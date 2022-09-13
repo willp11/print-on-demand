@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Footer() {
     return (
-        <div className="w-full p-4 bg-black absolute bottom-0 left-0 flex-col justify-center">
+        <div className="w-full p-4 bg-black flex-col justify-center">
             <div className="w-full max-w-[1200px] mx-auto flex flex-col xs:flex-row justify-between">
                 <div className="w-[150px]">
                     <h3 className="text-white font-semibold">CUSTOMER SERVICE</h3>

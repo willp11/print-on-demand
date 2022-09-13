@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
+import Slideshow from '../components/slideshow';
 
 const Home: NextPage = () => {
     return (
@@ -8,6 +8,7 @@ const Home: NextPage = () => {
             <Head>
                 <title>Print On Demand</title>
             </Head>
+            <Slideshow />
         </>
     )
 }
