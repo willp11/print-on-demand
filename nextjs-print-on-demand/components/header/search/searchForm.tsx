@@ -17,11 +17,11 @@ export default function SearchForm() {
 
     return (    
         <form onSubmit={(e)=>submitSearch(e)}>  
-            <div className="w-[280px] flex flex-row justify-between items-center bg-gray-100 px-2">
+            <div className="w-[240px] flex flex-row justify-between items-center bg-gray-100 px-2">
                 <input 
                     type="text" 
                     placeholder="SEARCH..." 
-                    className="p-2 focus:outline-0 bg-gray-100 placeholder:text-gray-600 placeholder:text-sm"
+                    className="p-2 w-[200px] focus:outline-0 bg-gray-100 placeholder:text-gray-600 placeholder:text-sm"
                     onChange={(e)=>setSearchQuery(e.target.value)}
                     value={searchQuery}
                 />
