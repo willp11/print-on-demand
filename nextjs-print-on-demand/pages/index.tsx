@@ -8,9 +8,6 @@ const Home: NextPage = () => {
             <Head>
                 <title>Print On Demand</title>
             </Head>
-
-            <h1>Print on demand</h1>
-
         </>
     )
 }
