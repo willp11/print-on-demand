@@ -4,6 +4,7 @@ import Logo from '../logo';
 import { useRouter } from 'next/router';
 import NavItem from './navItem';
 import NavListItem from './navListItem';
+import SearchForm from '../search/searchForm';
 
 interface MobileMenuProps {
     active: boolean,
@@ -86,7 +87,8 @@ export default function MobileNav({active, setActive}: MobileMenuProps) {
                 <div className="w-full flex items-center justify-start p-2">
                     <Logo />
                 </div>
-
+                <div className="ml-2 mb-2"><SearchForm /></div>
+                
                 {menuItems}
             </div>
         </nav>
