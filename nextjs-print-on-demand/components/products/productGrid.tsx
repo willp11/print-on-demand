@@ -1,37 +1,5 @@
 import GridItem from "./gridItem";
-
-const productList = [
-    {
-        id: 1,
-        name: "SOL'S REGENT T-SHIRT",
-        price: 3.69,
-        image: "/images/products/SOL_REGENT_TSHIRT.webp"
-    },
-    {
-        id: 2,
-        name: "SOL'S REGENT T-SHIRT",
-        price: 3.69,
-        image: "/images/products/SOL_REGENT_TSHIRT.webp"
-    },
-    {
-        id: 3,
-        name: "SOL'S REGENT T-SHIRT",
-        price: 3.69,
-        image: "/images/products/SOL_REGENT_TSHIRT.webp"
-    },
-    {
-        id: 4,
-        name: "SOL'S REGENT T-SHIRT",
-        price: 3.69,
-        image: "/images/products/SOL_REGENT_TSHIRT.webp"
-    },
-    {
-        id: 5,
-        name: "SOL'S REGENT T-SHIRT",
-        price: 3.69,
-        image: "/images/products/SOL_REGENT_TSHIRT.webp"
-    }
-]
+import { productList } from "../../utils/productList";
 
 export default function ProductGrid() {
 

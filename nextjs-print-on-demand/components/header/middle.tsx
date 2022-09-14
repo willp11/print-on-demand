@@ -11,7 +11,7 @@ export default function Middle({setShowMenu}: {setShowMenu: Dispatch<SetStateAct
                 <SearchForm />
             </div>
             <Logo />
-            <div className="text-right md:w-[280px]">
+            <div className="text-right md:w-[240px]">
                 <p className="cursor-pointer">MY CART</p>
             </div>
             <div className="block md:hidden">
