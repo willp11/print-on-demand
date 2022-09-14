@@ -7,7 +7,8 @@ module.exports = {
     theme: {
         extend: {
             transitionProperty: {
-                'height': 'height'
+                'height': 'height',
+                'max-height': 'max-height'
             }
         },
         screens: {
