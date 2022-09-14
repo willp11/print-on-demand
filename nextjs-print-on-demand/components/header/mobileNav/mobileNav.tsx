@@ -10,7 +10,7 @@ interface MobileMenuProps {
     setActive: Dispatch<SetStateAction<boolean>>;
 }
 
-const productList = [
+export const productList = [
     {title: "All", route: "/products/all"},
     {title: "T-Shirts", route: "/products/t-shirts"},
     {title: "Polo Shirts", route: "/products/polo-shirts"},
@@ -23,7 +23,7 @@ const productList = [
     {title: "Accessories", route: "/products/accessories"}
 ]
 
-const brandList = [
+export const brandList = [
     {title: "American Apparel", route: "/products/american-apparel"},
     {title: "Awdis", route: "/products/awdis"},
     {title: "Bella+Canvas", route: "/products/bella-canvas"},
@@ -63,7 +63,7 @@ export default function MobileNav({active, setActive}: MobileMenuProps) {
         transform transition ease-in-out duration-300`;
     }
 
-    // menu categories
+    // menu items
     const menuItems = menuCategories.map((category) => {
         const children = category.list.map((item)=>{
             return (
