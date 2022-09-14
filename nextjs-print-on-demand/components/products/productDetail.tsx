@@ -1,9 +1,11 @@
 import {IProduct} from '../../types/product';
+import { ISize } from '../../types/size';
 import Image from 'next/image';
 import BlankPriceTable from './blankPriceTable';
 import SelectColor from './selectColor';
 import SelectQuantity from './selectQuantity';
 import Btn from '../ui/btn';
+import { useState, useEffect } from 'react';
 
 const blankPriceRows = [
     "Buy 3 to 9 for £5.63 each - SAVE 10%",
@@ -20,10 +22,27 @@ const colors = [
     "black",
     "gray",
     "red",
-    "blue"
+    "blue",
+    "green"
 ]
 
 export default function ProductDetail({product}: {product: IProduct}) {
+
+    const [selectedColor, setSelectedColor] = useState("white");
+    const [qty, setQty] = useState<ISize>({
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0,
+        "XL": 0,
+        "XXL": 0
+    })
+
+    const updateQtyHandler = (size: string, value: string) => {
+        let newQty = {...qty};
+        (value === "") ? newQty[size] = 0 : newQty[size] = parseInt(value);
+        setQty(newQty);
+    }
 
     return (
         <div>
@@ -44,12 +63,12 @@ export default function ProductDetail({product}: {product: IProduct}) {
                         <BlankPriceTable rows={blankPriceRows} />
                     </div>
                     <div className="mt-4">
-                        <SelectColor colors={colors} />
+                        <SelectColor colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
                     </div>
                 </div>
             </div>
-            <div className="w-full max-w-[600px] md:mx-auto p-2">
-                <SelectQuantity />
+            <div className="w-full max-w-[660px] md:mx-auto p-2">
+                <SelectQuantity updateQtyHandler={updateQtyHandler} />
                 <div className="mt-4">
                     <div className="my-2">
                         <Btn content="CUSTOMIZE" />
