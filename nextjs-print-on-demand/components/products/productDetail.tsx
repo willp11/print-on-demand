@@ -7,6 +7,8 @@ import SelectQuantity from './selectQuantity';
 import SizeDescription from './sizeDescription';
 import Btn from '../ui/btn';
 import { useState } from 'react';
+import { useCart } from '../../hooks/useCart';
+import { useRouter } from 'next/router';
 
 const blankPriceRows = [
     "Buy 3 to 9 for £5.63 each - SAVE 10%",
@@ -45,6 +47,9 @@ export default function ProductDetail({product}: {product: IProduct}) {
         setQty(newQty);
     }
 
+    const {addItem} = useCart();
+    const router = useRouter();
+
     return (
         <div>
             <div className="flex flex-col md:flex-row justify-center">
@@ -72,10 +77,10 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 <SelectQuantity updateQtyHandler={updateQtyHandler} />
                 <div className="mt-4">
                     <div className="my-2">
-                        <Btn content="CUSTOMIZE" />
+                        <Btn content="CUSTOMIZE" click={()=>router.push('/customize')} />
                     </div>
                     <div className="my-2">
-                        <Btn content="BUY BLANK" />
+                        <Btn content="BUY BLANK" click={()=>addItem(product, qty["XS"])} />
                     </div>
                 </div>
             </div>
