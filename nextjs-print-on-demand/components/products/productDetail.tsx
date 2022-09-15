@@ -4,8 +4,9 @@ import Image from 'next/image';
 import BlankPriceTable from './blankPriceTable';
 import SelectColor from './selectColor';
 import SelectQuantity from './selectQuantity';
+import SizeDescription from './sizeDescription';
 import Btn from '../ui/btn';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const blankPriceRows = [
     "Buy 3 to 9 for £5.63 each - SAVE 10%",
@@ -77,6 +78,9 @@ export default function ProductDetail({product}: {product: IProduct}) {
                         <Btn content="BUY BLANK" />
                     </div>
                 </div>
+            </div>
+            <div className="w-full max-w-[660px] md:mx-auto p-2">
+                <SizeDescription product={product}/>
             </div>
         </div>
     )

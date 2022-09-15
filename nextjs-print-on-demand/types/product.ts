@@ -3,5 +3,8 @@ export interface IProduct {
     name: string,
     price: number,
     image: string,
-    brand: string
+    brand: string,
+    material: string,
+    description: string[],
+    sizes: {[key: string]: string}
 }
