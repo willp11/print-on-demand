@@ -6,7 +6,7 @@ import SelectColor from './selectColor';
 import SelectQuantity from './selectQuantity';
 import SizeDescription from './sizeDescription';
 import Btn from '../ui/btn';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import { useRouter } from 'next/router';
 
@@ -20,26 +20,19 @@ const blankPriceRows = [
     "Buy 500 + for £3.44 each - SAVE 45%"
 ]
 
-const colors = [
-    "white",
-    "black",
-    "gray",
-    "red",
-    "blue",
-    "green"
-]
-
 export default function ProductDetail({product}: {product: IProduct}) {
 
     const [selectedColor, setSelectedColor] = useState("white");
-    const [qty, setQty] = useState<ISize>({
-        "XS": 0,
-        "S": 0,
-        "M": 0,
-        "L": 0,
-        "XL": 0,
-        "XXL": 0
-    })
+    const [qty, setQty] = useState<ISize>({})
+
+    // On mount - create the qty object
+    useEffect(()=>{
+        let qtyObj: ISize = {};
+        Object.keys(product.sizes).map(size=>{
+            qtyObj[size] = 0;
+        })
+        setQty(qtyObj);
+    }, []);
 
     const updateQtyHandler = (size: string, value: string) => {
         let newQty = {...qty};
@@ -49,6 +42,13 @@ export default function ProductDetail({product}: {product: IProduct}) {
 
     const {addItem} = useCart();
     const router = useRouter();
+
+    const addToCartHandler = () => {
+        // for each size, add item to cart if qty>0
+        Object.keys(qty).forEach(size=>{
+            (qty[size] > 0) && addItem(product, selectedColor, size, qty[size])
+        })
+    }
 
     return (
         <div>
@@ -80,7 +80,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
                         <Btn content="CUSTOMIZE" click={()=>router.push('/customize')} />
                     </div>
                     <div className="my-2">
-                        <Btn content="BUY BLANK" click={()=>addItem(product, qty["XS"])} />
+                        <Btn content="BUY BLANK" click={addToCartHandler} />
                     </div>
                 </div>
             </div>

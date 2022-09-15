@@ -10,21 +10,25 @@ const initialCart: Cart = {
     total_qty: 0
 }
 
-const addItem = (state: Cart, product: IProduct, quantity: number) => {
-    let item = state?.items?.[product.name];
+const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number) => {
+    let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
+    let item = state?.items?.[itemName];
     if (item) {
         item.quantity += quantity;
     } else {
         item = {
             ...product,
-            quantity
+            quantity,
+            color,
+            size,
+            itemName
         }
     }
     let updatedCart = {
         ...state,
         items: {
             ...state.items,
-            [product.name]: item
+            [itemName]: item
         },
         value: Math.max(0, state.value + (product.price * quantity)),
         total_qty: Math.max(0, state.total_qty + quantity)
@@ -32,8 +36,9 @@ const addItem = (state: Cart, product: IProduct, quantity: number) => {
     return updatedCart;
 }
 
-const removeItem = (state: Cart, product: IProduct, quantity: number) => {
-    let item = state?.items?.[product.name];
+const removeItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number) => {
+    let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
+    let item = state?.items?.[itemName];
     if (item) {
         item.quantity -= quantity;
     } else return state;
@@ -42,7 +47,7 @@ const removeItem = (state: Cart, product: IProduct, quantity: number) => {
         ...state,
         items: {
             ...state.items,
-            [product.name]: item
+            [itemName]: item
         },
         value: Math.max(0, state.value - (product.price * quantity)),
         total_qty: Math.max(0, state.total_qty - quantity)
@@ -57,9 +62,9 @@ const clearCart = () => {
 const cartReducer: Reducer<Cart, UpdateCartAction> = (state: Cart, action: UpdateCartAction) => {
     switch (action.type) {
         case 'ADD_ITEM':
-            return addItem(state, action.product, action.quantity);
+            return addItem(state, action.product, action.color, action.size, action.quantity);
         case 'REMOVE_ITEM':
-            return removeItem(state, action.product, action.quantity);
+            return removeItem(state, action.product, action.color, action.size, action.quantity);
         case 'CLEAR_CART':
             return clearCart();
         default:
@@ -98,12 +103,12 @@ export const useCart = () => {
     const { setMessage } = useMessage();
     // console.log(setMessage)
 
-    const addItem = (product: IProduct, quantity: number) => {
-        if (dispatch) dispatch({type: "ADD_ITEM", product, quantity});
+    const addItem = (product: IProduct, color: string, size: string, quantity: number) => {
+        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity});
         if (setMessage) setMessage("Item added to cart");
     }
-    const removeItem = (product: IProduct, quantity: number) => {
-        if (dispatch) dispatch({type: "REMOVE_ITEM", product, quantity});
+    const removeItem = (product: IProduct, color: string, size: string, quantity: number) => {
+        if (dispatch) dispatch({type: "REMOVE_ITEM", product, color, size, quantity});
         if (setMessage) setMessage("Item removed from cart");
     }
 

@@ -2,7 +2,10 @@ import { IProduct } from "./product";
 import { Dispatch } from "react";
 
 export interface ICartItem extends IProduct {
-    quantity: number
+    quantity: number,
+    color: string,
+    size: string,
+    itemName: string
 }
 
 export interface Cart {
@@ -14,6 +17,8 @@ export interface Cart {
 export interface UpdateCartAction {
     type: string,
     product: IProduct,
+    color: string,
+    size: string,
     quantity: number
 }
 

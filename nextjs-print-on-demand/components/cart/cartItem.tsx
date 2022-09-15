@@ -16,7 +16,7 @@ export default function CartItem({item}: {item: ICartItem}) {
                 <div className="h-[100px] min-w-[100px]">
                     {item?.image && 
                         <Image
-                            src={item.image}
+                            src={item.colors[item.color]}
                             height={100}
                             width={100}
                             alt={item.name}
@@ -24,13 +24,13 @@ export default function CartItem({item}: {item: ICartItem}) {
                     }
                 </div>
                 <div className="flex flex-col items-start justify-center ml-4">
-                    <p className="dark:text-gray-100">{item.name}</p>
+                    <p className="dark:text-gray-100">{item.itemName}</p>
                     <div className="flex pt-2 items-center">
-                        <div onClick={()=>removeItem(item, 1)}>
+                        <div onClick={()=>removeItem(item, item.color, item.size, 1)}>
                             <MinusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-red-600 dark:hover:stroke-red-400" />
                         </div>
                         <p className="text-lg mx-4 dark:text-gray-100">{item.quantity}</p>
-                        <div onClick={()=>addItem(item, 1)}>
+                        <div onClick={()=>addItem(item, item.color, item.size, 1)}>
                             <PlusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-green-600 dark:hover:stroke-green-500" />
                         </div>
                         <div className="ml-8 flex items-center">

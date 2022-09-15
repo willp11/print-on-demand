@@ -59,7 +59,7 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                 {!isSSR ? cartItems : null}
                 {cart?.total_qty !== 0 && <div className="w-full my-2 px-1 flex justify-between">
                     <p className="dark:text-gray-100 text-lg font-semibold">Total:</p>
-                    <p className="dark:text-gray-100 text-lg font-semibold">${cart?.value}</p>
+                    <p className="dark:text-gray-100 text-lg font-semibold">${cart?.value.toFixed(2)}</p>
                 </div>}
                 <button 
                     className={`p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
