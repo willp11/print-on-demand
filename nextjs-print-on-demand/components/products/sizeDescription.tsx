@@ -29,11 +29,11 @@ function HeadingTab({title, activeTab, setActiveTab}: {title: string, activeTab:
 
 function SizeTable({sizes}: {sizes: {[key: string]: string}}) {
     const headings = Object.keys(sizes).map(size=>{
-        return <th className="w-20 p-1">{size}</th>
+        return <th key={size} className="w-20 p-1">{size}</th>
     });
     const values = Object.keys(sizes).map(size=>{
         const val = sizes[size];
-        return <td className="w-20 text-center p-1 text-sm">{val}</td>
+        return <td key={size+"-body"} className="w-20 text-center p-1 text-sm">{val}</td>
     });
 
     return (
@@ -96,7 +96,7 @@ export default function SizeDescription({product}: {product: IProduct}) {
 
     const listItems = product.description.map(item=>{
         return (
-            <li>{item}</li>
+            <li key={item}>{item}</li>
         )
     })
     const description = (

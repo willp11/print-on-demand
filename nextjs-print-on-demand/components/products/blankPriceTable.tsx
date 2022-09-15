@@ -13,7 +13,7 @@ export default function BlankPriceTable({rows}: {rows: string[]}) {
     const rowDivs = rows.map((row, idx)=>{
         let underline = true;
         if (idx === rows.length-1) underline = false;
-        return <TableRow content={row} underline={underline} />
+        return <TableRow key={row} content={row} underline={underline} />
     })
 
     return (

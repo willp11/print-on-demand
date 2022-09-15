@@ -34,7 +34,7 @@ export default function SelectColor({colors, selectedColor, setSelectedColor}: S
     const palette = colors.map(color=>{
         let active = false;
         if (selectedColor === color) active = true;
-        return <ColorPreview color={color} active={active} setSelectedColor={setSelectedColor} />
+        return <ColorPreview key={color} color={color} active={active} setSelectedColor={setSelectedColor} />
     })
 
     return (
