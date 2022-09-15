@@ -32,7 +32,7 @@ export default function DesktopNav() {
     })
 
     return (
-        <div className="w-full hidden md:flex md:items-center md:justify-center">
+        <div className="w-full hidden md:flex md:items-center md:justify-center border-b border-gray-300">
             {menuItems}
         </div>
     )
