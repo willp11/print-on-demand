@@ -6,5 +6,6 @@ export interface IProduct {
     brand: string,
     material: string,
     description: string[],
-    sizes: {[key: string]: string}
+    sizes: {[key: string]: string},
+    colors: {[key: string]: string},
 }

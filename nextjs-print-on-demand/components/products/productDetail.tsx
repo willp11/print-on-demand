@@ -55,7 +55,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="relative w-full max-w-[400px] h-[350px] xs:h-[450px]">
                     <Image
-                        src={product.image}
+                        src={product.colors[selectedColor]}
                         layout="fill"
                         objectFit="contain"
                         alt={product.name}
@@ -69,7 +69,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
                         <BlankPriceTable rows={blankPriceRows} />
                     </div>
                     <div className="mt-4">
-                        <SelectColor colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
+                        <SelectColor colors={Object.keys(product.colors)} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
                     </div>
                 </div>
             </div>
