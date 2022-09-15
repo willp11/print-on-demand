@@ -28,7 +28,16 @@ export const productList = [
             "red": "/images/products/sol_regent_tshirt_red.png",
             "blue": "/images/products/sol_regent_tshirt_blue.png",
             "green": "/images/products/sol_regent_tshirt_green.png"
-        }
+        },
+        blankPriceRows: [
+            "Buy 3 to 9 for £5.63 each - SAVE 10%",
+            "Buy 10 to 39 for £5.31 each - SAVE 15%",
+            "Buy 40 to 74 for £5.13 each - SAVE 18%",
+            "Buy 75 to 99 for £4.69 each - SAVE 25%",
+            "Buy 100 to 249 for £4.38 each - SAVE 30%",
+            "Buy 250 to 499 for £3.88 each - SAVE 38%",
+            "Buy 500 + for £3.44 each - SAVE 45%"
+        ]
     },
     {
         id: 2,
@@ -59,6 +68,15 @@ export const productList = [
             "red",
             "blue",
             "green"
+        ],
+        blankPriceRows: [
+            "Buy 3 to 9 for £5.63 each - SAVE 10%",
+            "Buy 10 to 39 for £5.31 each - SAVE 15%",
+            "Buy 40 to 74 for £5.13 each - SAVE 18%",
+            "Buy 75 to 99 for £4.69 each - SAVE 25%",
+            "Buy 100 to 249 for £4.38 each - SAVE 30%",
+            "Buy 250 to 499 for £3.88 each - SAVE 38%",
+            "Buy 500 + for £3.44 each - SAVE 45%"
         ]
     },
     {
@@ -90,6 +108,15 @@ export const productList = [
             "red",
             "blue",
             "green"
+        ],
+        blankPriceRows: [
+            "Buy 3 to 9 for £5.63 each - SAVE 10%",
+            "Buy 10 to 39 for £5.31 each - SAVE 15%",
+            "Buy 40 to 74 for £5.13 each - SAVE 18%",
+            "Buy 75 to 99 for £4.69 each - SAVE 25%",
+            "Buy 100 to 249 for £4.38 each - SAVE 30%",
+            "Buy 250 to 499 for £3.88 each - SAVE 38%",
+            "Buy 500 + for £3.44 each - SAVE 45%"
         ]
     },
     {
@@ -121,6 +148,15 @@ export const productList = [
             "red",
             "blue",
             "green"
+        ],
+        blankPriceRows: [
+            "Buy 3 to 9 for £5.63 each - SAVE 10%",
+            "Buy 10 to 39 for £5.31 each - SAVE 15%",
+            "Buy 40 to 74 for £5.13 each - SAVE 18%",
+            "Buy 75 to 99 for £4.69 each - SAVE 25%",
+            "Buy 100 to 249 for £4.38 each - SAVE 30%",
+            "Buy 250 to 499 for £3.88 each - SAVE 38%",
+            "Buy 500 + for £3.44 each - SAVE 45%"
         ]
     },
     {
@@ -152,6 +188,15 @@ export const productList = [
             "red",
             "blue",
             "green"
+        ],
+        blankPriceRows: [
+            "Buy 3 to 9 for £5.63 each - SAVE 10%",
+            "Buy 10 to 39 for £5.31 each - SAVE 15%",
+            "Buy 40 to 74 for £5.13 each - SAVE 18%",
+            "Buy 75 to 99 for £4.69 each - SAVE 25%",
+            "Buy 100 to 249 for £4.38 each - SAVE 30%",
+            "Buy 250 to 499 for £3.88 each - SAVE 38%",
+            "Buy 500 + for £3.44 each - SAVE 45%"
         ]
     }
 ]

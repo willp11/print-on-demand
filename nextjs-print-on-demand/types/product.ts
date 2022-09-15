@@ -8,4 +8,5 @@ export interface IProduct {
     description: string[],
     sizes: {[key: string]: string},
     colors: {[key: string]: string},
+    blankPriceRows: string[]
 }
