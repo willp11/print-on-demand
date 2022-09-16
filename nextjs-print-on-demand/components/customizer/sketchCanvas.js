@@ -71,7 +71,7 @@ export default function SketchCanvas() {
     const draw = (p5) => {
         p5.background(255);
         p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
-        if (activeLayerRef.current !== undefined) p5.image(activeLayerRef.current, 1, 1, 100, 100);
+        if (activeLayerRef.current !== undefined) p5.image(activeLayerRef.current, 1, 1, layers[0].xSize, layers[0].ySize);
     }
 
     return <Sketch preload={preload} setup={setup} draw={draw} />

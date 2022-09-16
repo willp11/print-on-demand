@@ -9,6 +9,8 @@ export default function Customizer() {
     const {setProductSide, setColor, addLayer} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
+    const [layerImageWidth, setLayerImageWidth] = useState(0);
+    const [layerImageHeight, setLayerImageHeight] = useState(0);
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined") {
@@ -23,6 +25,13 @@ export default function Customizer() {
     }
 
     const returnFile = (file: string) => {
+        let img = new Image;
+        // @ts-ignore
+        img.src = file;
+        img.onload = function() {
+            setLayerImageWidth(img.width);
+            setLayerImageHeight(img.height);
+        }
         setLayerImage(file);
         return file;
     }
@@ -34,14 +43,14 @@ export default function Customizer() {
     }
 
     const addImageLayer = () => {
-        if (layerImage) {
+        if (layerImage && layerImageWidth && layerImageHeight) {
             let layer: ILayer = {
                 id: 1,
                 type: "image",
                 xPos: 100,
                 yPos: 100,
-                xSize: 100,
-                ySize: 100,
+                xSize: layerImageWidth,
+                ySize: layerImageHeight,
                 image: layerImage
             }
             addLayer(layer);
