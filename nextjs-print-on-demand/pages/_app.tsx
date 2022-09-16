@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import Layout from '../components/layout';
 import { CartProvider } from '../hooks/useCart';
 import { MessageProvider } from '../hooks/useMessage';
+import { DesignProvider } from '../hooks/useDesign';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import NProgress from 'nprogress';
@@ -36,9 +37,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <CartProvider>
             <MessageProvider>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
+                <DesignProvider>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </DesignProvider>
             </MessageProvider>
         </CartProvider>
     )

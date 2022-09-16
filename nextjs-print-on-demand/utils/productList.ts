@@ -22,7 +22,12 @@ export const productList = [
             "XXL": "43/44"
         },
         colors: {
-            "white": "/images/products/sol_regent_tshirt_white.png",
+            "white": {
+                front: "/images/products/sol_regent_tshirt_white.png",
+                back: "/images/products/sol_regent_tshirt_white_back.png",
+                left: "/images/products/sol_regent_tshirt_white_left.png",
+                right: "/images/products/sol_regent_tshirt_white_right.png",
+            },
             "black": "/images/products/sol_regent_tshirt_black.png",
             "gray": "/images/products/sol_regent_tshirt_gray.png",
             "red": "/images/products/sol_regent_tshirt_red.png",

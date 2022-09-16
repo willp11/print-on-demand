@@ -1,7 +1,10 @@
 import dynamic from 'next/dynamic';
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
     ssr: false,
-})
+});
+
+import { useRef, useState, useEffect } from 'react';
+import { useDesign } from '../../hooks/useDesign';
 
 export default function SketchCanvas() {
 
@@ -26,14 +29,27 @@ export default function SketchCanvas() {
         }
     }
 
+    // get current design data from useDesign hook
+    const { product, productSide } = useDesign();
+
     // images
     let productImageRef = useRef();
-    let layerImageRef = useRef();
+
+    // load image to imageRef
+    useEffect(()=>{
+        if (p5ref.current) {
+            productImageRef.current = p5ref.current.loadImage(product.colors.white[productSide]);
+        }
+    }, [product, productSide])
+
+    // Preload
+    const preload = (p5) => {
+        productImageRef.current = p5.loadImage(product.colors.white[productSide]);
+    }
 
     // Setup canvas
     const setup = (p5, canvasParentRef) => {
         p5ref.current = p5;
-
         if (window.innerWidth < 500) {
             setCanvasSize(350);
             p5.createCanvas(350, 350).parent(canvasParentRef);
@@ -43,5 +59,11 @@ export default function SketchCanvas() {
         }
     }
 
-    return <Sketch setup={setup} />
+    // Draw canvas
+    const draw = (p5) => {
+        p5.background(255);
+        p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
+    }
+
+    return <Sketch preload={preload} setup={setup} draw={draw} />
 }
