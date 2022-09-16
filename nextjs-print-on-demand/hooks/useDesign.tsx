@@ -7,9 +7,6 @@ import { Dispatch, SetStateAction } from 'react';
 const DesignContext = React.createContext<IDesignContext | undefined>(undefined);
 
 export const DesignProvider = ({children}: {children: React.ReactNode}) => {
-
-    // Ignore as typescript thinks the colors object is an array
-    // @ts-ignore
     const [product, setProduct] = useState<IProduct>(productList[0]);
     const [productSide, setProductSide] = useState<string>("front");
 

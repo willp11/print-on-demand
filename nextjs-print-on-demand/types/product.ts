@@ -7,6 +7,6 @@ export interface IProduct {
     material: string,
     description: string[],
     sizes: {[key: string]: string},
-    colors: {[key: string]: string},
+    colors: {[key: string]: {[key: string]: string}},
     blankPriceRows: string[]
 }
