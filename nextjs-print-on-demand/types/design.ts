@@ -5,5 +5,7 @@ export interface IDesignContext {
     product: IProduct,
     setProduct: Dispatch<SetStateAction<IProduct>>,
     productSide: string,
-    setProductSide: Dispatch<SetStateAction<string>>
+    setProductSide: Dispatch<SetStateAction<string>>,
+    color: string,
+    setColor: Dispatch<SetStateAction<string>>
 }

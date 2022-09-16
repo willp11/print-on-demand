@@ -30,7 +30,7 @@ export default function SketchCanvas() {
     }
 
     // get current design data from useDesign hook
-    const { product, productSide } = useDesign();
+    const { product, productSide, color } = useDesign();
 
     // images
     let productImageRef = useRef();
@@ -38,13 +38,13 @@ export default function SketchCanvas() {
     // load image to imageRef
     useEffect(()=>{
         if (p5ref.current) {
-            productImageRef.current = p5ref.current.loadImage(product.colors.white[productSide]);
+            productImageRef.current = p5ref.current.loadImage(product.colors[color][productSide]);
         }
-    }, [product, productSide])
+    }, [product, productSide, color])
 
     // Preload
     const preload = (p5) => {
-        productImageRef.current = p5.loadImage(product.colors.white[productSide]);
+        productImageRef.current = p5.loadImage(product.colors[color][productSide]);
     }
 
     // Setup canvas

@@ -45,7 +45,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="relative w-full max-w-[400px] h-[350px] xs:h-[450px]">
                     <Image
-                        src={product.colors[selectedColor]}
+                        src={product.colors[selectedColor]["front"]}
                         layout="fill"
                         objectFit="contain"
                         alt={product.name}
