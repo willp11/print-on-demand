@@ -7,5 +7,18 @@ export interface IDesignContext {
     productSide: string,
     setProductSide: Dispatch<SetStateAction<string>>,
     color: string,
-    setColor: Dispatch<SetStateAction<string>>
+    setColor: Dispatch<SetStateAction<string>>,
+    layers: ILayer[],
+    setLayers: Dispatch<SetStateAction<ILayer[]>>
+}
+
+export interface ILayer {
+    id: number,
+    type: string,
+    xPos: number,
+    yPos: number,
+    xSize: number,
+    ySize: number,
+    image?: string,
+    textContent?: string
 }
