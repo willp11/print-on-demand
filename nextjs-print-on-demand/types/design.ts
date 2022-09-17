@@ -21,6 +21,8 @@ export interface ILayer {
     yPos: number,
     aspectRatio: number,
     size: number,
+    width: number,
+    height: number,
     image?: string,
     textContent?: string
 }

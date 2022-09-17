@@ -50,6 +50,15 @@ export default function Customizer() {
     const addImageLayer = () => {
         if (layerImage && layerImageWidth && layerImageHeight) {
             const aspectRatio = layerImageWidth / layerImageHeight;
+            let size = Math.min(layerImageWidth, 350);
+            let width, height;
+            if (aspectRatio >= 1) {
+                width = Math.min(350, size);
+                height = Math.min(350, size)/aspectRatio;
+            } else {
+                width = Math.min(350*aspectRatio, size);
+                height = Math.min(350, size/aspectRatio);
+            }
             let layer: ILayer = {
                 id: 1,
                 type: "image",
@@ -57,6 +66,8 @@ export default function Customizer() {
                 yPos: 100,
                 aspectRatio: aspectRatio,
                 size: Math.min(layerImageWidth, 350),
+                width: width,
+                height: height,
                 image: layerImage
             }
             addLayer(layer);
