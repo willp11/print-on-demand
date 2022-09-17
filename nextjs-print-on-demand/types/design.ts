@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { IProduct } from "./product";
 
+type Sides = "front" | "back" | "left" | "right"
+
 export interface IDesignContext {
     product: IProduct,
     setProduct: Dispatch<SetStateAction<IProduct>>,
@@ -8,8 +10,10 @@ export interface IDesignContext {
     setProductSide: Dispatch<SetStateAction<string>>,
     color: string,
     setColor: Dispatch<SetStateAction<string>>,
-    layers: ILayer[],
-    setLayers: Dispatch<SetStateAction<ILayer[]>>,
+    // layers: ILayer[],
+    layers: {[key: string]: ILayer[]}
+    // setLayers: Dispatch<SetStateAction<ILayer[]>>,
+    setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>>,
     selectedLayer: number,
     setSelectedLayer: Dispatch<SetStateAction<number>>
 }

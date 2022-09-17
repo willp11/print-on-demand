@@ -34,7 +34,8 @@ export default function SketchCanvas() {
 
     // images
     let productImageRef = useRef();
-    let activeLayerRef = useRef(undefined);
+    let activeLayerImageRef = useRef(undefined);
+    let allLayerImagesRef = useRef(undefined);
 
     // load product image to productImageRef
     useEffect(()=>{
@@ -43,12 +44,20 @@ export default function SketchCanvas() {
         }
     }, [product, productSide, color]);
 
-    // load new layer image to activeLayerRef
+    // load new layer image to activeLayerImageRef
     useEffect(()=>{
-        if (p5ref.current && layers.length > 0) {
-            activeLayerRef.current = p5ref.current.loadImage(layers[selectedLayer].image);
-        }
-    }, [layers, selectedLayer])
+        if (p5ref.current && layers[productSide].length > 0) {
+            if (layers[productSide].length > 0) {
+                activeLayerImageRef.current = p5ref.current.loadImage(layers[productSide][selectedLayer].image);
+                allLayerImagesRef.current = layers[productSide].map((layer)=>{
+                    return p5ref.current.loadImage(layer.image);
+                })
+            } else {
+                activeLayerImageRef.current = undefined;
+                allLayerImagesRef.current = undefined;
+            }
+        } 
+    }, [layers, selectedLayer, productSide]);
 
     // Preload
     const preload = (p5) => {
@@ -70,8 +79,20 @@ export default function SketchCanvas() {
     // Draw canvas
     const draw = (p5) => {
         p5.background(255);
+        // draw product
         p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
-        if (activeLayerRef.current !== undefined) p5.image(activeLayerRef.current, 1, 1, layers[0].width, layers[0].height);
+
+        // draw active layer
+        // if (activeLayerImageRef.current !== undefined && layers[productSide].length > 0) {
+        //     p5.image(activeLayerImageRef.current, 1, 1, layers[productSide][selectedLayer].width, layers[productSide][selectedLayer].height);
+        // }
+
+        // draw all layers
+        if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
+            for (let i=0; i<allLayerImagesRef.current.length; i++) {
+                p5.image(allLayerImagesRef.current[i], 1+(i*40), 1+(i*40), layers[productSide][i].width, layers[productSide][i].height);
+            }
+        }
     }
 
     return <Sketch preload={preload} setup={setup} draw={draw} />

@@ -5,9 +5,19 @@ import { getBase64 } from '../../utils/customizer';
 import { ILayer } from '../../types/design';
 import LayerPreview from '../../components/customizer/layerPreview';
 
+function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
+    let className = "border border-gray-300 p-1 w-32 rounded";
+    if (selected) className = "border-2 border-blue-500 p-1 w-32 rounded"
+    return (
+        <button className={className} >
+            {content}
+        </button>
+    )
+}
+
 export default function Customizer() {
 
-    const {setProductSide, setColor, addLayer, layers, selectedLayer, setSelectedLayer} = useDesign();
+    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
@@ -18,8 +28,9 @@ export default function Customizer() {
     }, [layers]);
 
     const setSideHandler = (side: string) => {
-        if (typeof setProductSide !== "undefined") {
-            setProductSide(side)
+        if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
+            setProductSide(side);
+            setSelectedLayer(0);
         }
     }
 
@@ -48,7 +59,7 @@ export default function Customizer() {
     }
 
     const addImageLayer = () => {
-        if (layerImage && layerImageWidth && layerImageHeight) {
+        if (layers && layerImage && layerImageWidth && layerImageHeight && productSide) {
             const aspectRatio = layerImageWidth / layerImageHeight;
             let size = Math.min(layerImageWidth, 350);
             let width, height;
@@ -60,7 +71,7 @@ export default function Customizer() {
                 height = Math.min(350, size/aspectRatio);
             }
             let layer: ILayer = {
-                id: layers?.length ?? 0,
+                id: layers[productSide]?.length ?? 0,
                 type: "image",
                 xPos: 100,
                 yPos: 100,
@@ -75,8 +86,8 @@ export default function Customizer() {
     }
 
     let layerPreviews = null;
-    if (typeof layers !== "undefined") {
-        layerPreviews = layers.map((layer, idx)=>{
+    if (typeof layers !== "undefined" && productSide) {
+        layerPreviews = layers[productSide].map((layer, idx)=>{
             let className = "";
             if (selectedLayer === idx) className = "border-2 border-blue-500 w-[100px] h-[100px]"
             if (setSelectedLayer ) return (
@@ -92,14 +103,26 @@ export default function Customizer() {
             <SketchCanvas />
             <div className="flex">
                 <div className="flex flex-col">
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setSideHandler("front")}>Front</button>
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setSideHandler("back")}>Back</button>
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setSideHandler("left")}>Left</button>
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setSideHandler("right")}>Right</button>
+                    <div onClick={()=>setSideHandler("front")}>
+                        <CustomizerBtn content="Front" selected={productSide === "front"} />
+                    </div>
+                    <div onClick={()=>setSideHandler("back")}>
+                        <CustomizerBtn content="Back" selected={productSide === "back"} />
+                    </div>
+                    <div onClick={()=>setSideHandler("left")}>
+                        <CustomizerBtn content="Left" selected={productSide === "left"} />
+                    </div>
+                    <div onClick={()=>setSideHandler("right")}>
+                        <CustomizerBtn content="Right" selected={productSide === "right"} />
+                    </div>
                 </div>
                 <div className="flex flex-col">
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setColorHandler("white")}>White</button>
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setColorHandler("black")}>Black</button>
+                    <div onClick={()=>setColorHandler("white")}>
+                        <CustomizerBtn content="White" selected={color === "white"} />
+                    </div>
+                    <div onClick={()=>setColorHandler("black")}>
+                        <CustomizerBtn content="Black" selected={color === "black"} />
+                    </div>
                 </div>
                 <div className="flex flex-col">
                     <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
