@@ -30,7 +30,7 @@ export default function SketchCanvas() {
     }
 
     // get current design data from useDesign hook
-    const { product, productSide, color, layers, selectedLayer, updateLayerPosition } = useDesign();
+    const { product, productSide, color, layers, selectedLayer, updateLayerPosition, updateLayerSize } = useDesign();
 
     // images
     let productImageRef = useRef();
@@ -80,6 +80,10 @@ export default function SketchCanvas() {
     let clickedX = null;
     let clickedY = null;
 
+    // Variables for resizing layer image
+    let clickedXResize = null;
+    let clickedYResize = null;
+
     // Mouse pressed
     const mousePressed = (p5, event) => {
         if (activeLayerRef.current) {
@@ -92,18 +96,45 @@ export default function SketchCanvas() {
                 clickedX = p5.mouseX;
                 clickedY = p5.mouseY;
             }
+
+            // Mouse pressed inside active layer resize square - Resize image
+            if (p5.mouseX >= activeLayerRef.current.xPos + activeLayerRef.current.width &&
+                p5.mouseX <= activeLayerRef.current.xPos + activeLayerRef.current.width + 20 &&
+                p5.mouseY >= activeLayerRef.current.yPos + activeLayerRef.current.height &&
+                p5.mouseY <= activeLayerRef.current.yPos + activeLayerRef.current.height + 20
+            ) {
+                clickedXResize = p5.mouseX;
+                clickedYResize = p5.mouseY;
+            }
         }
     }
 
     // Mouse released
     const mouseReleased = (p5, event) => {
+        // Update layer position
         if (clickedX && clickedY) {
-            // Update the layer object
             let movedX = p5.mouseX - clickedX;
             let movedY = p5.mouseY - clickedY;
             updateLayerPosition(movedX, movedY)
             clickedX = null;
             clickedY = null;
+        }
+
+        // Update layer size
+        if (clickedXResize && clickedYResize) {
+            let resizedX = p5.mouseX - clickedXResize;
+            let resizedY = p5.mouseY - clickedYResize;
+            let logoSizeX = activeLayerRef.current.width;
+            let logoSizeY = activeLayerRef.current.height;
+            // we only want to resize smaller/bigger if we have negative/positive moved value on both axis
+            if ((resizedX < 0 && resizedY < 0) || (resizedX > 0 && resizedY > 0)) {
+                logoSizeX += Math.min(resizedX, resizedY);
+                logoSizeY += Math.min(resizedX, resizedY);
+            }
+            // update layer size
+            updateLayerSize(logoSizeX, logoSizeY);
+            clickedXResize = null;
+            clickedYResize = null;
         }
     }
 
@@ -118,6 +149,9 @@ export default function SketchCanvas() {
         if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
             // how far has image been moved
             let movedX = 0, movedY = 0;
+            let resizedX = 0, resizedY = 0;
+            let activeLogoSizeX = activeLayerRef.current.width;
+            let activeLogoSizeY = activeLayerRef.current.height;
 
             // draw all layers
             for (let i=0; i<allLayerImagesRef.current.length; i++) {
@@ -129,12 +163,24 @@ export default function SketchCanvas() {
                         movedX = p5.mouseX - clickedX;
                         movedY = p5.mouseY - clickedY;
                     }
+
+                    // Resize image
+                    if (clickedXResize !== null && clickedYResize !== null) {
+                        resizedX = p5.mouseX - clickedXResize;
+                        resizedY = p5.mouseY - clickedYResize;
+                    }
+                    // we only want to resize smaller/bigger if we have negative/positive moved value on both axis
+                    if ((resizedX < 0 && resizedY < 0) || (resizedX > 0 && resizedY > 0)) {
+                        activeLogoSizeX += Math.min(resizedX, resizedY);
+                        activeLogoSizeY += Math.min(resizedX, resizedY);
+                    }
+
                     p5.image(
                         allLayerImagesRef.current[i], 
                         activeLayerRef.current.xPos + movedX, 
                         activeLayerRef.current.yPos + movedY, 
-                        activeLayerRef.current.width, 
-                        activeLayerRef.current.height
+                        activeLogoSizeY, 
+                        activeLogoSizeY
                     );
                 } else {
                     p5.image(
@@ -154,43 +200,43 @@ export default function SketchCanvas() {
             p5.rect(
                 activeLayerRef.current.xPos + movedX, 
                 activeLayerRef.current.yPos + movedY, 
-                activeLayerRef.current.width, 
-                activeLayerRef.current.height
+                activeLogoSizeX,
+                activeLogoSizeY
             )
 
-            // draw resize rectangle
+            // draw resize square
             p5.stroke('white');
             p5.strokeWeight(0);
             p5.fill("blue");
             p5.rect(
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY,
+                activeLayerRef.current.xPos + activeLogoSizeX + movedX, 
+                activeLayerRef.current.yPos + activeLogoSizeY + movedY,
                 20, 
                 20
             );
             p5.fill("white");
             p5.strokeWeight(2);
             p5.triangle(
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 10, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 10
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
             )
             p5.triangle(
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17, 
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 10, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17, 
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 10
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
             )
             p5.line(
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
-                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
-                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
+                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
+                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17
             )
         }
 

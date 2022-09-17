@@ -56,9 +56,17 @@ export const useDesign = () => {
     const updateLayerPosition = (movedX: number, movedY: number) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && setLayers !== undefined) {
             let newLayers = {...layers};
-            console.log(newLayers[productSide][selectedLayer])
             newLayers[productSide][selectedLayer].xPos += movedX;
             newLayers[productSide][selectedLayer].yPos += movedY;
+            setLayers(newLayers)
+        }
+    }
+
+    const updateLayerSize = (width: number, height: number) => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && setLayers !== undefined) {
+            let newLayers = {...layers};
+            newLayers[productSide][selectedLayer].width = width;
+            newLayers[productSide][selectedLayer].height = height;
             setLayers(newLayers)
         }
     }
@@ -74,6 +82,7 @@ export const useDesign = () => {
         addLayer,
         selectedLayer,
         setSelectedLayer,
-        updateLayerPosition
+        updateLayerPosition,
+        updateLayerSize
     }
 }
