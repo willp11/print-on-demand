@@ -20,7 +20,7 @@ export default function GridItem({product}: {product: IProduct}) {
                     alt={product.name}
                 />
             </div>
-            <Btn content="CUSTOMIZE" />            
+            <Btn content="CUSTOMIZE" route={router.push('/customizer')}/>            
             <p className="font-semibold truncate mt-2 cursor-pointer hover:text-blue-600 transition ease-in-out duration-300">{product.name}</p>
             <p className="text-sm font-bold mt-2">From ${product.price}</p>
         </div>

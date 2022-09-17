@@ -12,13 +12,15 @@ export interface IDesignContext {
     setLayers: Dispatch<SetStateAction<ILayer[]>>
 }
 
+type LayerType = "image" | "text"
+
 export interface ILayer {
     id: number,
-    type: string,
+    type: LayerType,
     xPos: number,
     yPos: number,
-    xSize: number,
-    ySize: number,
+    aspectRatio: number,
+    size: number,
     image?: string,
     textContent?: string
 }

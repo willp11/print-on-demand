@@ -1,16 +1,21 @@
 import SketchCanvas from '../../components/customizer/sketchCanvas';
 import { useDesign } from '../../hooks/useDesign';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getBase64 } from '../../utils/customizer';
 import { ILayer } from '../../types/design';
+import LayerPreview from '../../components/customizer/layerPreview';
 
 export default function Customizer() {
 
-    const {setProductSide, setColor, addLayer} = useDesign();
+    const {setProductSide, setColor, addLayer, layers} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
+
+    useEffect(()=>{
+        console.log(layers);
+    }, [layers]);
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined") {
@@ -44,17 +49,27 @@ export default function Customizer() {
 
     const addImageLayer = () => {
         if (layerImage && layerImageWidth && layerImageHeight) {
+            const aspectRatio = layerImageWidth / layerImageHeight;
             let layer: ILayer = {
                 id: 1,
                 type: "image",
                 xPos: 100,
                 yPos: 100,
-                xSize: layerImageWidth,
-                ySize: layerImageHeight,
+                aspectRatio: aspectRatio,
+                size: Math.min(layerImageWidth, 350),
                 image: layerImage
             }
             addLayer(layer);
         }
+    }
+
+    let layerPreviews = null;
+    if (typeof layers !== "undefined") {
+        layerPreviews = layers.map(layer=>{
+            return (
+                <LayerPreview key={layer.id} layer={layer} />
+            )
+        })
     }
 
     return (
@@ -71,9 +86,12 @@ export default function Customizer() {
                     <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setColorHandler("white")}>White</button>
                     <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setColorHandler("black")}>Black</button>
                 </div>
-                <div>
+                <div className="flex flex-col">
                     <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
-                    <button className="border border-gray-300 p-1 w-32 rounded" onClick={addImageLayer}>Add Layer</button>
+                    <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
+                </div>
+                <div className="flex flex-row justify-start">
+                    {layerPreviews}
                 </div>
             </div>
         </>
