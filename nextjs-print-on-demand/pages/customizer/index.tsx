@@ -23,10 +23,6 @@ export default function Customizer() {
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
 
-    useEffect(()=>{
-        console.log(layers);
-    }, [layers]);
-
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
             setProductSide(side);
@@ -73,8 +69,8 @@ export default function Customizer() {
             let layer: ILayer = {
                 id: layers[productSide]?.length ?? 0,
                 type: "image",
-                xPos: 100,
-                yPos: 100,
+                xPos: layers[productSide]?.length*50,
+                yPos: layers[productSide]?.length*50,
                 aspectRatio: aspectRatio,
                 size: Math.min(layerImageWidth, 350),
                 width: width,

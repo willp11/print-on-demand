@@ -30,11 +30,11 @@ export default function SketchCanvas() {
     }
 
     // get current design data from useDesign hook
-    const { product, productSide, color, layers, selectedLayer } = useDesign();
+    const { product, productSide, color, layers, selectedLayer, updateLayerPosition } = useDesign();
 
     // images
     let productImageRef = useRef();
-    let activeLayerImageRef = useRef(undefined);
+    let activeLayerRef = useRef(undefined);
     let allLayerImagesRef = useRef(undefined);
 
     // load product image to productImageRef
@@ -48,15 +48,15 @@ export default function SketchCanvas() {
     useEffect(()=>{
         if (p5ref.current && layers[productSide].length > 0) {
             if (layers[productSide].length > 0) {
-                activeLayerImageRef.current = p5ref.current.loadImage(layers[productSide][selectedLayer].image);
+                activeLayerRef.current = layers[productSide][selectedLayer]
                 allLayerImagesRef.current = layers[productSide].map((layer)=>{
                     return p5ref.current.loadImage(layer.image);
                 })
             } else {
-                activeLayerImageRef.current = undefined;
+                activeLayerRef.current = undefined;
                 allLayerImagesRef.current = undefined;
             }
-        } 
+        }
     }, [layers, selectedLayer, productSide]);
 
     // Preload
@@ -76,24 +76,91 @@ export default function SketchCanvas() {
         }
     }
 
-    // Draw canvas
-    const draw = (p5) => {
-        p5.background(255);
-        // draw product
-        p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
+    // Variables for moving layer image
+    let clickedX = null;
+    let clickedY = null;
 
-        // draw active layer
-        // if (activeLayerImageRef.current !== undefined && layers[productSide].length > 0) {
-        //     p5.image(activeLayerImageRef.current, 1, 1, layers[productSide][selectedLayer].width, layers[productSide][selectedLayer].height);
-        // }
-
-        // draw all layers
-        if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
-            for (let i=0; i<allLayerImagesRef.current.length; i++) {
-                p5.image(allLayerImagesRef.current[i], 1+(i*40), 1+(i*40), layers[productSide][i].width, layers[productSide][i].height);
+    // Mouse pressed
+    const mousePressed = (p5, event) => {
+        if (activeLayerRef.current) {
+            // Mouse pressed inside active layer image - Move image
+            if (p5.mouseX >= activeLayerRef.current.xPos &&
+                p5.mouseX <= activeLayerRef.current.xPos + activeLayerRef.current.width &&
+                p5.mouseY >= activeLayerRef.current.yPos &&
+                p5.mouseY <= activeLayerRef.current.yPos + activeLayerRef.current.height
+            ) {
+                clickedX = p5.mouseX;
+                clickedY = p5.mouseY;
             }
         }
     }
 
-    return <Sketch preload={preload} setup={setup} draw={draw} />
+    // Mouse released
+    const mouseReleased = (p5, event) => {
+        if (clickedX && clickedY) {
+            // Update the layer object
+            let movedX = p5.mouseX - clickedX;
+            let movedY = p5.mouseY - clickedY;
+            updateLayerPosition(movedX, movedY)
+            clickedX = null;
+            clickedY = null;
+        }
+    }
+
+    // Draw canvas
+    const draw = (p5) => {
+        p5.background(255);
+
+        // PRODUCT
+        p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
+
+        // LAYERS
+        if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
+            // how far has image been moved
+            let movedX = 0, movedY = 0;
+
+            // draw all layers
+            for (let i=0; i<allLayerImagesRef.current.length; i++) {
+
+                // if it's the active layer - draw it based off the position and dimensions in the activeLayer ref 
+                if (i === selectedLayer) {
+                    // Move image
+                    if (clickedX !== null && clickedY !== null) {
+                        movedX = p5.mouseX - clickedX;
+                        movedY = p5.mouseY - clickedY;
+                    }
+                    p5.image(
+                        allLayerImagesRef.current[i], 
+                        activeLayerRef.current.xPos + movedX, 
+                        activeLayerRef.current.yPos + movedY, 
+                        activeLayerRef.current.width, 
+                        activeLayerRef.current.height
+                    );
+                } else {
+                    p5.image(
+                        allLayerImagesRef.current[i], 
+                        layers[productSide][i].xPos, 
+                        layers[productSide][i].yPos, 
+                        layers[productSide][i].width, 
+                        layers[productSide][i].height
+                    );
+                }
+            }
+
+            // draw border around active layer
+            p5.stroke('blue');
+            p5.strokeWeight(2);
+            p5.fill('rgba(100%,0%,100%,0)')
+            p5.rect(
+                activeLayerRef.current.xPos + movedX, 
+                activeLayerRef.current.yPos + movedY, 
+                activeLayerRef.current.width, 
+                activeLayerRef.current.height
+            )
+        }
+
+
+    }
+
+    return <Sketch preload={preload} setup={setup} draw={draw} mousePressed={mousePressed} mouseReleased={mouseReleased} />
 }

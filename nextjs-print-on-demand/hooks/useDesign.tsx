@@ -10,7 +10,6 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
     const [product, setProduct] = useState<IProduct>(productList[0]);
     const [productSide, setProductSide] = useState<string>("front");
     const [color, setColor] = useState<string>("white");
-    // const [layers, setLayers] = useState<ILayer[]>([]);
     const [layers, setLayers] = useState<{[key: string]: ILayer[]}>({
         "front": [],
         "back": [],
@@ -32,7 +31,6 @@ export const useDesign = () => {
     let product: IProduct | undefined, setProduct: Dispatch<SetStateAction<IProduct>> | undefined;
     let productSide: string | undefined, setProductSide: Dispatch<SetStateAction<string>> | undefined;
     let color: string | undefined, setColor: Dispatch<SetStateAction<string>> | undefined;
-    // let layers: ILayer[] | undefined, setLayers: Dispatch<SetStateAction<ILayer[]>> | undefined;
     let layers: {[key: string]: ILayer[]} | undefined, setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>> | undefined;
     let selectedLayer: number | undefined, setSelectedLayer: Dispatch<SetStateAction<number>> | undefined;
 
@@ -52,8 +50,17 @@ export const useDesign = () => {
     const addLayer = (layer: ILayer) => {
         let newLayers = {...layers};
         if (typeof productSide === "string" && typeof layers !== "undefined") newLayers[productSide] = [...layers[productSide], layer];
-        // if (setLayers && layers) setLayers([...layers, layer]);
         if (setLayers && layers) setLayers(newLayers);
+    }
+
+    const updateLayerPosition = (movedX: number, movedY: number) => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && setLayers !== undefined) {
+            let newLayers = {...layers};
+            console.log(newLayers[productSide][selectedLayer])
+            newLayers[productSide][selectedLayer].xPos += movedX;
+            newLayers[productSide][selectedLayer].yPos += movedY;
+            setLayers(newLayers)
+        }
     }
 
     return {
@@ -66,6 +73,7 @@ export const useDesign = () => {
         layers,
         addLayer,
         selectedLayer,
-        setSelectedLayer
+        setSelectedLayer,
+        updateLayerPosition
     }
 }
