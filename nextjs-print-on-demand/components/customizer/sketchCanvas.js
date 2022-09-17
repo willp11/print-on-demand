@@ -157,6 +157,41 @@ export default function SketchCanvas() {
                 activeLayerRef.current.width, 
                 activeLayerRef.current.height
             )
+
+            // draw resize rectangle
+            p5.stroke('white');
+            p5.strokeWeight(0);
+            p5.fill("blue");
+            p5.rect(
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY,
+                20, 
+                20
+            );
+            p5.fill("white");
+            p5.strokeWeight(2);
+            p5.triangle(
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 10, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 10
+            )
+            p5.triangle(
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17, 
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 10, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17, 
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 10
+            )
+            p5.line(
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 3, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 3, 
+                activeLayerRef.current.xPos+activeLayerRef.current.width+movedX + 17, 
+                activeLayerRef.current.yPos+activeLayerRef.current.height+movedY + 17
+            )
         }
 
 
