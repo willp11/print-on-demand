@@ -7,7 +7,7 @@ import LayerPreview from '../../components/customizer/layerPreview';
 
 export default function Customizer() {
 
-    const {setProductSide, setColor, addLayer, layers} = useDesign();
+    const {setProductSide, setColor, addLayer, layers, selectedLayer, setSelectedLayer} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
@@ -60,7 +60,7 @@ export default function Customizer() {
                 height = Math.min(350, size/aspectRatio);
             }
             let layer: ILayer = {
-                id: 1,
+                id: layers?.length ?? 0,
                 type: "image",
                 xPos: 100,
                 yPos: 100,
@@ -76,9 +76,13 @@ export default function Customizer() {
 
     let layerPreviews = null;
     if (typeof layers !== "undefined") {
-        layerPreviews = layers.map(layer=>{
-            return (
-                <LayerPreview key={layer.id} layer={layer} />
+        layerPreviews = layers.map((layer, idx)=>{
+            let className = "";
+            if (selectedLayer === idx) className = "border-2 border-blue-500 w-[100px] h-[100px]"
+            if (setSelectedLayer ) return (
+                <div key={layer.id} onClick={()=>setSelectedLayer(idx)} className={className}>
+                    <LayerPreview layer={layer} />
+                </div>
             )
         })
     }

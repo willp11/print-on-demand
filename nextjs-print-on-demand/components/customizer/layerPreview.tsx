@@ -15,7 +15,7 @@ export default function LayerPreview({layer}: {layer: ILayer}) {
             height = Math.min(100, layer.size/layer.aspectRatio);
         }
         return (
-            <div className="flex items-center justify-center p-2 border border-gray-300 w-[100px]">
+            <div className="flex items-center justify-center p-2 border border-gray-300 w-[100px] h-[100px]">
                 <div style={{width: width, height: height}} className="relative">
                     <Image
                         src={layer?.image}

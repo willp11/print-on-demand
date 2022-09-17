@@ -9,7 +9,9 @@ export interface IDesignContext {
     color: string,
     setColor: Dispatch<SetStateAction<string>>,
     layers: ILayer[],
-    setLayers: Dispatch<SetStateAction<ILayer[]>>
+    setLayers: Dispatch<SetStateAction<ILayer[]>>,
+    selectedLayer: number,
+    setSelectedLayer: Dispatch<SetStateAction<number>>
 }
 
 type LayerType = "image" | "text"

@@ -11,10 +11,11 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
     const [productSide, setProductSide] = useState<string>("front");
     const [color, setColor] = useState<string>("white");
     const [layers, setLayers] = useState<ILayer[]>([]);
+    const [selectedLayer, setSelectedLayer] = useState(0);
 
     const contextValue = useMemo(()=>{
-        return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers}
-    }, [product, productSide, color, layers]);
+        return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers, selectedLayer, setSelectedLayer}
+    }, [product, productSide, color, layers, selectedLayer]);
 
     return <DesignContext.Provider value={contextValue}>{children}</DesignContext.Provider>
 }
@@ -26,6 +27,7 @@ export const useDesign = () => {
     let productSide: string | undefined, setProductSide: Dispatch<SetStateAction<string>> | undefined;
     let color: string | undefined, setColor: Dispatch<SetStateAction<string>> | undefined;
     let layers: ILayer[] | undefined, setLayers: Dispatch<SetStateAction<ILayer[]>> | undefined;
+    let selectedLayer: number | undefined, setSelectedLayer: Dispatch<SetStateAction<number>> | undefined;
 
     if (contextValue) {
         product = contextValue.product;
@@ -36,10 +38,12 @@ export const useDesign = () => {
         setColor = contextValue.setColor;
         layers = contextValue.layers;
         setLayers = contextValue.setLayers;
+        selectedLayer = contextValue.selectedLayer;
+        setSelectedLayer = contextValue.setSelectedLayer;
     }
 
     const addLayer = (layer: ILayer) => {
-        if (setLayers && layers) setLayers([layer, ...layers]);
+        if (setLayers && layers) setLayers([...layers, layer]);
     }
 
     return {
@@ -50,6 +54,8 @@ export const useDesign = () => {
         color,
         setColor,
         layers,
-        addLayer
+        addLayer,
+        selectedLayer,
+        setSelectedLayer
     }
 }
