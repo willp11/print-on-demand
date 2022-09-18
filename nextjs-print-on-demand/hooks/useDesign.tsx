@@ -16,7 +16,7 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
         "left": [],
         "right": []
     });
-    const [selectedLayer, setSelectedLayer] = useState(0);
+    const [selectedLayer, setSelectedLayer] = useState<number | null>(0);
 
     const contextValue = useMemo(()=>{
         return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers, selectedLayer, setSelectedLayer}
@@ -32,7 +32,7 @@ export const useDesign = () => {
     let productSide: string | undefined, setProductSide: Dispatch<SetStateAction<string>> | undefined;
     let color: string | undefined, setColor: Dispatch<SetStateAction<string>> | undefined;
     let layers: {[key: string]: ILayer[]} | undefined, setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>> | undefined;
-    let selectedLayer: number | undefined, setSelectedLayer: Dispatch<SetStateAction<number>> | undefined;
+    let selectedLayer: number | null | undefined, setSelectedLayer: Dispatch<SetStateAction<number | null>> | undefined;
 
     if (contextValue) {
         product = contextValue.product;
@@ -54,7 +54,7 @@ export const useDesign = () => {
     }
 
     const updateLayerPosition = (movedX: number, movedY: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && setLayers !== undefined) {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].xPos += movedX;
             newLayers[productSide][selectedLayer].yPos += movedY;
@@ -63,7 +63,7 @@ export const useDesign = () => {
     }
 
     const updateLayerSize = (width: number, height: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && setLayers !== undefined) {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].width = width;
             newLayers[productSide][selectedLayer].height = height;

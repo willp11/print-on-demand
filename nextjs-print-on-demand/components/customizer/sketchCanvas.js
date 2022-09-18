@@ -147,11 +147,17 @@ export default function SketchCanvas() {
 
         // LAYERS
         if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
+
             // how far has image been moved
             let movedX = 0, movedY = 0;
             let resizedX = 0, resizedY = 0;
-            let activeLogoSizeX = activeLayerRef.current.width;
-            let activeLogoSizeY = activeLayerRef.current.height;
+            let activeLogoSizeX = null;
+            let activeLogoSizeY = null;
+
+            if (selectedLayer !== null) {
+                activeLogoSizeX = activeLayerRef.current.width;
+                activeLogoSizeY = activeLayerRef.current.height;
+            }
 
             // draw all layers
             for (let i=0; i<allLayerImagesRef.current.length; i++) {
@@ -193,51 +199,54 @@ export default function SketchCanvas() {
                 }
             }
 
-            // draw border around active layer
-            p5.stroke('blue');
-            p5.strokeWeight(2);
-            p5.fill('rgba(100%,0%,100%,0)')
-            p5.rect(
-                activeLayerRef.current.xPos + movedX, 
-                activeLayerRef.current.yPos + movedY, 
-                activeLogoSizeX,
-                activeLogoSizeY
-            )
+            if (selectedLayer !== null) {
+                // draw border around active layer
+                p5.stroke('blue');
+                p5.strokeWeight(2);
+                p5.fill('rgba(100%,0%,100%,0)')
+                p5.rect(
+                    activeLayerRef.current.xPos + movedX, 
+                    activeLayerRef.current.yPos + movedY, 
+                    activeLogoSizeX,
+                    activeLogoSizeY
+                )
 
-            // draw resize square
-            p5.stroke('white');
-            p5.strokeWeight(0);
-            p5.fill("blue");
-            p5.rect(
-                activeLayerRef.current.xPos + activeLogoSizeX + movedX, 
-                activeLayerRef.current.yPos + activeLogoSizeY + movedY,
-                20, 
-                20
-            );
-            p5.fill("white");
-            p5.strokeWeight(2);
-            p5.triangle(
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
-            )
-            p5.triangle(
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
-            )
-            p5.line(
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
-                activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
-                activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17
-            )
+                // draw resize square
+                p5.stroke('white');
+                p5.strokeWeight(0);
+                p5.fill("blue");
+                p5.rect(
+                    activeLayerRef.current.xPos + activeLogoSizeX + movedX, 
+                    activeLayerRef.current.yPos + activeLogoSizeY + movedY,
+                    20, 
+                    20
+                );
+                p5.fill("white");
+                p5.strokeWeight(1);
+                p5.triangle(
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3, 
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
+                )
+                p5.triangle(
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17, 
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10
+                )
+                p5.strokeWeight(2);
+                p5.line(
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 4, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 4, 
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX + 16, 
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY + 16
+                )
+            }
         }
 
 

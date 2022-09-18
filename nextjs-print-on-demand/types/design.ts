@@ -10,12 +10,10 @@ export interface IDesignContext {
     setProductSide: Dispatch<SetStateAction<string>>,
     color: string,
     setColor: Dispatch<SetStateAction<string>>,
-    // layers: ILayer[],
     layers: {[key: string]: ILayer[]}
-    // setLayers: Dispatch<SetStateAction<ILayer[]>>,
     setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>>,
-    selectedLayer: number,
-    setSelectedLayer: Dispatch<SetStateAction<number>>
+    selectedLayer: number | null,
+    setSelectedLayer: Dispatch<SetStateAction<number | null>>
 }
 
 type LayerType = "image" | "text"
