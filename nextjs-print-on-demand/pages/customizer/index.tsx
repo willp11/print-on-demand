@@ -1,9 +1,10 @@
 import SketchCanvas from '../../components/customizer/sketchCanvas';
 import { useDesign } from '../../hooks/useDesign';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getBase64 } from '../../utils/customizer';
 import { ILayer } from '../../types/design';
 import LayerPreview from '../../components/customizer/layerPreview';
+import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
     let className = "border border-gray-300 p-1 w-32 rounded";
@@ -17,7 +18,7 @@ function CustomizerBtn({content, selected}: {content: string, selected: boolean}
 
 export default function Customizer() {
 
-    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer} = useDesign();
+    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
@@ -66,8 +67,9 @@ export default function Customizer() {
                 width = Math.min(350*aspectRatio, size);
                 height = Math.min(350, size/aspectRatio);
             }
+            console.log(width, height)
             let layer: ILayer = {
-                id: layers[productSide]?.length ?? 0,
+                id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
                 type: "image",
                 xPos: layers[productSide]?.length*50,
                 yPos: layers[productSide]?.length*50,
@@ -92,6 +94,21 @@ export default function Customizer() {
                 </div>
             )
         })
+    }
+
+    let moveLayerBackArrow = <div className="w-6 h-6"></div>;
+    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined) {
+        // ensure selected layer is not the furthest back already
+        if (selectedLayer > 0) {
+            moveLayerBackArrow = <ArrowLeftIcon className="w-6 h-6 cursor-pointer mr-2" onClick={moveLayerBackward} />
+        }
+    }
+    let moveLayerForwardArrow = <div className="w-6 h-6"></div>;
+    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined) {
+        // ensure selected layer is not the furthest back already
+        if (selectedLayer < layers[productSide].length - 1) {
+            moveLayerForwardArrow = <ArrowRightIcon className="w-6 h-6 cursor-pointer ml-2" onClick={moveLayerForward} />
+        }
     }
 
     return (
@@ -124,8 +141,10 @@ export default function Customizer() {
                     <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
                     <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
                 </div>
-                <div className="flex flex-row justify-start">
+                <div className="flex flex-row justify-start items-center">
+                    {moveLayerBackArrow}
                     {layerPreviews}
+                    {moveLayerForwardArrow}
                 </div>
             </div>
         </>

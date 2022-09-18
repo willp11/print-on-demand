@@ -47,12 +47,14 @@ export const useDesign = () => {
         setSelectedLayer = contextValue.setSelectedLayer;
     }
 
+    // add a layer
     const addLayer = (layer: ILayer) => {
         let newLayers = {...layers};
         if (typeof productSide === "string" && typeof layers !== "undefined") newLayers[productSide] = [...layers[productSide], layer];
         if (setLayers && layers) setLayers(newLayers);
     }
 
+    // remove a layer
     const removeLayer = (index: number) => {
         if (setSelectedLayer) setSelectedLayer(null);
         let newLayers = {...layers};
@@ -60,6 +62,7 @@ export const useDesign = () => {
         if (setLayers && layers) setLayers(newLayers);
     }
 
+    // update layer position on the canvas
     const updateLayerPosition = (movedX: number, movedY: number) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
@@ -69,12 +72,41 @@ export const useDesign = () => {
         }
     }
 
+    // update layer size on the canvas
     const updateLayerSize = (width: number, height: number) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].width = width;
             newLayers[productSide][selectedLayer].height = height;
             setLayers(newLayers)
+        }
+    }
+
+    // move layer forward (draw later, so further back in layer array)
+    const moveLayerForward = () => {
+        if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
+            // ensure selected layer is not the furthest back already
+            if (selectedLayer < layers[productSide].length - 1) {
+                // swap the layer with next one further back
+                let newLayers = {...layers};
+                [newLayers[productSide][selectedLayer], newLayers[productSide][selectedLayer+1]] = [newLayers[productSide][selectedLayer+1], newLayers[productSide][selectedLayer]];
+                setLayers(newLayers);
+                setSelectedLayer(selectedLayer+1);
+            }
+        }
+    }
+
+    // move layer backward (draw earlier, so further forward in layer array)
+    const moveLayerBackward = () => {
+        if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
+            // ensure selected layer is not the furthest back already
+            if (selectedLayer > 0) {
+                // swap the layer with one further forward
+                let newLayers = {...layers};
+                [newLayers[productSide][selectedLayer-1], newLayers[productSide][selectedLayer]] = [newLayers[productSide][selectedLayer], newLayers[productSide][selectedLayer-1]];
+                setLayers(newLayers);
+                setSelectedLayer(selectedLayer-1);
+            }
         }
     }
 
@@ -91,6 +123,8 @@ export const useDesign = () => {
         setSelectedLayer,
         updateLayerPosition,
         updateLayerSize,
-        removeLayer
+        removeLayer,
+        moveLayerForward,
+        moveLayerBackward
     }
 }

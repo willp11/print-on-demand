@@ -185,7 +185,7 @@ export default function SketchCanvas() {
                         allLayerImagesRef.current[i], 
                         activeLayerRef.current.xPos + movedX, 
                         activeLayerRef.current.yPos + movedY, 
-                        activeLogoSizeY, 
+                        activeLogoSizeX, 
                         activeLogoSizeY
                     );
                 } else {
