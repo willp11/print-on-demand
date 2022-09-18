@@ -145,6 +145,18 @@ export default function SketchCanvas() {
         // PRODUCT
         p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
 
+        // PRINTABLE AREA
+        let printable_x_start = (canvasSize*0.32);
+        let printable_y_start = (canvasSize*0.18);
+        let printable_size_x = (canvasSize*0.37);
+        let printable_size_y = (canvasSize*0.66);
+
+        if (selectedLayer !== null) {
+            p5.stroke('green');
+            p5.fill('rgba(0,0,0,0)');
+            p5.rect(printable_x_start, printable_y_start, printable_size_x, printable_size_y);
+        }
+
         // LAYERS
         if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
 
@@ -246,6 +258,27 @@ export default function SketchCanvas() {
                     activeLayerRef.current.xPos+activeLogoSizeX+movedX + 16, 
                     activeLayerRef.current.yPos+activeLogoSizeY+movedY + 16
                 )
+
+
+                // Check active image is inside printable area
+                // check if inside printable area
+                let outside_printable = false;
+                if (activeLayerRef.current.xPos+movedX < printable_x_start ||
+                    activeLayerRef.current.xPos+activeLogoSizeX+movedX > printable_x_start+printable_size_x ||
+                    activeLayerRef.current.yPos+movedY < printable_y_start ||
+                    activeLayerRef.current.yPos+activeLogoSizeY+movedY > printable_y_start+printable_size_y
+                ) {
+                    outside_printable = true;
+                }
+
+                // outside printable area warning
+                if (outside_printable) {
+                    p5.textSize(16);
+                    p5.strokeWeight(1);
+                    p5.stroke('red');
+                    p5.fill('red');
+                    p5.text('Outside printable area', 20, 30);
+                }
             }
         }
 
