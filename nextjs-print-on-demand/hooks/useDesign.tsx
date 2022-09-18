@@ -53,6 +53,13 @@ export const useDesign = () => {
         if (setLayers && layers) setLayers(newLayers);
     }
 
+    const removeLayer = (index: number) => {
+        if (setSelectedLayer) setSelectedLayer(null);
+        let newLayers = {...layers};
+        if (typeof productSide === "string" && typeof layers !== "undefined") newLayers[productSide].splice(index, 1);
+        if (setLayers && layers) setLayers(newLayers);
+    }
+
     const updateLayerPosition = (movedX: number, movedY: number) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
@@ -83,6 +90,7 @@ export const useDesign = () => {
         selectedLayer,
         setSelectedLayer,
         updateLayerPosition,
-        updateLayerSize
+        updateLayerSize,
+        removeLayer
     }
 }

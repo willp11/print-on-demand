@@ -81,24 +81,14 @@ export default function Customizer() {
         }
     }
 
-    const selectLayerHandler = (idx: number) => {
-        if (setSelectedLayer) {
-            if (selectedLayer === idx) {
-                setSelectedLayer(null);
-            } else {
-                setSelectedLayer(idx);
-            }
-        } 
-    }
-
     let layerPreviews = null;
     if (typeof layers !== "undefined" && productSide) {
         layerPreviews = layers[productSide].map((layer, idx)=>{
             let className = "";
             if (selectedLayer === idx) className = "border-2 border-blue-500 w-[100px] h-[100px]"
             if (setSelectedLayer ) return (
-                <div key={layer.id} onClick={()=>selectLayerHandler(idx)} className={className}>
-                    <LayerPreview layer={layer} />
+                <div key={layer.id} className={className}>
+                    <LayerPreview layer={layer} index={idx} />
                 </div>
             )
         })
