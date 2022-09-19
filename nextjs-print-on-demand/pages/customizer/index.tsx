@@ -94,8 +94,8 @@ export default function Customizer() {
                 yPos: 200,
                 aspectRatio: 1,
                 size: 100,
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 60,
                 rotation: 0,
                 font: '/fonts/OpenSans-Medium.ttf',
                 textContent: 'hello',
@@ -136,7 +136,7 @@ export default function Customizer() {
     return (
         <> 
             <SketchCanvas />
-            <div className="flex flex-col p-2">
+            <div className="flex flex-col md:flex-row p-2">
                 <div className="flex">
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
@@ -163,23 +163,26 @@ export default function Customizer() {
                         </div>
                     </div>
                 </div>
-                <div className="flex mt-2">
+                <div className="flex">
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Add Image Layer</h2>
                         <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
                         <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
                     </div>
-                    <div className="flex flex-row justify-start items-center">
-                        {moveLayerBackArrow}
-                        {layerPreviews}
-                        {moveLayerForwardArrow}
-                    </div>
                 </div>
-                <div className="flex mt-2">
+                <div className="flex">
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Add Text Layer</h2>
                         <input type="text" className="p-1 border border-gray-300" placeholder="Text content..." onChange={(e)=>setTextLayerContent(e.target.value)} />
                         <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
+                    </div>
+                </div>
+                <div className="flex flex-col">
+                    <h2 className="text-xl font-bold tracking-tight">Layers</h2>
+                    <div className="flex flex-row justify-start items-center">
+                        {moveLayerBackArrow}
+                        {layerPreviews}
+                        {moveLayerForwardArrow}
                     </div>
                 </div>
             </div>
