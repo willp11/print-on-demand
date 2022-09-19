@@ -23,6 +23,7 @@ export default function Customizer() {
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
+    const [textLayerContent, setTextLayerContent] = useState("");
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
@@ -83,6 +84,27 @@ export default function Customizer() {
         }
     }
 
+    const addTextLayer = () => {
+        if (layers && productSide) {
+            
+            let layer: ILayer = {
+                id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+                type: "text",
+                xPos: 200,
+                yPos: 200,
+                aspectRatio: 1,
+                size: 100,
+                width: 100,
+                height: 100,
+                rotation: 0,
+                font: '/fonts/OpenSans-Medium.ttf',
+                textContent: 'hello',
+                textSize: 20
+            }
+            addLayer(layer);
+        }
+    }
+
     let layerPreviews = null;
     if (typeof layers !== "undefined" && productSide) {
         layerPreviews = layers[productSide].map((layer, idx)=>{
@@ -114,37 +136,51 @@ export default function Customizer() {
     return (
         <> 
             <SketchCanvas />
-            <div className="flex">
-                <div className="flex flex-col">
-                    <div onClick={()=>setSideHandler("front")}>
-                        <CustomizerBtn content="Front" selected={productSide === "front"} />
+            <div className="flex flex-col p-2">
+                <div className="flex">
+                    <div className="flex flex-col">
+                        <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
+                        <div onClick={()=>setSideHandler("front")}>
+                            <CustomizerBtn content="Front" selected={productSide === "front"} />
+                        </div>
+                        <div onClick={()=>setSideHandler("back")}>
+                            <CustomizerBtn content="Back" selected={productSide === "back"} />
+                        </div>
+                        <div onClick={()=>setSideHandler("left")}>
+                            <CustomizerBtn content="Left" selected={productSide === "left"} />
+                        </div>
+                        <div onClick={()=>setSideHandler("right")}>
+                            <CustomizerBtn content="Right" selected={productSide === "right"} />
+                        </div>
                     </div>
-                    <div onClick={()=>setSideHandler("back")}>
-                        <CustomizerBtn content="Back" selected={productSide === "back"} />
-                    </div>
-                    <div onClick={()=>setSideHandler("left")}>
-                        <CustomizerBtn content="Left" selected={productSide === "left"} />
-                    </div>
-                    <div onClick={()=>setSideHandler("right")}>
-                        <CustomizerBtn content="Right" selected={productSide === "right"} />
+                    <div className="flex flex-col">
+                        <h2 className="text-xl font-bold tracking-tight">Select Color</h2>
+                        <div onClick={()=>setColorHandler("white")}>
+                            <CustomizerBtn content="White" selected={color === "white"} />
+                        </div>
+                        <div onClick={()=>setColorHandler("black")}>
+                            <CustomizerBtn content="Black" selected={color === "black"} />
+                        </div>
                     </div>
                 </div>
-                <div className="flex flex-col">
-                    <div onClick={()=>setColorHandler("white")}>
-                        <CustomizerBtn content="White" selected={color === "white"} />
+                <div className="flex mt-2">
+                    <div className="flex flex-col">
+                        <h2 className="text-xl font-bold tracking-tight">Add Image Layer</h2>
+                        <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
+                        <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
                     </div>
-                    <div onClick={()=>setColorHandler("black")}>
-                        <CustomizerBtn content="Black" selected={color === "black"} />
+                    <div className="flex flex-row justify-start items-center">
+                        {moveLayerBackArrow}
+                        {layerPreviews}
+                        {moveLayerForwardArrow}
                     </div>
                 </div>
-                <div className="flex flex-col">
-                    <input type="file" onChange={(e)=>setImageHandler(e.target.files)} />
-                    <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
-                </div>
-                <div className="flex flex-row justify-start items-center">
-                    {moveLayerBackArrow}
-                    {layerPreviews}
-                    {moveLayerForwardArrow}
+                <div className="flex mt-2">
+                    <div className="flex flex-col">
+                        <h2 className="text-xl font-bold tracking-tight">Add Text Layer</h2>
+                        <input type="text" className="p-1 border border-gray-300" placeholder="Text content..." onChange={(e)=>setTextLayerContent(e.target.value)} />
+                        <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
+                    </div>
                 </div>
             </div>
         </>

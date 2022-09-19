@@ -46,6 +46,7 @@ export default function SketchCanvas() {
     let productImageMaskRef = useRef();
     let activeLayerRef = useRef(undefined);
     let allLayerImagesRef = useRef(undefined);
+    let allLayersRef = useRef(undefined);
 
     // load product image to productImageRef
     useEffect(()=>{
@@ -54,15 +55,23 @@ export default function SketchCanvas() {
         }
     }, [product, productSide, color]);
 
-    // load new layer image to activeLayerImageRef
+    // load new layers
     useEffect(()=>{
         if (p5ref.current && layers[productSide].length > 0) {
             if (layers[productSide].length > 0) {
+                // active layer
                 activeLayerRef.current = layers[productSide][selectedLayer];
-                allLayerImagesRef.current = layers[productSide].map((layer)=>{
-                    return p5ref.current.loadImage(layer.image);
-                })
                 rotationAngle = activeLayerRef.current?.rotation;
+
+                // all layers
+                allLayerImagesRef.current = layers[productSide].map((layer)=>{
+                    if (layer.type === "image") {
+                        return p5ref.current.loadImage(layer.image);
+                    } else if (layer.type === "text") {
+                        return p5ref.current.loadFont(layer.font);
+                    }
+                })
+                console.log(allLayersRef.current);
             } else {
                 activeLayerRef.current = undefined;
                 allLayerImagesRef.current = undefined;
@@ -75,6 +84,8 @@ export default function SketchCanvas() {
         p5.angleMode(p5.DEGREES);
         productImageRef.current = p5.loadImage(product.colors[color][productSide]);
         productImageMaskRef.current = p5.loadImage('/images/products/sol_regent_tshirt_white-mask.png');
+
+        // opensans = p5.loadFont('/fonts/OpenSans-Medium.ttf');
     }
 
     // Setup canvas
@@ -185,7 +196,7 @@ export default function SketchCanvas() {
         let printable_size_x = (canvasSize*0.37);
         let printable_size_y = (canvasSize*0.66);
 
-        if (selectedLayer !== null) {
+        if (selectedLayer !== null && selectedLayer !== undefined) {
             // printable rectangle
             p5.stroke('gray');
             p5.strokeWeight(1)
@@ -214,169 +225,180 @@ export default function SketchCanvas() {
         // LAYERS
         if (allLayerImagesRef.current !== undefined && layers[productSide].length > 0) {
 
-            // how far has image been moved
+            // how far has layer been moved / resized
             let movedX = 0, movedY = 0;
             let resizedX = 0;
-            let activeLogoSizeX = null;
-            let activeLogoSizeY = null;
+            let activeLayerSizeX = null;
+            let activeLayerSizeY = null;
 
             if (selectedLayer !== null) {
-                activeLogoSizeX = activeLayerRef.current.width;
-                activeLogoSizeY = activeLayerRef.current.height;
+                activeLayerSizeX = activeLayerRef.current.width;
+                activeLayerSizeY = activeLayerRef.current.height;
             }
 
             // draw all layers
             for (let i=0; i<allLayerImagesRef.current.length; i++) {
 
-                // if it's the active layer - draw it based off the position and dimensions in the activeLayer ref 
-                if (i === selectedLayer) {
-                    // Move image
-                    if (clickedX !== null && clickedY !== null) {
-                        movedX = p5.mouseX - clickedX;
-                        movedY = p5.mouseY - clickedY;
-                    }
+                if (layers[productSide][i].type === "image") {
+                    // if it's the active layer - draw it based off the position and dimensions in the activeLayer ref 
+                    if (i === selectedLayer) {
+                        // Move image
+                        if (clickedX !== null && clickedY !== null) {
+                            movedX = p5.mouseX - clickedX;
+                            movedY = p5.mouseY - clickedY;
+                        }
 
-                    // Resize image
-                    if (clickedXResize !== null && clickedYResize !== null) {
-                        resizedX = p5.mouseX - clickedXResize;
-                        activeLogoSizeX += resizedX;
-                        activeLogoSizeY += resizedX
-                    }
+                        // Resize image
+                        if (clickedXResize !== null && clickedYResize !== null) {
+                            resizedX = p5.mouseX - clickedXResize;
+                            activeLayerSizeX += resizedX;
+                            activeLayerSizeY += resizedX
+                        }
 
-                    // new drawing state for active layer, so can translate to middle of image and rotate around there
-                    p5.push();
-                    let translateX = activeLayerRef.current.xPos + movedX + (0.5*activeLogoSizeX);
-                    let translateY = activeLayerRef.current.yPos + movedY + (0.5*activeLogoSizeY);
-                    p5.translate(translateX, translateY);
+                        // new drawing state for active layer, so can translate to middle of image and rotate around there
+                        p5.push();
+                        let translateX = activeLayerRef.current.xPos + movedX + (0.5*activeLayerSizeX);
+                        let translateY = activeLayerRef.current.yPos + movedY + (0.5*activeLayerSizeY);
+                        p5.translate(translateX, translateY);
 
-                    // Rotation
-                    if (p5.mouseIsPressed && isRotating) {
-                        let angle = p5.atan2(p5.mouseY - translateY, p5.mouseX - translateX) - activeLayerRef.current.rotation + 45;
-                        p5.rotate(activeLayerRef.current.rotation+angle);
-                        rotationAngle = activeLayerRef.current.rotation+angle;
+                        // Rotation
+                        if (p5.mouseIsPressed && isRotating) {
+                            let angle = p5.atan2(p5.mouseY - translateY, p5.mouseX - translateX) - activeLayerRef.current.rotation + 45;
+                            p5.rotate(activeLayerRef.current.rotation+angle);
+                            rotationAngle = activeLayerRef.current.rotation+angle;
+                        } else {
+                            p5.rotate(activeLayerRef.current.rotation);
+                        }
+
+                        // draw layer image
+                        p5.image(
+                            allLayerImagesRef.current[i],
+                            activeLayerRef.current.xPos + movedX - translateX, 
+                            activeLayerRef.current.yPos + movedY - translateY, 
+                            activeLayerSizeX, 
+                            activeLayerSizeY
+                        );
+
+                        // draw border around active layer
+                        p5.stroke('blue');
+                        p5.strokeWeight(2);
+                        p5.fill('rgba(0,0,0,0)')
+                        p5.rect(
+                            activeLayerRef.current.xPos + movedX - translateX, 
+                            activeLayerRef.current.yPos + movedY - translateY, 
+                            activeLayerSizeX,
+                            activeLayerSizeY
+                        )
+
+                        // drawing tools
+                        p5.stroke('white');
+                        p5.fill("blue");
+                        p5.strokeWeight(0);
+
+                        // draw rotate square
+                        p5.rect(
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20, 
+                            20,
+                            20
+                        )
+                        p5.strokeWeight(2);
+                        p5.ellipse(
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
+                            12,
+                            12
+                        )
+                        p5.strokeWeight(4);
+                        p5.stroke('blue');
+                        p5.curve(
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 20, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 8, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 4, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 2, 
+                            activeLayerRef.current.yPos + movedY - translateY,
+                        )
+                        p5.fill("white");
+                        p5.strokeWeight(0);
+                        p5.triangle(
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 1,
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 9,
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 2, 
+                            activeLayerRef.current.yPos + movedY - translateY - 20 + 5,
+                        )
+
+                        // draw resize square
+                        p5.fill("blue")
+                        p5.stroke('white');
+                        p5.strokeWeight(0);
+                        p5.rect(
+                            activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX, 
+                            activeLayerRef.current.yPos + activeLayerSizeY + movedY - translateY,
+                            20, 
+                            20
+                        );
+                        p5.fill("white");
+                        p5.strokeWeight(1);
+                        p5.triangle(
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 3 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 3 - translateY, 
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 10 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 3 - translateY, 
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 3 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 10 - translateY
+                        )
+                        p5.triangle(
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 17 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 17 - translateY, 
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 10 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 17 - translateY, 
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 17 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 10 - translateY
+                        )
+                        p5.strokeWeight(2);
+                        p5.line(
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 4 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 4 - translateY, 
+                            activeLayerRef.current.xPos+activeLayerSizeX+movedX + 16 - translateX, 
+                            activeLayerRef.current.yPos+activeLayerSizeY+movedY + 16 - translateY
+                        )
+
+                        // restore old drawing state
+                        p5.pop()
                     } else {
-                        p5.rotate(activeLayerRef.current.rotation);
+                        p5.push();
+                        let translateX = layers[productSide][i].xPos + (0.5*layers[productSide][i].width);
+                        let translateY = layers[productSide][i].yPos + (0.5*layers[productSide][i].height);
+                        p5.translate(translateX, translateY);
+                        p5.rotate(layers[productSide][i].rotation);
+
+                        p5.image(
+                            allLayerImagesRef.current[i], 
+                            layers[productSide][i].xPos - translateX, 
+                            layers[productSide][i].yPos - translateY, 
+                            layers[productSide][i].width, 
+                            layers[productSide][i].height
+                        );
+
+                        p5.pop();
                     }
-
-                    // draw layer image
-                    p5.image(
-                        allLayerImagesRef.current[i], 
-                        activeLayerRef.current.xPos + movedX - translateX, 
-                        activeLayerRef.current.yPos + movedY - translateY, 
-                        activeLogoSizeX, 
-                        activeLogoSizeY
-                    );
-
-                    // draw border around active layer
-                    p5.stroke('blue');
-                    p5.strokeWeight(2);
-                    p5.fill('rgba(0,0,0,0)')
-                    p5.rect(
-                        activeLayerRef.current.xPos + movedX - translateX, 
-                        activeLayerRef.current.yPos + movedY - translateY, 
-                        activeLogoSizeX,
-                        activeLogoSizeY
-                    )
-
-                    // drawing tools
-                    p5.stroke('white');
-                    p5.fill("blue");
-                    p5.strokeWeight(0);
-
-                    // draw rotate square
-                    p5.rect(
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20, 
-                        20,
-                        20
-                    )
-                    p5.strokeWeight(2);
-                    p5.ellipse(
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
-                        12,
-                        12
-                    )
-                    p5.strokeWeight(4);
-                    p5.stroke('blue');
-                    p5.curve(
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 20, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 8, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 4, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 2, 
-                        activeLayerRef.current.yPos + movedY - translateY,
-                    )
-                    p5.fill("white");
-                    p5.strokeWeight(0);
-                    p5.triangle(
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 1,
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 9,
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX + 2, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 5,
-                    )
-
-                    // draw resize square
-                    p5.fill("blue")
-                    p5.stroke('white');
-                    p5.strokeWeight(0);
-                    p5.rect(
-                        activeLayerRef.current.xPos + activeLogoSizeX + movedX - translateX, 
-                        activeLayerRef.current.yPos + activeLogoSizeY + movedY - translateY,
-                        20, 
-                        20
-                    );
-                    p5.fill("white");
-                    p5.strokeWeight(1);
-                    p5.triangle(
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3 - translateY, 
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 3 - translateY, 
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 3 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10 - translateY
-                    )
-                    p5.triangle(
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17 - translateY, 
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 10 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 17 - translateY, 
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 17 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 10 - translateY
-                    )
-                    p5.strokeWeight(2);
-                    p5.line(
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 4 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 4 - translateY, 
-                        activeLayerRef.current.xPos+activeLogoSizeX+movedX + 16 - translateX, 
-                        activeLayerRef.current.yPos+activeLogoSizeY+movedY + 16 - translateY
-                    )
-
-                    // restore old drawing state
-                    p5.pop()
-                } else {
-                    p5.push();
-                    let translateX = layers[productSide][i].xPos + (0.5*layers[productSide][i].width);
-                    let translateY = layers[productSide][i].yPos + (0.5*layers[productSide][i].height);
-                    p5.translate(translateX, translateY);
-                    p5.rotate(layers[productSide][i].rotation);
-
-                    p5.image(
-                        allLayerImagesRef.current[i], 
-                        layers[productSide][i].xPos - translateX, 
-                        layers[productSide][i].yPos - translateY, 
-                        layers[productSide][i].width, 
-                        layers[productSide][i].height
-                    );
-
-                    p5.pop();
+                } else if (layers[productSide][i].type === "text") {
+                    p5.textFont(allLayerImagesRef.current[i]);
+                    p5.textSize(50);
+                    p5.fill("black");
+                    p5.text(layers[productSide][i].textContent, 200, 200);
                 }
+                
             }
+
+            // Draw the product mask image
             p5.image(productImageMaskRef.current, 1, 1, canvasSize, canvasSize);
+
         }
 
 

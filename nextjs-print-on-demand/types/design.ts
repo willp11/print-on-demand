@@ -29,5 +29,7 @@ export interface ILayer {
     height: number,
     rotation: number,
     image?: string,
-    textContent?: string
+    font?: string,
+    textContent?: string,
+    textSize?: number
 }

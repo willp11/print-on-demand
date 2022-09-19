@@ -16,7 +16,7 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
         "left": [],
         "right": []
     });
-    const [selectedLayer, setSelectedLayer] = useState<number | null>(0);
+    const [selectedLayer, setSelectedLayer] = useState<number | null>(null);
 
     const contextValue = useMemo(()=>{
         return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers, selectedLayer, setSelectedLayer}
