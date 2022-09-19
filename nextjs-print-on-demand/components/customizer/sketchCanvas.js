@@ -152,9 +152,29 @@ export default function SketchCanvas() {
         let printable_size_y = (canvasSize*0.66);
 
         if (selectedLayer !== null) {
-            p5.stroke('green');
+            // printable rectangle
+            p5.stroke('gray');
+            p5.strokeWeight(1)
             p5.fill('rgba(0,0,0,0)');
             p5.rect(printable_x_start, printable_y_start, printable_size_x, printable_size_y);
+
+            // grid
+            for (let i=0; i<5; i++) {
+                p5.line(
+                    printable_x_start + (printable_size_x * 0.2 * i),
+                    printable_y_start,
+                    printable_x_start + (printable_size_x * 0.2 * i),
+                    printable_y_start+printable_size_y
+                )
+            }
+            for (let i=0; i<10; i++) {
+                p5.line(
+                    printable_x_start,
+                    printable_y_start + (printable_size_y * 0.1 * i),
+                    printable_x_start + printable_size_x,
+                    printable_y_start + (printable_size_y * 0.1 * i)
+                )
+            }
         }
 
         // LAYERS
@@ -215,7 +235,7 @@ export default function SketchCanvas() {
                 // draw border around active layer
                 p5.stroke('blue');
                 p5.strokeWeight(2);
-                p5.fill('rgba(100%,0%,100%,0)')
+                p5.fill('rgba(0,0,0,0)')
                 p5.rect(
                     activeLayerRef.current.xPos + movedX, 
                     activeLayerRef.current.yPos + movedY, 
