@@ -58,10 +58,11 @@ export default function SketchCanvas() {
     useEffect(()=>{
         if (p5ref.current && layers[productSide].length > 0) {
             if (layers[productSide].length > 0) {
-                activeLayerRef.current = layers[productSide][selectedLayer]
+                activeLayerRef.current = layers[productSide][selectedLayer];
                 allLayerImagesRef.current = layers[productSide].map((layer)=>{
                     return p5ref.current.loadImage(layer.image);
                 })
+                rotationAngle = activeLayerRef.current?.rotation;
             } else {
                 activeLayerRef.current = undefined;
                 allLayerImagesRef.current = undefined;
@@ -151,14 +152,11 @@ export default function SketchCanvas() {
         // Update layer size
         if (clickedXResize && clickedYResize) {
             let resizedX = p5.mouseX - clickedXResize;
-            let resizedY = p5.mouseY - clickedYResize;
             let logoSizeX = activeLayerRef.current.width;
             let logoSizeY = activeLayerRef.current.height;
-            // we only want to resize smaller/bigger if we have negative/positive moved value on both axis
-            if ((resizedX < 0 && resizedY < 0) || (resizedX > 0 && resizedY > 0)) {
-                logoSizeX += Math.min(resizedX, resizedY);
-                logoSizeY += Math.min(resizedX, resizedY);
-            }
+
+            logoSizeX += resizedX;
+            logoSizeY += resizedX
 
             // update layer size
             updateLayerSize(logoSizeX, logoSizeY);
@@ -169,7 +167,8 @@ export default function SketchCanvas() {
         // Stop rotating
         if (isRotating) {
             isRotating = false;
-            updateLayerRotation(rotationAngle); 
+            if (rotationAngle < 0) rotationAngle = 360 + rotationAngle;
+            updateLayerRotation(rotationAngle);
         }
     }
 
@@ -217,7 +216,7 @@ export default function SketchCanvas() {
 
             // how far has image been moved
             let movedX = 0, movedY = 0;
-            let resizedX = 0, resizedY = 0;
+            let resizedX = 0;
             let activeLogoSizeX = null;
             let activeLogoSizeY = null;
 
@@ -240,12 +239,8 @@ export default function SketchCanvas() {
                     // Resize image
                     if (clickedXResize !== null && clickedYResize !== null) {
                         resizedX = p5.mouseX - clickedXResize;
-                        resizedY = p5.mouseY - clickedYResize;
-                    }
-                    // we only want to resize smaller/bigger if we have negative/positive moved value on both axis
-                    if ((resizedX < 0 && resizedY < 0) || (resizedX > 0 && resizedY > 0)) {
-                        activeLogoSizeX += Math.min(resizedX, resizedY);
-                        activeLogoSizeY += Math.min(resizedX, resizedY);
+                        activeLogoSizeX += resizedX;
+                        activeLogoSizeY += resizedX
                     }
 
                     // new drawing state for active layer, so can translate to middle of image and rotate around there
@@ -365,8 +360,8 @@ export default function SketchCanvas() {
                     p5.pop()
                 } else {
                     p5.push();
-                    let translateX = layers[productSide][i].xPos + movedX + (0.5*layers[productSide][i].width);
-                    let translateY = layers[productSide][i].yPos + movedY + (0.5*layers[productSide][i].height);
+                    let translateX = layers[productSide][i].xPos + (0.5*layers[productSide][i].width);
+                    let translateY = layers[productSide][i].yPos + (0.5*layers[productSide][i].height);
                     p5.translate(translateX, translateY);
                     p5.rotate(layers[productSide][i].rotation);
 
