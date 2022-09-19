@@ -61,22 +61,22 @@ export default function Customizer() {
             let size = Math.min(layerImageWidth, 350);
             let width, height;
             if (aspectRatio >= 1) {
-                width = Math.min(350, size);
-                height = Math.min(350, size)/aspectRatio;
+                width = Math.min(100, size);
+                height = Math.min(100, size)/aspectRatio;
             } else {
-                width = Math.min(350*aspectRatio, size);
-                height = Math.min(350, size/aspectRatio);
+                width = Math.min(100*aspectRatio, size);
+                height = Math.min(100, size/aspectRatio);
             }
-            console.log(width, height)
             let layer: ILayer = {
                 id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
                 type: "image",
-                xPos: layers[productSide]?.length*50,
-                yPos: layers[productSide]?.length*50,
+                xPos: 200,
+                yPos: 200,
                 aspectRatio: aspectRatio,
-                size: Math.min(layerImageWidth, 350),
+                size: Math.min(layerImageWidth, 100),
                 width: width,
                 height: height,
+                rotation: 0,
                 image: layerImage
             }
             addLayer(layer);

@@ -82,6 +82,15 @@ export const useDesign = () => {
         }
     }
 
+    // update layer rotation
+    const updateLayerRotation = (angle: number) => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+            let newLayers = {...layers};
+            newLayers[productSide][selectedLayer].rotation = angle;
+            setLayers(newLayers)
+        }
+    }
+
     // move layer forward (draw later, so further back in layer array)
     const moveLayerForward = () => {
         if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
@@ -123,6 +132,7 @@ export const useDesign = () => {
         setSelectedLayer,
         updateLayerPosition,
         updateLayerSize,
+        updateLayerRotation,
         removeLayer,
         moveLayerForward,
         moveLayerBackward
