@@ -16,7 +16,14 @@ export interface IDesignContext {
     setSelectedLayer: Dispatch<SetStateAction<number | null>>
 }
 
-type LayerType = "image" | "text"
+type LayerType = "image" | "text";
+
+interface TextBox {
+    x: number,
+    y: number,
+    w: number,
+    h: number
+}
 
 export interface ILayer {
     id: number,
@@ -31,5 +38,8 @@ export interface ILayer {
     image?: string,
     font?: string,
     textContent?: string,
-    textSize?: number
+    textSize?: number,
+    textBox?: TextBox,
+    translateX?: number,
+    translateY?: number
 }

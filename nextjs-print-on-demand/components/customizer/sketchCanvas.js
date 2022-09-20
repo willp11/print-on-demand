@@ -5,6 +5,7 @@ const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
 
 import { useRef, useState, useEffect } from 'react';
 import { useDesign } from '../../hooks/useDesign';
+import { drawResizeIcon, drawRotateIcon, isInsideArea } from '../../utils/customizer';
 
 export default function SketchCanvas() {
 
@@ -117,33 +118,44 @@ export default function SketchCanvas() {
         if (activeLayerRef.current) {
             let mouseCoords = getRotatedPoint(p5.mouseX, p5.mouseY, 0-activeLayerRef.current.rotation);
 
-            // Mouse pressed inside active layer image - Move image
-            if (mouseCoords.x >= activeLayerRef.current.xPos &&
-                mouseCoords.x <= activeLayerRef.current.xPos + activeLayerRef.current.width &&
-                mouseCoords.y >= activeLayerRef.current.yPos &&
-                mouseCoords.y <= activeLayerRef.current.yPos + activeLayerRef.current.height
-            ) {
-                clickedX = p5.mouseX;
-                clickedY = p5.mouseY;
-            }
-
-            // Mouse pressed inside active layer resize square - Resize image
-            if (mouseCoords.x >= activeLayerRef.current.xPos + activeLayerRef.current.width &&
-                mouseCoords.x <= activeLayerRef.current.xPos + activeLayerRef.current.width + 20 &&
-                mouseCoords.y >= activeLayerRef.current.yPos + activeLayerRef.current.height &&
-                mouseCoords.y <= activeLayerRef.current.yPos + activeLayerRef.current.height + 20
-            ) {
-                clickedXResize = p5.mouseX;
-                clickedYResize = p5.mouseY;
-            }
-
-            // Mouse pressed inside rotate square
-            if (mouseCoords.x >= activeLayerRef.current.xPos + activeLayerRef.current.width &&
-                mouseCoords.x <= activeLayerRef.current.xPos + activeLayerRef.current.width + 20 &&
-                mouseCoords.y >= activeLayerRef.current.yPos - 20 &&
-                mouseCoords.y <= activeLayerRef.current.yPos
-            ) {
-                isRotating = true;
+            if (activeLayerRef.current.type === "image") {
+                let x = activeLayerRef.current.xPos;
+                let y = activeLayerRef.current.yPos;
+                let w = activeLayerRef.current.width;
+                let h = activeLayerRef.current.height;
+                // Mouse pressed inside active layer image - Move image
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x, y, w, h)) {
+                    clickedX = p5.mouseX;
+                    clickedY = p5.mouseY;
+                }
+                // Mouse pressed inside active layer resize square - Resize image
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x+w, y+h, 20, 20)) {
+                    clickedXResize = p5.mouseX;
+                    clickedYResize = p5.mouseY;
+                }
+                // Mouse pressed inside rotate square
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x+w, y-20, 20, 20)) {
+                    isRotating = true;
+                }
+            } else if (activeLayerRef.current.type === "text") {
+                let x = activeLayerRef.current.textBox.x+activeLayerRef.current.translateX;
+                let y = activeLayerRef.current.textBox.y+activeLayerRef.current.translateY;
+                let w = activeLayerRef.current.textBox.w;
+                let h = activeLayerRef.current.textBox.h;
+                // Mouse pressed inside active layer image - Move image
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x, y, w, h)) {
+                    clickedX = p5.mouseX;
+                    clickedY = p5.mouseY;
+                }
+                // Mouse pressed inside active layer resize square - Resize image
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x+w, y+h, 20, 20)) {
+                    clickedXResize = p5.mouseX;
+                    clickedYResize = p5.mouseY;
+                }
+                // Mouse pressed inside rotate square
+                if (isInsideArea(mouseCoords.x, mouseCoords.y, x+w, y-20, 20, 20)) {
+                    isRotating = true;
+                }
             }
         }
     }
@@ -162,14 +174,14 @@ export default function SketchCanvas() {
         // Update layer size
         if (clickedXResize && clickedYResize) {
             let resizedX = p5.mouseX - clickedXResize;
-            let logoSizeX = activeLayerRef.current.width;
-            let logoSizeY = activeLayerRef.current.height;
+            let layerSizeX = activeLayerRef.current.width;
+            let layerSizeY = activeLayerRef.current.height;
 
-            logoSizeX += resizedX;
-            logoSizeY += resizedX
+            layerSizeX += resizedX;
+            layerSizeY += resizedX
 
             // update layer size
-            updateLayerSize(logoSizeX, logoSizeY);
+            updateLayerSize(layerSizeX, layerSizeY);
             clickedXResize = null;
             clickedYResize = null;
         }
@@ -184,6 +196,8 @@ export default function SketchCanvas() {
 
     // Draw canvas
     const draw = (p5) => {
+        // When move a layer, it draws the text again small, so make text size very low so can't see it
+        p5.textSize(0.0001)
         p5.background(255);
 
         // PRODUCT
@@ -199,8 +213,6 @@ export default function SketchCanvas() {
             // printable rectangle
             p5.stroke('gray');
             p5.strokeWeight(1)
-            p5.fill('rgba(0,0,0,0)');
-            p5.rect(printable_x_start, printable_y_start, printable_size_x, printable_size_y);
 
             // grid
             for (let i=0; i<5; i++) {
@@ -250,7 +262,7 @@ export default function SketchCanvas() {
                     if (clickedXResize !== null && clickedYResize !== null) {
                         resizedX = p5.mouseX - clickedXResize;
                         activeLayerSizeX += resizedX;
-                        activeLayerSizeY += resizedX
+                        activeLayerSizeY += resizedX;
                     }
 
                     // new drawing state for active layer, so can translate to middle of image and rotate around there
@@ -261,7 +273,14 @@ export default function SketchCanvas() {
 
                     // Rotation
                     if (p5.mouseIsPressed && isRotating) {
-                        let angle = p5.atan2(p5.mouseY - translateY, p5.mouseX - translateX) - activeLayerRef.current.rotation + 45;
+                        let angle;
+                        if (activeLayerRef.current.type === "image") {
+                            angle = p5.atan2(p5.mouseY - translateY, p5.mouseX - translateX) - activeLayerRef.current.rotation + 45;
+                        } else if (activeLayerRef.current.type === "text") {
+                            angle = p5.atan2(p5.mouseY - translateY, p5.mouseX - translateX) - activeLayerRef.current.rotation + 51;
+                            console.log(angle)
+                        }
+                        
                         p5.rotate(activeLayerRef.current.rotation+angle);
                         rotationAngle = activeLayerRef.current.rotation+angle;
                     } else {
@@ -269,7 +288,8 @@ export default function SketchCanvas() {
                     }
 
                     // Draw Layer
-                    if (layers[productSide][i].type === "image") {
+                    if (activeLayerRef.current.type === "image") {
+                        // draw image
                         p5.image(
                             allLayerImagesRef.current[i],
                             activeLayerRef.current.xPos + movedX - translateX, 
@@ -277,116 +297,113 @@ export default function SketchCanvas() {
                             activeLayerSizeX, 
                             activeLayerSizeY
                         );
-                    } else if (layers[productSide][i].type === "text") {
-                        p5.textFont(allLayerImagesRef.current[i]);
-                        p5.textSize(50);
-                        p5.fill("black");
-                        p5.textAlign(p5.LEFT, p5.TOP);
-                        p5.text(
-                            layers[productSide][i].textContent, 
-                            activeLayerRef.current.xPos + movedX - translateX, 
-                            activeLayerRef.current.yPos + movedY - translateY
-                        );
-                    }
 
-                    // draw border around active layer
-                    p5.stroke('blue');
-                    p5.strokeWeight(2);
-                    p5.fill('rgba(0,0,0,0)')
-
-                    if (layers[productSide][i].type === "image") {
+                        // draw box around image
+                        p5.stroke('blue');
+                        p5.strokeWeight(2);
+                        p5.fill('rgba(0,0,0,0)')
                         p5.rect(
                             activeLayerRef.current.xPos + movedX - translateX, 
                             activeLayerRef.current.yPos + movedY - translateY, 
                             activeLayerSizeX,
                             activeLayerSizeY
                         )
-                    } else if (layers[productSide][i].type === "text") {
-                        p5.rect(
-                            activeLayerRef.current.xPos + movedX - translateX, 
-                            activeLayerRef.current.yPos + movedY - translateY, 
+
+                        // drawing tools
+                        p5.stroke('white');
+                        p5.fill("blue");
+                        p5.strokeWeight(0);
+
+                        // draw rotate icon
+                        drawRotateIcon(
+                            p5,
+                            activeLayerRef.current.xPos,
+                            activeLayerRef.current.yPos,
                             activeLayerSizeX,
-                            activeLayerSizeY
+                            movedX,
+                            movedY,
+                            translateX,
+                            translateY
                         )
+
+                        // draw resize icon
+                        drawResizeIcon(
+                            p5,
+                            activeLayerRef.current.xPos,
+                            activeLayerRef.current.yPos,
+                            activeLayerSizeX,
+                            activeLayerSizeY,
+                            movedX,
+                            movedY,
+                            translateX,
+                            translateY
+                        )
+                    } else if (activeLayerRef.current.type === "text") {
+
+                        if (allLayerImagesRef.current[i].font !== undefined) {
+                            // Draw box around text
+                            let textBox = allLayerImagesRef.current[i].textBounds(
+                                layers[productSide][i].textContent,
+                                activeLayerRef.current.xPos + movedX - translateX, 
+                                activeLayerRef.current.yPos + movedY - translateY,
+                                activeLayerRef.current.textSize + (resizedX*0.5)
+                            );
+                            p5.stroke('blue');
+                            p5.fill('rgba(0,0,0,0)');
+                            p5.strokeWeight(2);
+                            p5.rect(textBox.x, textBox.y, textBox.w, textBox.h);
+                            p5.noStroke();
+                            p5.textFont(allLayerImagesRef.current[i]);
+                            p5.textSize(activeLayerRef.current.textSize + (resizedX*0.5));
+                            p5.fill("black");
+
+                            // update activeLayerRef position based on the text bounds box
+                            activeLayerRef.current.textBox = textBox;
+                            activeLayerRef.current.translateX = translateX;
+                            activeLayerRef.current.translateY = translateY;
+
+                            // draw text
+                            p5.text(
+                                layers[productSide][i].textContent, 
+                                activeLayerRef.current.xPos + movedX - translateX, 
+                                activeLayerRef.current.yPos + movedY - translateY
+                            );
+
+                            // drawing tools
+                            p5.stroke('white');
+                            p5.fill("blue");
+                            p5.strokeWeight(0);
+                            
+                            // Only draw resize/rotate icons if not pressing mouse
+                            if (!p5.mouseIsPressed || clickedXResize !== null | isRotating){
+                                // draw rotate icon
+                                drawRotateIcon(
+                                    p5,
+                                    textBox.x+translateX, 
+                                    textBox.y+translateY, 
+                                    textBox.w, 
+                                    movedX,
+                                    movedY,
+                                    translateX,
+                                    translateY
+                                )
+                                
+                                // draw resize icon
+                                drawResizeIcon(
+                                    p5,
+                                    textBox.x+translateX, 
+                                    textBox.y+translateY, 
+                                    textBox.w, 
+                                    textBox.h,
+                                    movedX,
+                                    movedY,
+                                    translateX,
+                                    translateY
+                                )
+                            }
+                        }
+
                     }
-
-                    // drawing tools
-                    p5.stroke('white');
-                    p5.fill("blue");
-                    p5.strokeWeight(0);
-
-                    // draw rotate square
-                    p5.rect(
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20, 
-                        20,
-                        20
-                    )
-                    p5.strokeWeight(2);
-                    p5.ellipse(
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
-                        12,
-                        12
-                    )
-                    p5.strokeWeight(4);
-                    p5.stroke('blue');
-                    p5.curve(
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 20, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 8, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 2,
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 4, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 10,
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 2, 
-                        activeLayerRef.current.yPos + movedY - translateY,
-                    )
-                    p5.fill("white");
-                    p5.strokeWeight(0);
-                    p5.triangle(
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 1,
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 10, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 9,
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX + 2, 
-                        activeLayerRef.current.yPos + movedY - translateY - 20 + 5,
-                    )
-
-                    // draw resize square
-                    p5.fill("blue")
-                    p5.stroke('white');
-                    p5.strokeWeight(0);
-                    p5.rect(
-                        activeLayerRef.current.xPos + activeLayerSizeX + movedX - translateX, 
-                        activeLayerRef.current.yPos + activeLayerSizeY + movedY - translateY,
-                        20, 
-                        20
-                    );
-                    p5.fill("white");
-                    p5.strokeWeight(1);
-                    p5.triangle(
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 3 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 3 - translateY, 
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 10 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 3 - translateY, 
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 3 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 10 - translateY
-                    )
-                    p5.triangle(
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 17 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 17 - translateY, 
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 10 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 17 - translateY, 
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 17 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 10 - translateY
-                    )
-                    p5.strokeWeight(2);
-                    p5.line(
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 4 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 4 - translateY, 
-                        activeLayerRef.current.xPos+activeLayerSizeX+movedX + 16 - translateX, 
-                        activeLayerRef.current.yPos+activeLayerSizeY+movedY + 16 - translateY
-                    )
 
                     // restore old drawing state
                     p5.pop()
@@ -408,7 +425,6 @@ export default function SketchCanvas() {
                     } else if (layers[productSide][i].type === "text") {
                         p5.textFont(allLayerImagesRef.current[i]);
                         p5.textSize(50);
-                        p5.fill("black");
                         p5.textAlign(p5.LEFT, p5.TOP);
                         p5.text(
                             layers[productSide][i].textContent, 

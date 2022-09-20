@@ -99,7 +99,13 @@ export default function Customizer() {
                 rotation: 0,
                 font: '/fonts/OpenSans-Medium.ttf',
                 textContent: 'hello',
-                textSize: 20
+                textSize: 50,
+                textBox: {
+                    x: 200,
+                    y: 200,
+                    w: 120,
+                    h: 60
+                }
             }
             addLayer(layer);
         }
