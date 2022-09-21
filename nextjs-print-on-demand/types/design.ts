@@ -42,6 +42,7 @@ export interface ILayer {
     textContent?: string,
     textSize?: number,
     textBox?: TextBox,
+    textColor?: string,
     translateX?: number,
     translateY?: number
 }

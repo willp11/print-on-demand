@@ -295,7 +295,7 @@ export default function SketchCanvas() {
                         if (allLayerImagesRef.current[i].font) {
                             let textBox = allLayerImagesRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
-                                activeLayerRef.current.xPos, 
+                                activeLayerRef.current.xPos,
                                 activeLayerRef.current.yPos,
                                 activeLayerRef.current.textSize + (resizedX*0.5)
                             );
@@ -406,6 +406,9 @@ export default function SketchCanvas() {
                             activeLayerRef.current.movedX = movedX;
                             activeLayerRef.current.movedY = movedY;
 
+                            p5.noStroke();
+                            p5.fill(layers[productSide][i].textColor);
+
                             // draw text
                             p5.text(
                                 layers[productSide][i].textContent, 
@@ -484,6 +487,8 @@ export default function SketchCanvas() {
 
                             p5.textFont(allLayerImagesRef.current[i]);
                             p5.textSize(layers[productSide][i].textSize);
+                            p5.noStroke();
+                            p5.fill(layers[productSide][i].textColor);
                             p5.text(
                                 layers[productSide][i].textContent, 
                                 layers[productSide][i].xPos - translateX, 

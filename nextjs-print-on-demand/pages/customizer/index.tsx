@@ -5,6 +5,9 @@ import { getBase64 } from '../../utils/customizer';
 import { ILayer } from '../../types/design';
 import LayerPreview from '../../components/customizer/layerPreview';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import SelectColor from '../../components/products/selectColor';
+
+const colors = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
 
 function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
     let className = "border border-gray-300 p-1 w-32 rounded";
@@ -24,6 +27,7 @@ export default function Customizer() {
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
     const [textLayerContent, setTextLayerContent] = useState("");
+    const [selectedColor, setSelectedColor] = useState("black");
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
@@ -99,15 +103,14 @@ export default function Customizer() {
                 rotation: 0,
                 font: '/fonts/OpenSans-Medium.ttf',
                 textContent: textLayerContent,
-                textOriginX: 200,
-                textOriginY: 200,
                 textSize: 50,
                 textBox: {
                     x: 200,
                     y: 200,
                     w: 120,
                     h: 60
-                }
+                },
+                textColor: selectedColor
             }
             addLayer(layer);
         }
@@ -181,7 +184,15 @@ export default function Customizer() {
                 <div className="flex">
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Add Text Layer</h2>
-                        <input type="text" className="p-1 border border-gray-300" placeholder="Text content..." onChange={(e)=>setTextLayerContent(e.target.value)} />
+                        <input 
+                            type="text" 
+                            className="p-1 border border-gray-300" 
+                            placeholder="Text content..." 
+                            onChange={(e)=>setTextLayerContent(e.target.value)} 
+                        />
+                        <div className="my-2">
+                            <SelectColor colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
+                        </div>
                         <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
                     </div>
                 </div>
