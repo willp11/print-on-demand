@@ -98,7 +98,9 @@ export default function Customizer() {
                 height: 60,
                 rotation: 0,
                 font: '/fonts/OpenSans-Medium.ttf',
-                textContent: 'hello',
+                textContent: textLayerContent,
+                textOriginX: 200,
+                textOriginY: 200,
                 textSize: 50,
                 textBox: {
                     x: 200,

@@ -91,6 +91,15 @@ export const useDesign = () => {
         }
     }
 
+    // update layer textSize
+    const updateLayerTextSize = (textSize: number) => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+            let newLayers = {...layers};
+            newLayers[productSide][selectedLayer].textSize = textSize;
+            setLayers(newLayers)
+        }
+    }
+
     // move layer forward (draw later, so further back in layer array)
     const moveLayerForward = () => {
         if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
@@ -133,6 +142,7 @@ export const useDesign = () => {
         updateLayerPosition,
         updateLayerSize,
         updateLayerRotation,
+        updateLayerTextSize,
         removeLayer,
         moveLayerForward,
         moveLayerBackward

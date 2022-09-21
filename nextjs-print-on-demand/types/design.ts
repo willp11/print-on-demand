@@ -37,6 +37,8 @@ export interface ILayer {
     rotation: number,
     image?: string,
     font?: string,
+    textOriginX?: number,
+    textOriginY?: number,
     textContent?: string,
     textSize?: number,
     textBox?: TextBox,
