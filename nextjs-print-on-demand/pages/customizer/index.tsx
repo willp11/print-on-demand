@@ -33,7 +33,15 @@ export default function Customizer() {
     const [layerImageHeight, setLayerImageHeight] = useState(0);
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
-    const [selectedFont, setSelectedFont] = useState('/fonts/OpenSans-Medium.ttf');
+    const [selectedFont, setSelectedFont] = useState(fonts[0]);
+
+    const setFontHandler = (name: string) => {
+        console.log(name)
+        fonts.forEach((font, idx)=>{
+            console.log(font.location, name)
+            if (font.location === name) setSelectedFont(fonts[idx])
+        })
+    }
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
@@ -159,8 +167,8 @@ export default function Customizer() {
     let fontSelection = (
         <select 
             className="border border-gray-300 cursor-pointer mr-2 w-48"
-            value={selectedFont} 
-            onChange={e=>setSelectedFont(e.target.value)}
+            value={selectedFont.location} 
+            onChange={e=>setFontHandler(e.target.value)}
         >
             {fontItems}
         </select>

@@ -44,7 +44,7 @@ export default function LayerPreview({layer, index}: {layer: ILayer, index: numb
     } else if (layer.type === "text") {
         return (
             <div className="relative flex items-center justify-center p-2 border border-gray-300 w-[100px] h-[100px] cursor-pointer" onClick={()=>selectLayerHandler(index)}>
-                <p>{layer?.textContent}</p>
+                <p style={{fontFamily: layer?.font?.name}}>{layer?.textContent}</p>
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />
             </div>
         )

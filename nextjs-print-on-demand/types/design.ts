@@ -25,6 +25,12 @@ interface TextBox {
     h: number
 }
 
+interface Font {
+    id: number,
+    location: string,
+    name: string
+}
+
 export interface ILayer {
     id: number,
     type: LayerType,
@@ -36,7 +42,7 @@ export interface ILayer {
     height: number,
     rotation: number,
     image?: string,
-    font?: string,
+    font?: Font,
     textOriginX?: number,
     textOriginY?: number,
     textContent?: string,
