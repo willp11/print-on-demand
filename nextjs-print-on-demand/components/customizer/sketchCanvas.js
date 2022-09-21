@@ -227,7 +227,7 @@ export default function SketchCanvas() {
         let printable_size_x = (canvasSize*0.37);
         let printable_size_y = (canvasSize*0.66);
 
-        if (selectedLayer !== null && selectedLayer !== undefined) {
+        if (selectedLayer !== null && selectedLayer !== undefined && activeLayerRef.current !== undefined) {
             // printable rectangle
             p5.stroke('gray');
             p5.strokeWeight(1)
@@ -260,7 +260,7 @@ export default function SketchCanvas() {
             let activeLayerSizeX = null;
             let activeLayerSizeY = null;
 
-            if (selectedLayer !== null) {
+            if (selectedLayer !== null && activeLayerRef.current !== undefined) {
                 activeLayerSizeX = activeLayerRef.current.width;
                 activeLayerSizeY = activeLayerRef.current.height;
             }

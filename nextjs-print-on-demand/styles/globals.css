@@ -25,6 +25,19 @@ a {
   }
 }
 
+@font-face {
+    font-family: Bungee Spice;
+    src: url(../public/fonts/BungeeSpice-Regular.ttf);
+}
+@font-face {
+    font-family: Open Sans;
+    src: url(../public/fonts/OpenSans-Medium.ttf);
+}
+@font-face {
+    font-family: Blaka Ink;
+    src: url(../public/fonts/BlakaInk-Regular.ttf);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

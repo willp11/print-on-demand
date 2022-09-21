@@ -8,6 +8,11 @@ import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import SelectColor from '../../components/products/selectColor';
 
 const colors = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
+const fonts = [
+    {id: 0, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
+    {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
+    {id: 2, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
+]
 
 function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
     let className = "border border-gray-300 p-1 w-32 rounded";
@@ -28,6 +33,7 @@ export default function Customizer() {
     const [layerImageHeight, setLayerImageHeight] = useState(0);
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
+    const [selectedFont, setSelectedFont] = useState('/fonts/OpenSans-Medium.ttf');
 
     const setSideHandler = (side: string) => {
         if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
@@ -101,7 +107,7 @@ export default function Customizer() {
                 width: 120,
                 height: 60,
                 rotation: 0,
-                font: '/fonts/OpenSans-Medium.ttf',
+                font: selectedFont,
                 textContent: textLayerContent,
                 textSize: 50,
                 textBox: {
@@ -116,6 +122,7 @@ export default function Customizer() {
         }
     }
 
+    // LAYER PREVIEWS
     let layerPreviews = null;
     if (typeof layers !== "undefined" && productSide) {
         layerPreviews = layers[productSide].map((layer, idx)=>{
@@ -128,7 +135,6 @@ export default function Customizer() {
             )
         })
     }
-
     let moveLayerBackArrow = <div className="w-6 h-6"></div>;
     if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined) {
         // ensure selected layer is not the furthest back already
@@ -143,6 +149,22 @@ export default function Customizer() {
             moveLayerForwardArrow = <ArrowRightIcon className="w-6 h-6 cursor-pointer ml-2" onClick={moveLayerForward} />
         }
     }
+
+    // FONT SELECTION
+    let fontItems = fonts.map((font, idx)=>{
+        return (
+            <option key={font.id} value={font.location} style={{fontFamily: font.name}}>{font.name}</option>
+        );
+    })
+    let fontSelection = (
+        <select 
+            className="border border-gray-300 cursor-pointer mr-2 w-48"
+            value={selectedFont} 
+            onChange={e=>setSelectedFont(e.target.value)}
+        >
+            {fontItems}
+        </select>
+    )
 
     return (
         <> 
@@ -192,6 +214,9 @@ export default function Customizer() {
                         />
                         <div className="my-2">
                             <SelectColor colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
+                        </div>
+                        <div className="my-2">
+                            {fontSelection}
                         </div>
                         <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
                     </div>
