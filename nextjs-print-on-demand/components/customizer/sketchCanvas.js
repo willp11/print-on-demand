@@ -34,8 +34,8 @@ export default function SketchCanvas() {
     const getRotatedPoint = (x, y, angle) => {
         let translateX, translateY;
         if (activeLayerRef.current.type === "image") {
-            translateX = activeLayerRef.current.xPos + (0.5*activeLayerRef.current.width);
-            translateY = activeLayerRef.current.yPos + (0.5*activeLayerRef.current.height);
+            translateX = (activeLayerRef.current.xPos * (canvasSize/500)) + (0.5*activeLayerRef.current.width * (canvasSize/500));
+            translateY = (activeLayerRef.current.yPos * (canvasSize/500)) + (0.5*activeLayerRef.current.height * (canvasSize/500));
             let x_new = ((x - translateX) * p5ref.current.cos(angle)) - ((y-translateY) * p5ref.current.sin(angle));
             let y_new = ((x - translateX) * p5ref.current.sin(angle)) + ((y-translateY) * p5ref.current.cos(angle));
             return {x: x_new+translateX, y: y_new+translateY}
@@ -127,10 +127,10 @@ export default function SketchCanvas() {
             let mouseCoords = getRotatedPoint(p5.mouseX, p5.mouseY, 0-activeLayerRef.current.rotation);
 
             if (activeLayerRef.current.type === "image") {
-                let x = activeLayerRef.current.xPos;
-                let y = activeLayerRef.current.yPos;
-                let w = activeLayerRef.current.width;
-                let h = activeLayerRef.current.height;
+                let x = (activeLayerRef.current.xPos * (canvasSize/500));
+                let y = (activeLayerRef.current.yPos * (canvasSize/500));
+                let w = (activeLayerRef.current.width * (canvasSize/500));
+                let h = (activeLayerRef.current.height * (canvasSize/500));
                 // Mouse pressed inside active layer image - Move image
                 if (isInsideArea(mouseCoords.x, mouseCoords.y, x, y, w, h)) {
                     clickedX = p5.mouseX;
@@ -182,7 +182,7 @@ export default function SketchCanvas() {
         // Update layer size
         if (clickedXResize && clickedYResize) {
             if (activeLayerRef.current.type === "image") {
-                let resizedX = p5.mouseX - clickedXResize;
+                let resizedX = (p5.mouseX - clickedXResize) / (canvasSize/500);
                 let layerSizeX = activeLayerRef.current.width;
                 let layerSizeY = activeLayerRef.current.height;
 
@@ -260,8 +260,8 @@ export default function SketchCanvas() {
             let activeLayerSizeY = null;
 
             if (selectedLayer !== null && activeLayerRef.current !== undefined) {
-                activeLayerSizeX = activeLayerRef.current.width;
-                activeLayerSizeY = activeLayerRef.current.height;
+                activeLayerSizeX = activeLayerRef.current.width * (canvasSize/500);
+                activeLayerSizeY = activeLayerRef.current.height * (canvasSize/500);
             }
 
             // draw all layers
@@ -288,17 +288,17 @@ export default function SketchCanvas() {
 
                     let translateX = 0, translateY = 0;
                     if (activeLayerRef.current.type === "image") {
-                        translateX = activeLayerRef.current.xPos + movedX + (0.5*activeLayerSizeX);
-                        translateY = activeLayerRef.current.yPos + movedY + (0.5*activeLayerSizeY);
+                        translateX = (activeLayerRef.current.xPos * (canvasSize/500)) + movedX + (0.5*activeLayerSizeX);
+                        translateY = (activeLayerRef.current.yPos * (canvasSize/500)) + movedY + (0.5*activeLayerSizeY);
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
                         if (allLayerImagesRef.current[i].font) {
-                            let textBox = allLayerImagesRef.current[i].textBounds(
-                                layers[productSide][i].textContent,
-                                (activeLayerRef.current.xPos * (canvasSize/500)),
-                                (activeLayerRef.current.yPos * (canvasSize/500)),
-                                (activeLayerRef.current.textSize + (resizedX*0.5)) * (canvasSize/500)
-                            );
+                            // let textBox = allLayerImagesRef.current[i].textBounds(
+                            //     layers[productSide][i].textContent,
+                            //     (activeLayerRef.current.xPos * (canvasSize/500)),
+                            //     (activeLayerRef.current.yPos * (canvasSize/500)),
+                            //     (activeLayerRef.current.textSize + (resizedX*0.5)) * (canvasSize/500)
+                            // );
                             let textBoxNew = allLayerImagesRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
@@ -340,8 +340,8 @@ export default function SketchCanvas() {
                         // draw image
                         p5.image(
                             allLayerImagesRef.current[i],
-                            activeLayerRef.current.xPos + movedX - translateX, 
-                            activeLayerRef.current.yPos + movedY - translateY, 
+                            (activeLayerRef.current.xPos * (canvasSize/500)) + movedX - translateX, 
+                            (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY, 
                             activeLayerSizeX, 
                             activeLayerSizeY
                         );
@@ -351,8 +351,8 @@ export default function SketchCanvas() {
                         p5.strokeWeight(2);
                         p5.fill('rgba(0,0,0,0)')
                         p5.rect(
-                            activeLayerRef.current.xPos + movedX - translateX, 
-                            activeLayerRef.current.yPos + movedY - translateY, 
+                            (activeLayerRef.current.xPos * (canvasSize/500)) + movedX - translateX, 
+                            (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY, 
                             activeLayerSizeX,
                             activeLayerSizeY
                         )
@@ -365,8 +365,8 @@ export default function SketchCanvas() {
                         // draw rotate icon
                         drawRotateIcon(
                             p5,
-                            activeLayerRef.current.xPos,
-                            activeLayerRef.current.yPos,
+                            (activeLayerRef.current.xPos * (canvasSize/500)),
+                            (activeLayerRef.current.yPos * (canvasSize/500)),
                             activeLayerSizeX,
                             movedX,
                             movedY,
@@ -377,8 +377,8 @@ export default function SketchCanvas() {
                         // draw resize icon
                         drawResizeIcon(
                             p5,
-                            activeLayerRef.current.xPos,
-                            activeLayerRef.current.yPos,
+                            (activeLayerRef.current.xPos * (canvasSize/500)),
+                            (activeLayerRef.current.yPos * (canvasSize/500)),
                             activeLayerSizeX,
                             activeLayerSizeY,
                             movedX,
@@ -466,17 +466,17 @@ export default function SketchCanvas() {
                     p5.push();
 
                     if (layers[productSide][i].type === "image") {
-                        let translateX = layers[productSide][i].xPos + (0.5*layers[productSide][i].width);
-                        let translateY = layers[productSide][i].yPos + (0.5*layers[productSide][i].height);
+                        let translateX = (layers[productSide][i].xPos * (canvasSize/500)) + (0.5*layers[productSide][i].width);
+                        let translateY = (layers[productSide][i].yPos * (canvasSize/500)) + (0.5*layers[productSide][i].height);
                         p5.translate(translateX, translateY);
                         p5.rotate(layers[productSide][i].rotation);
 
                         p5.image(
                             allLayerImagesRef.current[i], 
-                            layers[productSide][i].xPos - translateX,
-                            layers[productSide][i].yPos - translateY,
-                            layers[productSide][i].width, 
-                            layers[productSide][i].height
+                            (layers[productSide][i].xPos * (canvasSize/500)) - translateX,
+                            (layers[productSide][i].yPos * (canvasSize/500)) - translateY,
+                            layers[productSide][i].width * (canvasSize/500), 
+                            layers[productSide][i].height * (canvasSize/500)
                         );
                     } else if (layers[productSide][i].type === "text") {
                         if (allLayerImagesRef.current[i].font !== undefined){
@@ -493,7 +493,7 @@ export default function SketchCanvas() {
 
                             p5.translate(translateX, translateY);
                             p5.rotate(layers[productSide][i].rotation);
-                            
+
                             p5.textFont(allLayerImagesRef.current[i]);
                             p5.textSize(layers[productSide][i].textSize * (canvasSize/500));
                             p5.noStroke();
