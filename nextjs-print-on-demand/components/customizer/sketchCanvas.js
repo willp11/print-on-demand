@@ -281,8 +281,6 @@ export default function SketchCanvas() {
                         resizedXNew = (p5.mouseX - clickedXResize) / (canvasSize/500);
                         activeLayerSizeX += resizedX;
                         activeLayerSizeY += resizedX;
-
-                        console.log(resizedX, resizedXNew)
                     }
 
                     // new drawing state for active layer, so can translate to middle of image and rotate around there
@@ -311,7 +309,6 @@ export default function SketchCanvas() {
                             // translateY = textBox.y + movedY + (0.5*textBox.h);
                             translateX = textBoxNew.x + movedX + (0.5*textBoxNew.w);
                             translateY = textBoxNew.y + movedY + (0.5*textBoxNew.h);
-                            if (p5.mouseIsPressed) console.log(textBox, textBoxNew)
                         }
                     }
 
@@ -469,7 +466,6 @@ export default function SketchCanvas() {
                     p5.push();
 
                     if (layers[productSide][i].type === "image") {
-                        if (p5.mouseIsPressed) console.log(p5.mouseX, p5.mouseY)
                         let translateX = layers[productSide][i].xPos + (0.5*layers[productSide][i].width);
                         let translateY = layers[productSide][i].yPos + (0.5*layers[productSide][i].height);
                         p5.translate(translateX, translateY);
@@ -484,11 +480,12 @@ export default function SketchCanvas() {
                         );
                     } else if (layers[productSide][i].type === "text") {
                         if (allLayerImagesRef.current[i].font !== undefined){
+                            
                             let textBox = allLayerImagesRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
                                 layers[productSide][i].xPos * (canvasSize/500), 
                                 layers[productSide][i].yPos * (canvasSize/500),
-                                layers[productSide][i].textSize
+                                layers[productSide][i].textSize * (canvasSize/500)
                             );
 
                             let translateX = textBox.x + (0.5*textBox.w);
@@ -496,7 +493,7 @@ export default function SketchCanvas() {
 
                             p5.translate(translateX, translateY);
                             p5.rotate(layers[productSide][i].rotation);
-
+                            
                             p5.textFont(allLayerImagesRef.current[i]);
                             p5.textSize(layers[productSide][i].textSize * (canvasSize/500));
                             p5.noStroke();
