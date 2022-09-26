@@ -1,6 +1,7 @@
 import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
+import axios from 'axios';
 
 interface ISignUpForm {
     email: string,
@@ -16,8 +17,23 @@ export default function SignUpForm() {
         confirmPassword: Yup.string().required("Required").oneOf([Yup.ref('password'), null], 'Passwords must match'),
     });
 
-    const submitHandler = (values: ISignUpForm) => {
-        console.log(values);
+
+    const submitHandler = async (values: ISignUpForm) => {
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        const url = `http://localhost:8000/auth/register/`;
+        const data = {
+            email: values.email,
+            password1: values.password,
+            password2: values.confirmPassword
+        }
+        try {
+            const res = await axios.post(url, data, {headers: headers});
+            console.log(res.data);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     return (
