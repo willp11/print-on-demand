@@ -1,5 +1,6 @@
 import { PencilSquareIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import ChangePassword from "./changePassword";
 
 const DetailsField = ({title, content, placeholder}: {title: string, content: string, placeholder: string}) => {
 
@@ -44,10 +45,7 @@ export default function AccountDetails() {
             <DetailsField title="First Name" content="William" placeholder="Type new name..." />
             <DetailsField title="Last Name" content="Page" placeholder="Type new name..." />
             <DetailsField title="Phone Number" content="01234567890" placeholder="Type new number..." />
-            <div className="mb-2">
-                <h2 className="text-sm text-gray-500 font-semibold">Change Password</h2>
-                <button className="btn mt-1" style={{width: "120px"}}>CHANGE</button>
-            </div>
+            <ChangePassword />
             <div className="mb-2">
                 <h2 className="text-sm text-gray-500 font-semibold">Marketing Emails</h2>
                 <div className="flex items-center">
