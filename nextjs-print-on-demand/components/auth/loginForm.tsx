@@ -1,9 +1,11 @@
 import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {handleDjangoErrors} from '../../utils/errors';
+import { useUser } from '../../hooks/useUser';
+import { useRouter } from 'next/router';
 
 interface ILoginForm {
     email: string,
@@ -12,10 +14,18 @@ interface ILoginForm {
 
 export default function LoginForm() {
 
+    const router = useRouter();
+
     const LoginSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Required'),
         password: Yup.string().min(8, 'Password must be at least 8 characters.').required('Required')
     });
+
+    const { token, setToken } = useUser();
+
+    useEffect(()=>{
+        if (token !== "") router.push('/')
+    }, []);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string[] | never>([]);
@@ -32,9 +42,8 @@ export default function LoginForm() {
         setLoading(true);
         try {
             const res = await axios.post(url, data, {headers: headers});
-            console.log(res.data);
+            if (setToken) setToken(res?.data?.key);
         } catch(e: any) {
-            console.log(e);
             if (e?.response?.data) {
                 setError(handleDjangoErrors(e));
             }

@@ -101,7 +101,6 @@ export const useCart = () => {
     }
 
     const { setMessage } = useMessage();
-    // console.log(setMessage)
 
     const addItem = (product: IProduct, color: string, size: string, quantity: number) => {
         if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity});

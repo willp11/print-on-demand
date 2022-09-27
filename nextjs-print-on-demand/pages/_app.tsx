@@ -4,6 +4,7 @@ import Layout from '../components/layout';
 import { CartProvider } from '../hooks/useCart';
 import { MessageProvider } from '../hooks/useMessage';
 import { DesignProvider } from '../hooks/useDesign';
+import { UserProvider } from '../hooks/useUser';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import NProgress from 'nprogress';
@@ -35,15 +36,17 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, [router])
 
     return (
-        <CartProvider>
-            <MessageProvider>
-                <DesignProvider>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </DesignProvider>
-            </MessageProvider>
-        </CartProvider>
+        <UserProvider>
+            <CartProvider>
+                <MessageProvider>
+                    <DesignProvider>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </DesignProvider>
+                </MessageProvider>
+            </CartProvider>
+        </UserProvider>
     )
 }
 
