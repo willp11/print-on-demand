@@ -49,7 +49,7 @@ export default function AccountDetails() {
             <div className="mb-2">
                 <h2 className="text-sm text-gray-500 font-semibold">Marketing Emails</h2>
                 <div className="flex items-center">
-                    <input type="checkbox" className="cursor-pointer" checked={true} />
+                    <input type="checkbox" className="cursor-pointer" defaultChecked={true} />
                     <p className="text-sm ml-2">You are opted-in to receiving marketing emails.</p>
                 </div>
             </div>

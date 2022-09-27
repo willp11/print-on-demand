@@ -1,5 +1,5 @@
 import MenuItem from "./menuItem";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const menuItems = [
     "Account Details",
@@ -8,14 +8,17 @@ const menuItems = [
     "My Designs"
 ]
 
-export default function AccountMenu() {
+interface IAccountMenuProps {
+    selectedIndex: number,
+    setSelectedIndex: Dispatch<SetStateAction<number>>
+}
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
+export default function AccountMenu({selectedIndex, setSelectedIndex}: IAccountMenuProps) {
 
     const menu = menuItems.map((item, i)=>{
         return (
-            <div onClick={()=>setSelectedIndex(i)}>
-                <MenuItem key={item} content={item} selected={selectedIndex === i} />
+            <div key={item} onClick={()=>setSelectedIndex(i)}>
+                <MenuItem content={item} selected={selectedIndex === i} />
             </div>
         );
     })
