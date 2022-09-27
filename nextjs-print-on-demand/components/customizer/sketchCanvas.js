@@ -19,8 +19,6 @@ export default function SketchCanvas() {
     }, []);
 
     function windowResized() {
-        console.log("resized");
-        console.log(window.innerWidth)
         if (p5ref.current) {
             if (window.innerWidth < 500) {
                 p5ref.current.resizeCanvas(350, 350);
