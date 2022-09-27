@@ -34,7 +34,7 @@ export default function ResetPasswordForm() {
         const headers = {
             'Content-Type': 'application/json'
         }
-        const url = `http://localhost:8000/auth/login/`;
+        const url = `http://localhost:8000/auth/password/reset/`;
         const data = {
             email: values.email
         }
