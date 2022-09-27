@@ -23,9 +23,10 @@ export default function LoginForm() {
 
     const { token, setToken } = useUser();
 
+    // Redirect if already logged in
     useEffect(()=>{
-        if (token !== "") router.push('/')
-    }, []);
+        if (token !== "" && token !== undefined) router.push('/')
+    }, [token]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string[] | never>([]);
@@ -93,6 +94,8 @@ export default function LoginForm() {
                     {responseErrors}
                 </div>
             }
+
+            <p className="mt-2">Don't have an account? <span className="underline text-blue-600 cursor-pointer" onClick={()=>router.push('/signUp')}>Sign Up</span></p>
         </section>
     )
 }

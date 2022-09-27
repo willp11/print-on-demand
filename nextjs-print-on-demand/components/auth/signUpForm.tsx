@@ -2,8 +2,10 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
 import axios from 'axios';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {handleDjangoErrors} from '../../utils/errors';
+import {useRouter} from 'next/router';
+import {useUser} from '../../hooks/useUser';
 
 interface ISignUpForm {
     email: string,
@@ -13,11 +15,20 @@ interface ISignUpForm {
 
 export default function SignUpForm() {
 
+    const router = useRouter();
+
     const LoginSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Required'),
         password: Yup.string().min(8, 'Password must be at least 8 characters.').required("Required"),
         confirmPassword: Yup.string().required("Required").oneOf([Yup.ref('password'), null], 'Passwords must match'),
     });
+
+    const {token} = useUser();
+    
+    // Redirect if already logged in
+    useEffect(()=>{
+        if (token !== "" && token !== undefined) router.push('/')
+    }, [token]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string[] | never>([]);
@@ -94,6 +105,8 @@ export default function SignUpForm() {
                     {responseErrors}
                 </div>
             }
+
+            <p className="mt-2">Already have an account? <span className="underline text-blue-600 cursor-pointer" onClick={()=>router.push('/login')}>Login</span></p>
         </section>
     )
 }
