@@ -5,7 +5,6 @@ import BlankPriceTable from './blankPriceTable';
 import SelectColor from './selectColor';
 import SelectQuantity from './selectQuantity';
 import SizeDescription from './sizeDescription';
-import Btn from '../ui/btn';
 import { useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import { useRouter } from 'next/router';
@@ -67,10 +66,10 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 <SelectQuantity updateQtyHandler={updateQtyHandler} />
                 <div className="mt-4">
                     <div className="my-2">
-                        <Btn content="CUSTOMIZE" click={()=>router.push('/customize')} />
+                        <button className="btn" onClick={()=>router.push('/customizer')}>CUSTOMIZE</button>
                     </div>
                     <div className="my-2">
-                        <Btn content="BUY BLANK" click={addToCartHandler} />
+                        <button className="btn" onClick={addToCartHandler}>BUY BLANK</button>
                     </div>
                 </div>
             </div>

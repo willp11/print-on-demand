@@ -8,6 +8,7 @@ function QuantityInput({label, updateQtyHandler}: {label: string, updateQtyHandl
                 className="py-1 w-full text-center border border-gray-300 rounded" 
                 type="number" 
                 placeholder="0"
+                min="0"
                 onChange={(e)=>updateQtyHandler(label, e.target.value)}
             />
         </div>

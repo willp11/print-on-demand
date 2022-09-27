@@ -41,3 +41,9 @@ a {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .btn {
+        @apply p-2 rounded w-full text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300
+    }
+}
