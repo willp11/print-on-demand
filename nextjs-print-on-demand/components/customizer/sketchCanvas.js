@@ -10,7 +10,7 @@ import { drawResizeIcon, drawRotateIcon, isInsideArea } from '../../utils/custom
 export default function SketchCanvas() {
 
     const p5ref = useRef();
-    const [canvasSize, setCanvasSize] = useState(500);
+    const [canvasSize, setCanvasSize] = useState(499);
 
     // resize event listener
     useEffect(() => {
@@ -19,13 +19,15 @@ export default function SketchCanvas() {
     }, []);
 
     function windowResized() {
+        console.log("resized");
+        console.log(window.innerWidth)
         if (p5ref.current) {
             if (window.innerWidth < 500) {
                 p5ref.current.resizeCanvas(350, 350);
                 setCanvasSize(350);
             } else {
-                p5ref.current.resizeCanvas(500, 500);
-                setCanvasSize(500);
+                p5ref.current.resizeCanvas(499, 499);
+                setCanvasSize(499);
             }
         }
     }
@@ -103,8 +105,8 @@ export default function SketchCanvas() {
             setCanvasSize(350);
             p5.createCanvas(350, 350).parent(canvasParentRef);
         } else {
-            setCanvasSize(500);
-            p5.createCanvas(500, 500).parent(canvasParentRef);
+            setCanvasSize(499);
+            p5.createCanvas(499, 499).parent(canvasParentRef);
         }
     }
 
