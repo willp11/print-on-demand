@@ -1,4 +1,8 @@
-export default function Spinner({size}: {size: string}) {
+interface ISpinner {
+    size?: string
+}
+
+export default function Spinner({size}: ISpinner) {
     let className = `mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`;
     if (size === "small") className = `mr-2 w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`;
     return (

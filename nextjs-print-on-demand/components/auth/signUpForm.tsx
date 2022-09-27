@@ -2,6 +2,8 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
 import axios from 'axios';
+import {useState} from 'react';
+import {handleDjangoErrors} from '../../utils/errors';
 
 interface ISignUpForm {
     email: string,
@@ -17,6 +19,8 @@ export default function SignUpForm() {
         confirmPassword: Yup.string().required("Required").oneOf([Yup.ref('password'), null], 'Passwords must match'),
     });
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string[] | never>([]);
 
     const submitHandler = async (values: ISignUpForm) => {
         const headers = {
@@ -28,13 +32,23 @@ export default function SignUpForm() {
             password1: values.password,
             password2: values.confirmPassword
         }
+        setLoading(true);
         try {
             const res = await axios.post(url, data, {headers: headers});
             console.log(res.data);
-        } catch(e) {
+        } catch(e: any) {
             console.log(e);
+            if (e?.response?.data) {
+                setError(handleDjangoErrors(e));
+            }
+        } finally {
+            setLoading(false);
         }
     }
+
+    const responseErrors = error.map(err=>{
+        return <div className="text-xs">{err}</div>
+    });
 
     return (
         <section className="w-full max-w-[500px] p-4 mx-auto my-4 bg-gray-100 rounded shadow-md flex flex-col justify-start items-center">
@@ -70,10 +84,16 @@ export default function SignUpForm() {
                             <div className="text-xs">*{errors.confirmPassword}</div>
                         ) : null}
 
-                        <SubmitBtn content="SIGN UP" />
+                        <SubmitBtn content="SIGN UP" isLoading={loading} />
                     </Form>
                 )}
             </Formik>
+            
+            {responseErrors.length > 0 && 
+                <div className="flex flex-col mt-2">
+                    {responseErrors}
+                </div>
+            }
         </section>
     )
 }

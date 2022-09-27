@@ -1,6 +1,9 @@
 import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
+import { useState } from 'react';
+import axios from 'axios';
+import {handleDjangoErrors} from '../../utils/errors';
 
 interface ILoginForm {
     email: string,
@@ -14,9 +17,35 @@ export default function LoginForm() {
         password: Yup.string().min(8, 'Password must be at least 8 characters.').required('Required')
     });
 
-    const submitHandler = (values: ILoginForm) => {
-        console.log(values);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string[] | never>([]);
+
+    const submitHandler = async (values: ILoginForm) => {
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        const url = `http://localhost:8000/auth/login/`;
+        const data = {
+            email: values.email,
+            password: values.password
+        }
+        setLoading(true);
+        try {
+            const res = await axios.post(url, data, {headers: headers});
+            console.log(res.data);
+        } catch(e: any) {
+            console.log(e);
+            if (e?.response?.data) {
+                setError(handleDjangoErrors(e));
+            }
+        } finally {
+            setLoading(false);
+        }
     }
+
+    const responseErrors = error.map(err=>{
+        return <div className="text-xs">{err}</div>
+    });
 
     return (
         <section className="w-full max-w-[500px] p-4 mx-auto my-4 bg-gray-100 rounded shadow-md flex flex-col justify-start items-center">
@@ -45,10 +74,16 @@ export default function LoginForm() {
                             <div className="text-xs">*{errors.password}</div>
                         ) : null}
 
-                        <SubmitBtn content="LOGIN" />
+                        <SubmitBtn content="LOGIN" isLoading={loading}/>
                     </Form>
                 )}
             </Formik>
+
+            {responseErrors.length > 0 && 
+                <div className="flex flex-col mt-2">
+                    {responseErrors}
+                </div>
+            }
         </section>
     )
 }
