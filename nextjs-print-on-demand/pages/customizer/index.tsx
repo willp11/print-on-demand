@@ -26,7 +26,7 @@ function CustomizerBtn({content, selected}: {content: string, selected: boolean}
 
 export default function Customizer() {
 
-    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
+    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward, saveDesign} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
@@ -179,6 +179,10 @@ export default function Customizer() {
             <SketchCanvas />
             <div className="flex flex-col md:flex-row p-2">
                 <div className="flex">
+                    <div>
+                        <h2 className="text-xl font-bold tracking-tight">Save Design</h2>
+                        <button onClick={saveDesign} className="border border-gray-300 p-1 w-32 rounded">Save</button>
+                    </div>
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
                         <div onClick={()=>setSideHandler("front")}>

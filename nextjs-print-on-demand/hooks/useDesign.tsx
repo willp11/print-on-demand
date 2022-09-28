@@ -128,6 +128,12 @@ export const useDesign = () => {
         }
     }
 
+    // save the design - a design consists of the layers, 
+    // so then can be applied to any product that has same sides
+    const saveDesign = () => {
+        console.log(layers)
+    }
+
     return {
         product,
         setProduct,
@@ -145,6 +151,7 @@ export const useDesign = () => {
         updateLayerTextSize,
         removeLayer,
         moveLayerForward,
-        moveLayerBackward
+        moveLayerBackward,
+        saveDesign
     }
 }

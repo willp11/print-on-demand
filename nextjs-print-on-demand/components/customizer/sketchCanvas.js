@@ -62,6 +62,7 @@ export default function SketchCanvas() {
     useEffect(()=>{
         if (p5ref.current) {
             productImageRef.current = p5ref.current.loadImage(product.colors[color][productSide]);
+            productImageMaskRef.current = p5ref.current.loadImage(product.colors[color][`${productSide}_mask`]);
         }
     }, [product, productSide, color]);
 
@@ -93,7 +94,7 @@ export default function SketchCanvas() {
     const preload = (p5) => {
         p5.angleMode(p5.DEGREES);
         productImageRef.current = p5.loadImage(product.colors[color][productSide]);
-        productImageMaskRef.current = p5.loadImage('/images/products/sol_regent_tshirt_white-mask.png');
+        productImageMaskRef.current = p5.loadImage(product.colors[color][`${productSide}_mask`]);
     }
 
     // Setup canvas

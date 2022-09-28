@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { IProduct } from "./product";
 
-type Sides = "front" | "back" | "left" | "right"
+type Side = "front" | "back" | "left" | "right"
 
 export interface IDesignContext {
     product: IProduct,
@@ -51,4 +51,10 @@ export interface ILayer {
     textColor?: string,
     translateX?: number,
     translateY?: number
+}
+
+export interface IDesign {
+    layers: {
+        [key: string]: ILayer[]
+    }
 }
