@@ -16,7 +16,7 @@ export default function CartItem({item}: {item: ICartItem}) {
                 <div className="h-[100px] min-w-[100px]">
                     {item?.image && 
                         <Image
-                            src={item.colors[item.color]}
+                            src={item.colors[item.color]["front"]}
                             height={100}
                             width={100}
                             alt={item.name}
