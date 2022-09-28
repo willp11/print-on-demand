@@ -28,25 +28,25 @@ export default function DeliveryAddress({address}: {address: IDeliveryAddress}) 
             >
                 <div className="flex flex-col items-start mt-1">
                     <h3 className="text-xs text-gray-400">Address 1</h3>
-                    <p>{address.address_1}</p>
+                    <p className="text-sm">{address.address_1}</p>
                 </div>
                 {address.address_2 && 
                     <div className="flex flex-col items-start">
                         <h3 className="text-xs text-gray-400">Address 2</h3>
-                        <p>{address.address_1}</p>
+                        <p className="text-sm">{address.address_1}</p>
                     </div> 
                 }
                 <div className="flex flex-col items-start">
                     <h3 className="text-xs text-gray-400">District</h3>
-                    <p>{address.district}</p>
+                    <p className="text-sm">{address.district}</p>
                 </div>
                 <div className="flex flex-col items-start">
                     <h3 className="text-xs text-gray-400">City</h3>
-                    <p>{address.city}</p>
+                    <p className="text-sm">{address.city}</p>
                 </div>
                 <div className="flex flex-col items-start">
                     <h3 className="text-xs text-gray-400">Postcode</h3>
-                    <p>{address.postcode}</p>
+                    <p className="text-sm">{address.postcode}</p>
                 </div>
             </div>
         </div>

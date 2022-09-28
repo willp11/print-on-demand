@@ -15,12 +15,12 @@ export default function OrderItem({item}: {item: ICartItem}) {
                 }
             </div>
             <div className="flex flex-col items-start justify-center ml-2 sm:ml-4">
-                <p className="dark:text-gray-100">{item.itemName}</p>
+                <p className="text-sm">{item.itemName}</p>
                 <div className="flex pt-2 items-center">
                     <div className="ml-8 flex items-center">
-                        <p className="text-base sm:text-lg mx-4">{item.quantity}</p>
+                        <p className="text-base mx-4">{item.quantity}</p>
                         <p className="ml-8 mr-2 text-base sm:text-lg">x</p>
-                        <p className="text-base sm:text-lg font-semibold">${item.price}</p>
+                        <p className="text-base font-semibold">${item.price}</p>
                     </div>
                 </div>
             </div>

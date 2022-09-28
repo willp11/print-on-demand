@@ -10,31 +10,31 @@ export default function Order({order}: {order: IOrder}) {
     return (
         <div className="w-full max-w-[500px] p-2 border border-gray-300 rounded shadow-lg">
 
-            <div className="flex justify-start items-center">
+            <div className="flex justify-between items-center border-b border-gray-300 pb-2">
                 <div className="">
                     <h2 className="text-sm text-gray-500 font-semibold">Date</h2>
-                    <div className="flex items-center">
+                    <div className="text-sm flex items-center">
                         <p>{order.date}</p>
                     </div>
                 </div>
-                <div className="ml-6">
+                <div className="">
                     <h2 className="text-sm text-gray-500 font-semibold">Status</h2>
-                    <div className="flex items-center">
+                    <div className="text-sm flex items-center">
                         <p>{order.status}</p>
                     </div>
                 </div>
-            </div>
-
-            <div className="my-2 pb-2 border-y border-gray-300 mt-2">
-                <h2 className="text-sm text-gray-500 font-semibold pt-2">Total</h2>
-                <div className="flex items-center">
-                    <p>${order.total}</p>
+                <div className="">
+                    <h2 className="text-sm text-gray-500 font-semibold">Total</h2>
+                    <div className="text-sm flex items-center">
+                        <p>${order.total}</p>
+                    </div>
                 </div>
             </div>
+            <div className="pt-2">
+                <OrderProducts order={order} />
 
-            <OrderProducts order={order} />
-            
-            <DeliveryAddress address={order.deliveryAddress} />
+                <DeliveryAddress address={order.deliveryAddress} />
+            </div>
         </div>
     )
 }
