@@ -49,7 +49,7 @@ export default function SelectSide() {
     console.log(productSide === "front");
 
     return (
-        <div className="w-[200px] flex justify-center">
+        <div className="w-[100px] flex justify-center">
             <div className="flex flex-col">
                 <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
                 <div onClick={()=>setSideHandler("front")}>

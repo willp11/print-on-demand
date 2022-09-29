@@ -17,12 +17,12 @@ export default function Customizer() {
 
     return (
         <> 
-            <div className="flex justify-start">
+            <div className="flex justify-center">
                 <LeftMenu />
                 <SketchCanvas />
                 <SelectSide />
+                <Layers/>
             </div>
-            <Layers/>
         </>
     )
 }

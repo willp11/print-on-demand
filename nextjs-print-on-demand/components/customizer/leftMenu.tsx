@@ -15,11 +15,11 @@ export default function LeftMenu() {
 
     return (
         <div className="flex flex-col w-[250px]">
-            <div>
+            <div className="mb-4">
                 <h2 className="text-xl font-bold tracking-tight">Save Design</h2>
                 <button onClick={saveDesign} className="border border-gray-300 p-1 w-32 rounded">Save</button>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col mb-4">
                 <h2 className="text-xl font-bold tracking-tight">Select Color</h2>
                 <div onClick={()=>setColorHandler("white")}>
                     <CustomizerBtn content="White" selected={color === "white"} />
@@ -28,8 +28,12 @@ export default function LeftMenu() {
                     <CustomizerBtn content="Black" selected={color === "black"} />
                 </div>
             </div>
-            <AddImageLayer />
-            <AddTextLayer />
+            <div className="mb-4">
+                <AddImageLayer />
+            </div>
+            <div className="mb-4">
+                <AddTextLayer />
+            </div>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import { useDesign } from '../../hooks/useDesign';
 import LayerPreview from './layerPreview';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowLeftIcon, ArrowRightIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 
 export default function Layers() {
     const { productSide, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
@@ -18,30 +18,32 @@ export default function Layers() {
             )
         })
     }
-    let moveLayerBackArrow = <div className="w-6 h-6"></div>;
-    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined) {
+    let moveLayerBackArrow = null;
+    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && layers[productSide].length > 0) {
         // ensure selected layer is not the furthest back already
         if (selectedLayer > 0) {
-            moveLayerBackArrow = <ArrowLeftIcon className="w-6 h-6 cursor-pointer mr-2" onClick={moveLayerBackward} />
+            moveLayerBackArrow = <ArrowUpIcon className="w-6 h-6 cursor-pointer mr-2" onClick={moveLayerBackward} />
+        } else {
+            moveLayerBackArrow = <ArrowUpIcon className="w-6 h-6 cursor-pointer mr-2 opacity-25" />
         }
     }
-    let moveLayerForwardArrow = <div className="w-6 h-6"></div>;
-    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined) {
+    let moveLayerForwardArrow = null;
+    if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && layers[productSide].length > 0) {
         // ensure selected layer is not the furthest back already
         if (selectedLayer < layers[productSide].length - 1) {
-            moveLayerForwardArrow = <ArrowRightIcon className="w-6 h-6 cursor-pointer ml-2" onClick={moveLayerForward} />
+            moveLayerForwardArrow = <ArrowDownIcon className="w-6 h-6 cursor-pointer ml-2" onClick={moveLayerForward} />
+        } else {
+            moveLayerForwardArrow = <ArrowDownIcon className="w-6 h-6 cursor-pointer ml-2 opacity-25"/>
         }
     }
 
     return (
-        <div className="flex flex-col md:flex-row p-2">
-            <div className="flex flex-col">
-                <h2 className="text-xl font-bold tracking-tight">Layers</h2>
-                <div className="flex flex-row justify-start items-center">
-                    {moveLayerBackArrow}
-                    {layerPreviews}
-                    {moveLayerForwardArrow}
-                </div>
+        <div className="flex flex-col ml-8">
+            <h2 className="text-xl font-bold tracking-tight">Layers</h2>
+            <div className="flex flex-col justify-start items-center">
+                {moveLayerBackArrow}
+                {layerPreviews}
+                {moveLayerForwardArrow}
             </div>
         </div>
     )
