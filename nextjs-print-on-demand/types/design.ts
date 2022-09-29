@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 import { IProduct } from "./product";
 
-export interface ILayerSides {
-    "front": ILayer | never[],
-    "back"?: ILayer | never[],
-    "left"?: ILayer | never[],
-    "right"?: ILayer | never[]
-}
+// export interface ILayerSides {
+//     "front": ILayer | never[],
+//     "back"?: ILayer | never[],
+//     "left"?: ILayer | never[],
+//     "right"?: ILayer | never[]
+// }
 
 export interface IDesignContext {
     product: IProduct,

@@ -6,6 +6,7 @@ import { ILayer } from '../../types/design';
 import LayerPreview from '../../components/customizer/layerPreview';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import SelectColor from '../../components/products/selectColor';
+import SelectSide from '../../components/customizer/selectSide';
 
 const colors = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
 const fonts = [
@@ -14,7 +15,7 @@ const fonts = [
     {id: 2, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
 ]
 
-function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
+export function CustomizerBtn({content, selected}: {content: string, selected: boolean}) {
     let className = "border border-gray-300 p-1 w-32 rounded";
     if (selected) className = "border-2 border-blue-500 p-1 w-32 rounded"
     return (
@@ -43,12 +44,12 @@ export default function Customizer() {
         })
     }
 
-    const setSideHandler = (side: string) => {
-        if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
-            setProductSide(side);
-            setSelectedLayer(null);
-        }
-    }
+    // const setSideHandler = (side: string) => {
+    //     if (typeof setProductSide !== "undefined" && typeof setSelectedLayer !== "undefined") {
+    //         setProductSide(side);
+    //         setSelectedLayer(null);
+    //     }
+    // }
 
     const setColorHandler = (color: string) => {
         if (typeof setColor !== "undefined") {
@@ -198,7 +199,8 @@ export default function Customizer() {
                         <h2 className="text-xl font-bold tracking-tight">Save Design</h2>
                         <button onClick={saveDesign} className="border border-gray-300 p-1 w-32 rounded">Save</button>
                     </div>
-                    <div className="flex flex-col">
+                    <SelectSide />
+                    {/* <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
                         <div onClick={()=>setSideHandler("front")}>
                             <CustomizerBtn content="Front" selected={productSide === "front"} />
@@ -212,7 +214,7 @@ export default function Customizer() {
                         <div onClick={()=>setSideHandler("right")}>
                             <CustomizerBtn content="Right" selected={productSide === "right"} />
                         </div>
-                    </div>
+                    </div> */}
                     <div className="flex flex-col">
                         <h2 className="text-xl font-bold tracking-tight">Select Color</h2>
                         <div onClick={()=>setColorHandler("white")}>
