@@ -1,12 +1,26 @@
-enum ImageSides {
-    Front = 'front',
-    Back = 'back',
-    Left = 'left',
-    Right = 'right',
-    FrontMask = 'front_mask',
-    BackMask = 'back_mask',
-    LeftMask = 'left_mask',
-    RightMask = 'right_mask'
+interface IProductImages {
+    front: string,
+    back?: string,
+    left?: string,
+    right?: string,
+    front_mask: string,
+    back_mask?: string,
+    left_mask?: string,
+    right_mask?: string
+}
+
+interface IDrawableAreaDetails {
+    xPos: number,
+    yPos: number,
+    xSize: number,
+    ySize: number
+}
+
+interface IDrawableArea {
+    front: IDrawableAreaDetails,
+    back?: IDrawableAreaDetails,
+    left?: IDrawableAreaDetails,
+    right?: IDrawableAreaDetails
 }
 
 export interface IProduct {
@@ -18,6 +32,7 @@ export interface IProduct {
     material: string,
     description: string[],
     sizes: {[key: string]: string},
-    colors: {[key: string]: {[key in ImageSides]: string}},
-    blankPriceRows: string[]
+    colors: {[key: string]: IProductImages},
+    blankPriceRows: string[],
+    drawableArea: IDrawableArea
 }

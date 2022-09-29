@@ -91,7 +91,33 @@ export const productList = [
             "Buy 100 to 249 for £4.38 each - SAVE 30%",
             "Buy 250 to 499 for £3.88 each - SAVE 38%",
             "Buy 500 + for £3.44 each - SAVE 45%"
-        ]
+        ],
+        drawableArea: {
+            front: {
+                xPos: 180,
+                yPos: 107,
+                xSize: 140,
+                ySize: 232
+            },
+            back: {
+                xPos: 180,
+                yPos: 107,
+                xSize: 140,
+                ySize: 232
+            },
+            left: {
+                xPos: 230,
+                yPos: 108,
+                xSize: 50,
+                ySize: 65
+            },
+            right: {
+                xPos: 220,
+                yPos: 108,
+                xSize: 50,
+                ySize: 65
+            }
+        }
     },
     // {
     //     id: 2,

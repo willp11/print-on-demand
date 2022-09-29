@@ -26,7 +26,7 @@ function CustomizerBtn({content, selected}: {content: string, selected: boolean}
 
 export default function Customizer() {
 
-    const {productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward, saveDesign} = useDesign();
+    const {product, productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward, saveDesign} = useDesign();
 
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
@@ -86,6 +86,21 @@ export default function Customizer() {
                 width = Math.min(100*aspectRatio, size);
                 height = Math.min(100, size/aspectRatio);
             }
+            let xPos, yPos;
+            if (productSide === "front") {
+                xPos = product?.drawableArea.front.xPos;
+                yPos = product?.drawableArea.front.yPos;
+            } else if (productSide === "back") {
+                xPos = product?.drawableArea?.back?.xPos;
+                yPos = product?.drawableArea?.back?.yPos;
+            } else if (productSide === "left") {
+                xPos = product?.drawableArea?.left?.xPos;
+                yPos = product?.drawableArea?.left?.yPos;
+            } else if (productSide === "right") {
+                xPos = product?.drawableArea?.right?.xPos;
+                yPos = product?.drawableArea?.right?.yPos;
+            }
+
             let layer: ILayer = {
                 id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
                 type: "image",

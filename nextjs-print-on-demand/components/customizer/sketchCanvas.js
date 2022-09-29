@@ -222,18 +222,23 @@ export default function SketchCanvas() {
         p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
 
         // PRINTABLE AREA
-        let printable_x_start = (canvasSize*0.34);
-        let printable_y_start = (canvasSize*0.22);
-        let printable_size_x = (canvasSize*0.35);
-        let printable_size_y = (canvasSize*0.62);
+        // let printable_x_start = (canvasSize*0.34);
+        // let printable_y_start = (canvasSize*0.22);
+        // let printable_size_x = (canvasSize*0.35);
+        // let printable_size_y = (canvasSize*0.62);
+        let printable_x_start = product.drawableArea[productSide].xPos;
+        let printable_y_start = product.drawableArea[productSide].yPos;
+        let printable_size_x = product.drawableArea[productSide].xSize;
+        let printable_size_y = product.drawableArea[productSide].ySize;
 
         if (selectedLayer !== null && selectedLayer !== undefined && activeLayerRef.current !== undefined) {
             // printable rectangle
             p5.stroke('gray');
             p5.strokeWeight(1)
 
+            // let incrementX = printable_size_x / 5;
             // grid
-            for (let i=0; i<5; i++) {
+            for (let i=0; i<6; i++) {
                 p5.line(
                     printable_x_start + (printable_size_x * 0.2 * i),
                     printable_y_start,
@@ -241,7 +246,7 @@ export default function SketchCanvas() {
                     printable_y_start+printable_size_y
                 )
             }
-            for (let i=0; i<10; i++) {
+            for (let i=0; i<11; i++) {
                 p5.line(
                     printable_x_start,
                     printable_y_start + (printable_size_y * 0.1 * i),
@@ -294,22 +299,14 @@ export default function SketchCanvas() {
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
                         if (allLayerImagesRef.current[i].font) {
-                            // let textBox = allLayerImagesRef.current[i].textBounds(
-                            //     layers[productSide][i].textContent,
-                            //     (activeLayerRef.current.xPos * (canvasSize/500)),
-                            //     (activeLayerRef.current.yPos * (canvasSize/500)),
-                            //     (activeLayerRef.current.textSize + (resizedX*0.5)) * (canvasSize/500)
-                            // );
-                            let textBoxNew = allLayerImagesRef.current[i].textBounds(
+                            let textBox = allLayerImagesRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
                                 (activeLayerRef.current.yPos * (canvasSize/500)),
                                 (activeLayerRef.current.textSize + (resizedXNew*0.5)) * (canvasSize/500)
                             );
-                            // translateX = textBox.x + movedX + (0.5*textBox.w);
-                            // translateY = textBox.y + movedY + (0.5*textBox.h);
-                            translateX = textBoxNew.x + movedX + (0.5*textBoxNew.w);
-                            translateY = textBoxNew.y + movedY + (0.5*textBoxNew.h);
+                            translateX = textBox.x + movedX + (0.5*textBox.w);
+                            translateY = textBox.y + movedY + (0.5*textBox.h);
                         }
                     }
 
@@ -514,8 +511,9 @@ export default function SketchCanvas() {
             }
 
             // Draw the product mask image
-            p5.image(productImageMaskRef.current, 1, 1, canvasSize, canvasSize);
-
+            if (activeLayerRef.current === undefined) {
+                p5.image(productImageMaskRef.current, 1, 1, canvasSize, canvasSize);
+            }
         }
 
 
