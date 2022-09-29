@@ -14,7 +14,7 @@ export default function LeftMenu() {
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-[250px]">
             <div>
                 <h2 className="text-xl font-bold tracking-tight">Save Design</h2>
                 <button onClick={saveDesign} className="border border-gray-300 p-1 w-32 rounded">Save</button>

@@ -12,7 +12,7 @@ const fonts = [
 
 export default function AddTextLayer() {
     
-    const {product, productSide, setProductSide, color, setColor, addLayer, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward, saveDesign} = useDesign();
+    const { productSide, addLayer, layers} = useDesign();
 
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");

@@ -49,19 +49,21 @@ export default function SelectSide() {
     console.log(productSide === "front");
 
     return (
-        <div className="flex flex-col">
-            <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
-            <div onClick={()=>setSideHandler("front")}>
-                {product !== undefined ? <Side product={product} side="front" color="white" selected={productSide === "front"} /> : null}
-            </div>
-            <div onClick={()=>setSideHandler("back")}>
-                {product !== undefined ? <Side product={product} side="back" color="white" selected={productSide === "back"}  /> : null}
-            </div>
-            <div onClick={()=>setSideHandler("left")}>
-                {product !== undefined ? <Side product={product} side="left" color="white" selected={productSide === "left"}  /> : null}
-            </div>
-            <div onClick={()=>setSideHandler("right")}>
-                {product !== undefined ? <Side product={product} side="right" color="white" selected={productSide === "right"}  /> : null}
+        <div className="w-[200px] flex justify-center">
+            <div className="flex flex-col">
+                <h2 className="text-xl font-bold tracking-tight">Select Side</h2>
+                <div onClick={()=>setSideHandler("front")}>
+                    {product !== undefined ? <Side product={product} side="front" color="white" selected={productSide === "front"} /> : null}
+                </div>
+                <div onClick={()=>setSideHandler("back")}>
+                    {product !== undefined ? <Side product={product} side="back" color="white" selected={productSide === "back"}  /> : null}
+                </div>
+                <div onClick={()=>setSideHandler("left")}>
+                    {product !== undefined ? <Side product={product} side="left" color="white" selected={productSide === "left"}  /> : null}
+                </div>
+                <div onClick={()=>setSideHandler("right")}>
+                    {product !== undefined ? <Side product={product} side="right" color="white" selected={productSide === "right"}  /> : null}
+                </div>
             </div>
         </div>
     )
