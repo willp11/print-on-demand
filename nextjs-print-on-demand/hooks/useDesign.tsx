@@ -128,6 +128,15 @@ export const useDesign = () => {
         }
     }
 
+    // edit the text layer - textContent, font, color, fontSize, position, rotation
+    const editTextLayer = (layer: ILayer) => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+            let newLayers = {...layers};
+            newLayers[productSide][selectedLayer] = layer;
+            setLayers(newLayers);
+        }
+    }
+
     // save the design - a design consists of the layers, 
     // so then can be applied to any product that has same sides
     const saveDesign = () => {
@@ -152,6 +161,7 @@ export const useDesign = () => {
         removeLayer,
         moveLayerForward,
         moveLayerBackward,
+        editTextLayer,
         saveDesign
     }
 }

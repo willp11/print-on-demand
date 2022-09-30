@@ -1,9 +1,9 @@
 import { useDesign } from '../../hooks/useDesign';
 import LayerPreview from './layerPreview';
 import { ArrowLeftIcon, ArrowRightIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-export default function Layers() {
+export default function Layers({setEditTextLayerMode}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>}) {
     const { productSide, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
 
     const [windowWidth, setWindowWidth] = useState(0);
@@ -25,7 +25,7 @@ export default function Layers() {
         layerPreviews = layers[productSide].map((layer, idx)=>{
             if (setSelectedLayer ) return (
                 <div key={layer.id}>
-                    <LayerPreview layer={layer} index={idx} />
+                    <LayerPreview layer={layer} index={idx} setEditTextLayerMode={setEditTextLayerMode} />
                 </div>
             )
         })

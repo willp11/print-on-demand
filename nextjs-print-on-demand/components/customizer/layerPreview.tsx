@@ -2,8 +2,15 @@ import { ILayer } from "../../types/design";
 import Image from "next/image";
 import { XCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useDesign } from "../../hooks/useDesign";
+import { Dispatch, SetStateAction } from 'react';
 
-export default function LayerPreview({layer, index}: {layer: ILayer, index: number}) {
+interface ILayerPreviewProps {
+    layer: ILayer,
+    index: number,
+    setEditTextLayerMode: Dispatch<SetStateAction<boolean>>
+}
+
+export default function LayerPreview({layer, index, setEditTextLayerMode}: ILayerPreviewProps) {
 
     const {removeLayer, selectedLayer, setSelectedLayer} = useDesign();
 
@@ -52,7 +59,7 @@ export default function LayerPreview({layer, index}: {layer: ILayer, index: numb
                 <div className="w-[80px] h-[80px] flex items-center justify-center" onClick={()=>selectLayerHandler(index)}>
                     <p style={{fontFamily: layer?.font?.name}} className="truncate">{layer?.textContent}</p>
                 </div>
-                {selectedLayer === index && <PencilSquareIcon className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
+                {selectedLayer === index && <PencilSquareIcon onClick={()=>setEditTextLayerMode(true)} className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />
             </div>
         )

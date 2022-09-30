@@ -9,12 +9,14 @@ import SaveDesign from '../../components/customizer/saveDesign';
 import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
+import EditTextLayer from '../../components/customizer/editTextLayer';
 
 export default function Customizer() {
 
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
+    const [editTextLayerMode, setEditTextLayerMode] = useState(false);
 
     return (
         <div className="p-1"> 
@@ -23,8 +25,13 @@ export default function Customizer() {
                 <div className="touch-none">
                     <SketchCanvas />
                 </div>
-                <SelectSide />
-                <Layers/>
+                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
+                {!editTextLayerMode && 
+                    <>
+                        <SelectSide />
+                        <Layers setEditTextLayerMode={setEditTextLayerMode}/>
+                    </>
+                }
 
                 {
                     showSelectProductModal && 
@@ -47,17 +54,22 @@ export default function Customizer() {
                     <SketchCanvas />
                 </div>
 
-                <SelectSide />
+                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
+                
+                {!editTextLayerMode && 
+                    <>
+                        <SelectSide />
+                        <div>
+                            <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Layer</h2>
+                            <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
+                            <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
+                        </div>
 
-                <div>
-                    <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Layer</h2>
-                    <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
-                    <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
-                </div>
-
-                <div className="min-h-[100px]">
-                    <Layers/>
-                </div>
+                        <div className="min-h-[100px]">
+                            <Layers setEditTextLayerMode={setEditTextLayerMode}/>
+                        </div>
+                    </>
+                }
 
                 {
                     showImageLayerModal && 
