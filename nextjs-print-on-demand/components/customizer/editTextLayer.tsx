@@ -15,6 +15,8 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
     const [selectedFont, setSelectedFont] = useState(fonts[0]);
+    const [selectedSize, setSelectedSize] = useState(0);
+    const [selectedRotation, setSelectedRotation] = useState(0);
 
     useEffect(()=>{
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null) {
@@ -22,6 +24,8 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             if (layer.textContent !== undefined) setTextLayerContent(layer.textContent);
             if (layer.font !== undefined) setSelectedFont(layer.font);
             if (layer.textColor !== undefined) setSelectedColor(layer.textColor);
+            if (layer.textSize !== undefined) setSelectedSize(Math.round(layer.textSize));
+            if (layer.rotation !== undefined) setSelectedRotation(Math.round(layer.rotation));
         }
     }, [layers, selectedLayer, productSide])
 
@@ -30,6 +34,21 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             console.log(font.location, name)
             if (font.location === name) setSelectedFont(fonts[idx])
         })
+    }
+
+    const editLayerHandler = () => {
+        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null)  {
+            let layer: ILayer = {
+                ...layers[productSide][selectedLayer]
+            }
+            layer.textContent = textLayerContent;
+            layer.font = selectedFont;
+            layer.textColor = selectedColor;
+            layer.textSize = selectedSize;
+            layer.rotation = selectedRotation;
+            editTextLayer(layer);
+            setEditTextLayerMode(false);
+        }
     }
 
     // FONT SELECTION
@@ -48,51 +67,31 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
         </select>
     )
 
-    const editLayerHandler = () => {
-        if (layers) {
-            
-            let layer: ILayer = {
-                id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-                type: "text",
-                xPos: 200,
-                yPos: 200,
-                aspectRatio: 1,
-                size: 100,
-                width: 120,
-                height: 60,
-                rotation: 0,
-                font: selectedFont,
-                textContent: textLayerContent,
-                textSize: 50,
-                textBox: {
-                    x: 200,
-                    y: 200,
-                    w: 120,
-                    h: 60
-                },
-                textColor: selectedColor
-            }
-            editTextLayer(layer);
-            setEditTextLayerMode(false);
-        }
-    }
-
     return (
         <div className="flex flex-col">
             <h2 className="text-base lg:text-xl font-bold tracking-tight">Edit Text Layer</h2>
             <input 
                 type="text" 
                 className="p-1 border border-gray-300" 
-                placeholder="Text content..." 
+                placeholder="Text content..."
+                value={textLayerContent ?? ""}
                 onChange={(e)=>setTextLayerContent(e.target.value)} 
             />
             <div className="my-2">
-                <h3 className="text-sm font-semibold mb-1">Select Color:</h3>
-                <input type="color" onChange={(e)=>setSelectedColor(e.target.value)}/>
+                <h3 className="text-sm font-semibold mb-1">Color:</h3>
+                <input type="color" value={selectedColor ?? "#000"} onChange={(e)=>setSelectedColor(e.target.value)}/>
             </div>
             <div className="mb-2">
-                <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
+                <h3 className="text-sm font-semibold mb-1">Font:</h3>
                 {fontSelection}
+            </div>
+            <div className="my-2">
+                <h3 className="text-sm font-semibold mb-1">Font Size:</h3>
+                <input min="0" type="number" value={selectedSize} onChange={(e)=>setSelectedSize(parseInt(e.target.value))} className="p-1 border border-gray-300"/>
+            </div>
+            <div className="my-2">
+                <h3 className="text-sm font-semibold mb-1">Rotation:</h3>
+                <input min="0" type="number" value={selectedRotation} onChange={(e)=>setSelectedRotation(parseInt(e.target.value))} className="p-1 border border-gray-300"/>
             </div>
             <button className="border bg-red-100 border-red-600 text-red-600 p-1 w-32 rounded mt-1" onClick={()=>setEditTextLayerMode(false)}>Cancel</button>
             <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={editLayerHandler}>Edit Layer</button>
