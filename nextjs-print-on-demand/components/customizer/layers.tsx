@@ -10,6 +10,7 @@ export default function Layers() {
 
     // resize event listener
     useEffect(() => {
+        setWindowWidth(window.innerWidth);
         window.addEventListener("resize", windowResized); 
         return () => window.removeEventListener("resize", windowResized);
     }, []);
@@ -22,10 +23,8 @@ export default function Layers() {
     let layerPreviews = null;
     if (typeof layers !== "undefined" && productSide) {
         layerPreviews = layers[productSide].map((layer, idx)=>{
-            let className = "";
-            if (selectedLayer === idx) className = "border-2 border-blue-500 w-[100px] h-[100px]"
             if (setSelectedLayer ) return (
-                <div key={layer.id} className={className}>
+                <div key={layer.id}>
                     <LayerPreview layer={layer} index={idx} />
                 </div>
             )

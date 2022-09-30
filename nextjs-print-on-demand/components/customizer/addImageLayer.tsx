@@ -23,8 +23,12 @@ export default function AddImageLayer() {
     }
 
     const setImageHandler = (files: FileList | null) => {
-        if (files !== null) {
-            getBase64(files[0], returnFile);
+        try {
+            if (files !== null) {
+                getBase64(files[0], returnFile);
+            }
+        } catch(e) {
+            console.log(e);
         }
     }
 
