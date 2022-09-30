@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction } from "react";
 export default function LeftMenu({setShowSelectProductModal}: {setShowSelectProductModal: Dispatch<SetStateAction<boolean>>}) {
 
     return (
-        <div className="flex flex-row w-full lg:flex-col lg:w-[250px]">
+        <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
             <div className="mb-2">
                 <SaveDesign />
             </div>

@@ -61,7 +61,7 @@ export default function Customizer() {
 
                 {
                     showImageLayerModal && 
-                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)]">
+                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20">
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2">
                             <div className="relative w-full h-full">
                                 <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer" onClick={()=>setShowImageLayerModal(false)}/>
@@ -72,7 +72,7 @@ export default function Customizer() {
                 }
                 {
                     showTextLayerModal && 
-                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)]">
+                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20">
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2">
                         <div className="relative w-full h-full">
                                 <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer" onClick={()=>setShowTextLayerModal(false)}/>
