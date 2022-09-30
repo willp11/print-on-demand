@@ -8,25 +8,46 @@ import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
 import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import ProductGrid from '../../components/products/productGrid';
 
 export default function Customizer() {
 
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
+    const [showSelectProductModal, setShowSelectProductModal] = useState(false);
 
     return (
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
-                <LeftMenu />
+                <LeftMenu setShowSelectProductModal={setShowSelectProductModal}/>
                 <div className="touch-none">
                     <SketchCanvas />
                 </div>
                 <SelectSide />
                 <Layers/>
+
+                {
+                    showSelectProductModal && 
+                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)]">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2">
+                        <div className="relative w-full h-full">
+                                <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer z-10" onClick={()=>setShowSelectProductModal(false)}/>
+                            </div>
+                            <ProductGrid />
+                        </div>
+                    </div>
+                }
             </div>
 
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
-                <SaveDesign />
+                <div className='flex'>
+                    <div className="mr-16">
+                        <h2 className="text-base lg:text-xl font-bold tracking-tight">Select Product</h2>
+                        <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                    </div>
+                    <SaveDesign />
+                </div>
+
                 <SelectProductColor />
 
                 <div className="touch-none w-full flex justify-center">
@@ -34,6 +55,7 @@ export default function Customizer() {
                 </div>
 
                 <SelectSide />
+
                 <div>
                     <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Layer</h2>
                     <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
@@ -63,6 +85,18 @@ export default function Customizer() {
                                 <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer" onClick={()=>setShowTextLayerModal(false)}/>
                             </div>
                             <AddTextLayer />
+                        </div>
+                    </div>
+                }
+
+                {
+                    showSelectProductModal && 
+                    <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)]">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2">
+                        <div className="relative w-full h-full">
+                                <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer z-10" onClick={()=>setShowSelectProductModal(false)}/>
+                            </div>
+                            <ProductGrid />
                         </div>
                     </div>
                 }

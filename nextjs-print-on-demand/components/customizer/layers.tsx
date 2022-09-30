@@ -70,8 +70,8 @@ export default function Layers() {
 
     return (
         <div className="flex flex-col lg:ml-8 min-w-[100px]">
-            <h2 className="text-xl font-bold tracking-tight">Layers</h2>
-            <div className="flex lg:flex-col justify-start items-center">
+            <h2 className="text-base lg:text-xl font-bold tracking-tight">Layers</h2>
+            <div className="flex flex-wrap lg:flex-col justify-start items-center">
                 {moveLayerBackArrow}
                 {layerPreviews}
                 {moveLayerForwardArrow}
