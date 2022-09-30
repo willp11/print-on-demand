@@ -70,7 +70,7 @@ export default function AddTextLayer() {
     return (
         <div className="flex">
             <div className="flex flex-col">
-                <h2 className="text-xl font-bold tracking-tight">Add Text Layer</h2>
+                <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Text Layer</h2>
                 <input 
                     type="text" 
                     className="p-1 border border-gray-300" 

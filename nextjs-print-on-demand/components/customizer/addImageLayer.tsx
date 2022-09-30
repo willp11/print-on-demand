@@ -74,7 +74,7 @@ export default function AddImageLayer() {
     return (
         <div className="flex">
             <div className="flex flex-col">
-                <h2 className="text-xl font-bold tracking-tight">Add Image Layer</h2>
+                <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Image Layer</h2>
                 <label className="block">
                     <span className="sr-only">Add Image Layer</span>
                     <input type="file" 
