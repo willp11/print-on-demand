@@ -222,10 +222,6 @@ export default function SketchCanvas() {
         p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
 
         // PRINTABLE AREA
-        // let printable_x_start = (canvasSize*0.34);
-        // let printable_y_start = (canvasSize*0.22);
-        // let printable_size_x = (canvasSize*0.35);
-        // let printable_size_y = (canvasSize*0.62);
         let printable_x_start = product.drawableArea[productSide].xPos;
         let printable_y_start = product.drawableArea[productSide].yPos;
         let printable_size_x = product.drawableArea[productSide].xSize;

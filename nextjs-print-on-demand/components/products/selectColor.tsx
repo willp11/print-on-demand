@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 interface ColorPreviewProps {
@@ -13,7 +13,7 @@ interface SelectColorProps {
     setSelectedColor: Dispatch<SetStateAction<string>>
 }
 
-function ColorPreview({color, active, setSelectedColor}: ColorPreviewProps) {
+export function ColorPreview({color, active, setSelectedColor}: ColorPreviewProps) {
     let className = "h-8 w-8 rounded-full border border-gray-300 shadow-md cursor-pointer mr-1";
     if (active) className = "h-8 w-8 rounded-full border border-gray-300 shadow-md cursor-pointer mr-1 scale-125 transition ease-in-out duration-300 flex items-center justify-center";
     let checkClassName = "h-6 w-6 stroke-white";

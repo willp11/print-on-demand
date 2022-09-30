@@ -1,6 +1,6 @@
 import { useDesign } from '../../hooks/useDesign';
 import LayerPreview from './layerPreview';
-import { ArrowLeftIcon, ArrowRightIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 
 export default function Layers() {
     const { productSide, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
@@ -38,7 +38,7 @@ export default function Layers() {
     }
 
     return (
-        <div className="flex flex-col ml-8">
+        <div className="flex flex-col ml-8 min-w-[100px]">
             <h2 className="text-xl font-bold tracking-tight">Layers</h2>
             <div className="flex flex-col justify-start items-center">
                 {moveLayerBackArrow}

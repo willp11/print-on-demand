@@ -1,9 +1,7 @@
-import SelectColor from "../products/selectColor";
 import { useDesign } from "../../hooks/useDesign";
 import { useState } from "react";
 import { ILayer } from "../../types/design";
 
-const colors = ['black', 'white', 'red', 'green', 'blue', 'yellow'];
 const fonts = [
     {id: 0, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
     {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
@@ -19,7 +17,6 @@ export default function AddTextLayer() {
     const [selectedFont, setSelectedFont] = useState(fonts[0]);
 
     const setFontHandler = (name: string) => {
-        console.log(name)
         fonts.forEach((font, idx)=>{
             console.log(font.location, name)
             if (font.location === name) setSelectedFont(fonts[idx])
@@ -81,9 +78,11 @@ export default function AddTextLayer() {
                     onChange={(e)=>setTextLayerContent(e.target.value)} 
                 />
                 <div className="my-2">
-                    <SelectColor colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
+                    <h3 className="text-sm font-semibold mb-1">Select Color:</h3>
+                    <input type="color" onChange={(e)=>setSelectedColor(e.target.value)}/>
                 </div>
-                <div className="my-2">
+                <div className="mb-2">
+                    <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
                     {fontSelection}
                 </div>
                 <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>

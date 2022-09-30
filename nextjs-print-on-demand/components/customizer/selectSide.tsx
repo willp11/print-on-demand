@@ -1,4 +1,3 @@
-import { CustomizerBtn } from "../../pages/customizer";
 import { useDesign } from "../../hooks/useDesign";
 import Image from "next/image";
 import {IProduct} from '../../types/product';
@@ -13,7 +12,6 @@ interface ISideProps {
 
 const Side = ({product, side, color, selected}: ISideProps) => {
     let src = product.colors[color][side];
-    console.log(selected)
     if (src !== undefined) {
         let className = "flex flex-col items-center border border-gray-300 rounded cursor-pointer hover:border-gray-500";
         if (selected) className = "flex flex-col items-center border-2 border-blue-600 rounded cursor-pointer"
@@ -45,8 +43,6 @@ export default function SelectSide() {
             setSelectedLayer(null);
         }
     }
-
-    console.log(productSide === "front");
 
     return (
         <div className="w-[100px] flex justify-center">
