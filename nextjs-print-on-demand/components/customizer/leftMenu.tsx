@@ -8,20 +8,20 @@ export default function LeftMenu({setShowSelectProductModal}: {setShowSelectProd
 
     return (
         <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
-            <div className="mb-2">
+            <div className="border-b border-gray-400 pb-4">
                 <SaveDesign />
             </div>
-            <div className="mb-2">
-                <h2 className="text-base lg:text-xl font-bold tracking-tight">Select Product</h2>
-                <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+            <div className="border-b border-gray-400 pt-2 pb-4">
+                <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
+                <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
             </div>
-            <div className="mb-4">
+            <div className="border-b border-gray-400 pt-2 pb-4">
                 <SelectProductColor />
             </div>
-            <div className="mb-4">
+            <div className="border-b border-gray-400 pt-2 pb-4">
                 <AddImageLayer />
             </div>
-            <div className="mb-4">
+            <div className="pt-2 mb-4">
                 <AddTextLayer />
             </div>
         </div>

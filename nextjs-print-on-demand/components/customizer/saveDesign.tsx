@@ -6,8 +6,8 @@ export default function SaveDesign() {
 
     return (
         <div>
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Save Design</h2>
-            <button onClick={saveDesign} className="border border-gray-300 p-1 w-32 rounded">Save</button>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Save Design</h2>
+            <button onClick={saveDesign} className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded">Save</button>
         </div>
     )
 }

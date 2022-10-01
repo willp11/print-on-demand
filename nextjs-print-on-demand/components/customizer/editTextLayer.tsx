@@ -117,7 +117,7 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
 
     return (
         <div className="flex flex-col">
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Edit Text Layer</h2>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Edit Text Layer</h2>
             <div className="my-2">
                 <h3 className="text-sm font-semibold mb-1">Color:</h3>
                 <input type="color" value={values.textColor ?? "#000"} onChange={(e)=>editLayer("textColor", e.target.value)}/>

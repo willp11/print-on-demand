@@ -48,7 +48,7 @@ export default function SelectSide() {
 
     return (
         <div className="w-[100px] flex flex-col justify-center lg:justify-start">
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Select Side</h2>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Select Side</h2>
             <div className="flex lg:flex-col">
                 <div onClick={()=>setSideHandler("front")}>
                     {product !== undefined ? <Side product={product} side="front" color="white" selected={productSide === "front"} /> : null}

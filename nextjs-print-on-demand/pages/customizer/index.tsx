@@ -42,8 +42,8 @@ export default function Customizer() {
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
                 <div className='flex'>
                     <div className="mr-16">
-                        <h2 className="text-base lg:text-xl font-bold tracking-tight">Select Product</h2>
-                        <button className="border border-gray-300 p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                        <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
+                        <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
                     </div>
                     <SaveDesign />
                 </div>
@@ -55,12 +55,12 @@ export default function Customizer() {
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
-                
+
                 {!editTextLayerMode && 
                     <>
                         <SelectSide />
                         <div>
-                            <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Layer</h2>
+                            <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Layer</h2>
                             <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
                             <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
                         </div>

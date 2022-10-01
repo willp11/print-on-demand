@@ -48,6 +48,7 @@ export default function AddTextLayer() {
                 textColor: selectedColor
             }
             addLayer(layer);
+            setTextLayerContent("");
         }
     }
 
@@ -69,12 +70,13 @@ export default function AddTextLayer() {
 
     return (
         <div className="flex flex-col">
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Text Layer</h2>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Text Layer</h2>
             <input 
                 type="text" 
                 className="p-1 border border-gray-300" 
                 placeholder="Text content..." 
                 onChange={(e)=>setTextLayerContent(e.target.value)} 
+                value={textLayerContent}
             />
             <div className="my-2">
                 <h3 className="text-sm font-semibold mb-1">Select Color:</h3>
@@ -84,7 +86,7 @@ export default function AddTextLayer() {
                 <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
                 {fontSelection}
             </div>
-            <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
+            <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1" onClick={addTextLayer}>Add Layer</button>
         </div>
     )
 }

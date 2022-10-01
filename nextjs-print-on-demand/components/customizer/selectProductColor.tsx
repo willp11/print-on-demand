@@ -27,7 +27,7 @@ export default function SelectProductColor() {
 
     return (
         <div className="flex flex-col">
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Product Color</h2>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Product Color</h2>
             <div className="flex justify-start items-center">
                 {palette}
             </div>

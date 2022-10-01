@@ -69,7 +69,7 @@ export default function Layers({setEditTextLayerMode}: {setEditTextLayerMode: Di
 
     return (
         <div className="flex flex-col lg:ml-8 min-w-[100px]">
-            <h2 className="text-base lg:text-xl font-bold tracking-tight">Layers</h2>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Layers</h2>
             <div className="flex flex-wrap lg:flex-col justify-start items-center">
                 {moveLayerBackArrow}
                 {layerPreviews}

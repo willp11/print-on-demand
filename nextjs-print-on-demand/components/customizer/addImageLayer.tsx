@@ -78,8 +78,8 @@ export default function AddImageLayer() {
     return (
         <div className="flex">
             <div className="flex flex-col">
-                <h2 className="text-base lg:text-xl font-bold tracking-tight">Add Image Layer</h2>
-                <label className="block">
+                <h2 className="text-base lg:text-lg font-bold tracking-tight mb-1">Add Image Layer</h2>
+                <label className="block mb-1">
                     <span className="sr-only">Add Image Layer</span>
                     <input type="file" 
                         className="block w-full text-sm text-slate-500
@@ -91,7 +91,7 @@ export default function AddImageLayer() {
                         onChange={(e)=>setImageHandler(e.target.files)}
                     />
                 </label>
-                <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
+                <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
             </div>
         </div>
     )
