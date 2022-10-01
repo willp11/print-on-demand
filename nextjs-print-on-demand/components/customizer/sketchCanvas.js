@@ -90,6 +90,11 @@ export default function SketchCanvas() {
         }
     }, [layers, selectedLayer, productSide]);
 
+    // Layer edited by controls outside sketch component
+    useEffect(()=>{
+        activeLayerRef.current = layers[productSide][selectedLayer];
+    }, [layers[productSide][selectedLayer]])
+
     // Preload
     const preload = (p5) => {
         p5.angleMode(p5.DEGREES);
@@ -281,6 +286,7 @@ export default function SketchCanvas() {
                     if (clickedXResize !== null && clickedYResize !== null) {
                         resizedX = (p5.mouseX - clickedXResize);
                         resizedXNew = (p5.mouseX - clickedXResize) / (canvasSize/500);
+                        activeLayerRef.current.resizedX = resizedX;
                         activeLayerSizeX += resizedX;
                         activeLayerSizeY += resizedX;
                     }
@@ -296,7 +302,7 @@ export default function SketchCanvas() {
                         // rotate origin in middle of textBox
                         if (allLayerImagesRef.current[i].font) {
                             let textBox = allLayerImagesRef.current[i].textBounds(
-                                layers[productSide][i].textContent,
+                                activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
                                 (activeLayerRef.current.yPos * (canvasSize/500)),
                                 (activeLayerRef.current.textSize + (resizedXNew*0.5)) * (canvasSize/500)
@@ -390,6 +396,7 @@ export default function SketchCanvas() {
                                 (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY,
                                 (activeLayerRef.current.textSize * (canvasSize/500)) + (resizedX*0.5)
                             );
+
                             p5.stroke('blue');
                             p5.fill('rgba(0,0,0,0)');
                             p5.strokeWeight(2);
@@ -404,16 +411,19 @@ export default function SketchCanvas() {
                             activeLayerRef.current.textBox = textBox;
                             activeLayerRef.current.translateX = translateX;
                             activeLayerRef.current.translateY = translateY;
-                            activeLayerRef.current.resizedX = resizedX;
                             activeLayerRef.current.movedX = movedX;
                             activeLayerRef.current.movedY = movedY;
+                            
+
+                            // moved to where we calculate resizedX as sometimes get resizedX redefined to 0 by here
+                            // activeLayerRef.current.resizedX = resizedX; 
 
                             p5.noStroke();
-                            p5.fill(layers[productSide][i].textColor);
+                            p5.fill(activeLayerRef.current.textColor);
 
                             // draw text
                             p5.text(
-                                layers[productSide][i].textContent, 
+                                activeLayerRef.current.textContent, 
                                 (activeLayerRef.current.xPos * (canvasSize/500)) + movedX - translateX, 
                                 (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY
                             );

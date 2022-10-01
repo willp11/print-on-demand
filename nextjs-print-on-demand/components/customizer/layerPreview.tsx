@@ -47,7 +47,6 @@ export default function LayerPreview({layer, index, setEditTextLayerMode}: ILaye
                         alt=""
                     />
                 </div>
-                {selectedLayer === index && <PencilSquareIcon className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />
             </div>
         )

@@ -30,7 +30,7 @@ interface TextBox {
     h: number
 }
 
-interface Font {
+export interface Font {
     id: number,
     location: string,
     name: string
