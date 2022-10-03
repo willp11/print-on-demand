@@ -16,7 +16,7 @@ interface IDrawableAreaDetails {
     ySize: number
 }
 
-interface IDrawableArea {
+export interface IDrawableArea {
     front: IDrawableAreaDetails,
     back?: IDrawableAreaDetails,
     left?: IDrawableAreaDetails,

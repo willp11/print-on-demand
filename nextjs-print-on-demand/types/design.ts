@@ -27,7 +27,8 @@ interface TextBox {
     x: number,
     y: number,
     w: number,
-    h: number
+    h: number,
+    advance: number
 }
 
 export interface Font {
