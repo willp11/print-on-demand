@@ -2,10 +2,8 @@ import { useDesign } from "../../hooks/useDesign";
 import { useState, useCallback, useEffect } from "react";
 import { ColorPreview } from "../products/selectColor";
 
-const colors = ['white', 'black']
-
 export default function SelectProductColor() {
-    const {setColor} = useDesign();
+    const {product, setColor} = useDesign();
 
     const [selectedColor, setSelectedColor] = useState("white");
 
@@ -19,11 +17,14 @@ export default function SelectProductColor() {
         setColorHandler(selectedColor);
     }, [selectedColor]);
 
-    const palette = colors.map(color=>{
-        let active = false;
-        if (selectedColor === color) active = true;
-        return <ColorPreview key={color} color={color} active={active} setSelectedColor={setSelectedColor} />
-    })
+    let palette;
+    if (product?.colors) {
+        palette = Object.keys(product.colors).map(color=>{
+            let active = false;
+            if (selectedColor === color) active = true;
+            return <ColorPreview key={color} color={color} active={active} setSelectedColor={setSelectedColor} />
+        })
+    }
 
     return (
         <div className="flex flex-col">
