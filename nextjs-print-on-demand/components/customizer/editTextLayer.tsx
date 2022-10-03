@@ -25,7 +25,8 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
         textColor: "black",
         font: fonts[0],
         textSize: 0,
-        rotation: 0
+        rotation: 0,
+        xPos: 200
     });
 
     // set initial value so can revert
@@ -35,13 +36,15 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             if (layer.font !== undefined &&
                 layer.textColor !== undefined && 
                 layer.textSize !== undefined &&
-                layer.rotation !== undefined
+                layer.rotation !== undefined && 
+                layer.xPos !== undefined
             ) {
                 setInitialValues({
                     textColor: layer.textColor,
                     font: layer.font,
                     textSize: layer.textSize,
-                    rotation: layer.rotation
+                    rotation: layer.rotation,
+                    xPos: layer.xPos
                 })
             }
         }
@@ -126,6 +129,7 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             layer.textSize = initialValues.textSize;
             layer.font = initialValues.font;
             layer.rotation = initialValues.rotation;
+            layer.xPos = initialValues.xPos;
             editTextLayer(layer);
             setEditTextLayerMode(false);
         }
