@@ -128,8 +128,9 @@ export const useDesign = () => {
         }
     }
 
-    // edit the text layer - textContent, font, color, fontSize, position, rotation
-    const editTextLayer = (layer: ILayer) => {
+    // edit a text layer - textContent, font, color, fontSize, position, rotation
+    // edit an image layer -  position, rotation
+    const editLayer = (layer: ILayer) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer] = layer;
@@ -161,7 +162,7 @@ export const useDesign = () => {
         removeLayer,
         moveLayerForward,
         moveLayerBackward,
-        editTextLayer,
+        editLayer,
         saveDesign
     }
 }

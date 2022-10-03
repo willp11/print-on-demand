@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
+import EditImageLayer from '../../components/customizer/editImageLayer';
 
 export default function Customizer() {
 
@@ -17,6 +18,7 @@ export default function Customizer() {
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
+    const [editImgLayerMode, setEditImgLayerMode] = useState(false);
 
     return (
         <div className="p-1"> 
@@ -25,11 +27,14 @@ export default function Customizer() {
                 <div className="touch-none">
                     <SketchCanvas />
                 </div>
+
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
-                {!editTextLayerMode && 
+                {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
+
+                {(!editTextLayerMode && !editImgLayerMode) && 
                     <>
                         <SelectSide />
-                        <Layers setEditTextLayerMode={setEditTextLayerMode}/>
+                        <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
                     </>
                 }
 
@@ -55,8 +60,9 @@ export default function Customizer() {
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
+                {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
 
-                {!editTextLayerMode && 
+                {(!editTextLayerMode && !editImgLayerMode) && 
                     <>
                         <SelectSide />
                         <div>
@@ -66,7 +72,7 @@ export default function Customizer() {
                         </div>
 
                         <div className="min-h-[100px]">
-                            <Layers setEditTextLayerMode={setEditTextLayerMode}/>
+                            <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
                         </div>
                     </>
                 }

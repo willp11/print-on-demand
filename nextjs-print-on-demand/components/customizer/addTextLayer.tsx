@@ -43,7 +43,8 @@ export default function AddTextLayer() {
                     x: 200,
                     y: 200,
                     w: 120,
-                    h: 60
+                    h: 60,
+                    advance: 0
                 },
                 textColor: selectedColor
             }
@@ -78,11 +79,11 @@ export default function AddTextLayer() {
                 onChange={(e)=>setTextLayerContent(e.target.value)} 
                 value={textLayerContent}
             />
-            <div className="my-2">
+            <div className="my-1">
                 <h3 className="text-sm font-semibold mb-1">Select Color:</h3>
                 <input type="color" onChange={(e)=>setSelectedColor(e.target.value)}/>
             </div>
-            <div className="mb-2">
+            <div className="mb-1">
                 <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
                 {fontSelection}
             </div>

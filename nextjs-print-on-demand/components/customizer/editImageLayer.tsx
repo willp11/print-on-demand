@@ -3,28 +3,16 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { ILayer, Font } from "../../types/design";
 import {IDrawableArea} from "../../types/product";
 
-const fonts = [
-    {id: 0, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
-    {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
-    {id: 2, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
-]
-
 type AlignPos = 'left' | 'center' | 'right';
 
-export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>}) {
+export default function EditImageLayer({setEditImgLayerMode}: {setEditImgLayerMode: Dispatch<SetStateAction<boolean>>}) {
 
     const { product, layers, editLayer, selectedLayer, productSide } = useDesign();
 
     const [values, setValues] = useState({
-        textColor: "black",
-        font: fonts[0],
-        textSize: 0,
         rotation: 0
     });
     const [initialValues, setInitialValues] = useState({
-        textColor: "black",
-        font: fonts[0],
-        textSize: 0,
         rotation: 0,
         xPos: 200
     });
@@ -33,16 +21,10 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
     useEffect(()=>{
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null) {
             let layer = layers[productSide][selectedLayer];
-            if (layer.font !== undefined &&
-                layer.textColor !== undefined && 
-                layer.textSize !== undefined &&
-                layer.rotation !== undefined && 
+            if (layer.rotation !== undefined && 
                 layer.xPos !== undefined
             ) {
                 setInitialValues({
-                    textColor: layer.textColor,
-                    font: layer.font,
-                    textSize: layer.textSize,
                     rotation: layer.rotation,
                     xPos: layer.xPos
                 })
@@ -54,31 +36,15 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
     useEffect(()=>{
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null) {
             let layer = layers[productSide][selectedLayer];
-            if (layer.font !== undefined &&
-                layer.textColor !== undefined && 
-                layer.textSize !== undefined &&
+            if (
                 layer.rotation !== undefined
             ) {
                 setValues({
-                    textColor: layer.textColor,
-                    font: layer.font,
-                    textSize: layer.textSize,
                     rotation: layer.rotation
                 })
             }
         }
     }, [layers, selectedLayer, productSide])
-
-    const setFontHandler = (name: string) => {
-        fonts.forEach((font, idx)=>{
-            if (font.location === name) {
-                let vals = {...values};
-                vals.font = fonts[idx];
-                setValues(vals);
-                editLayerHandler("font", fonts[idx])
-            }
-        })
-    }
 
     const alignLayer = (pos: AlignPos) => {
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null) {
@@ -86,23 +52,22 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
                 ...layers[productSide][selectedLayer]
             }
             let drawableArea = product?.drawableArea[productSide as keyof IDrawableArea];
-            let width = layer?.textBox?.w;
-            let advance = layer?.textBox?.advance;
+            let width = layer?.width;
 
             switch (pos) {
                 case 'left':
-                    if (drawableArea && typeof advance === "number") layer.xPos = drawableArea?.xPos - advance;
+                    if (drawableArea) layer.xPos = drawableArea?.xPos;
                     break;
                 case 'center':
                     if (drawableArea) {
                         let center = drawableArea.xPos + (0.5*drawableArea.xSize);
-                        if (typeof width === "number" && typeof advance === "number") layer.xPos = center - (0.5*width) - advance;
+                        if (typeof width === "number") layer.xPos = center - (0.5*width);
                     }
                     break;
                 case 'right':
                     if (drawableArea) {
                         let right = drawableArea.xPos + drawableArea.xSize;
-                        if (typeof width === "number" && typeof advance === "number") layer.xPos = right - width - advance;
+                        if (typeof width === "number") layer.xPos = right - width;
                     }
             }
             editLayer(layer);
@@ -125,47 +90,16 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             let layer: ILayer = {
                 ...layers[productSide][selectedLayer]
             }
-            layer.textColor = initialValues.textColor;
-            layer.textSize = initialValues.textSize;
-            layer.font = initialValues.font;
             layer.rotation = initialValues.rotation;
             layer.xPos = initialValues.xPos;
             editLayer(layer);
-            setEditTextLayerMode(false);
+            setEditImgLayerMode(false);
         }
     }
 
-    // FONT SELECTION
-    let fontItems = fonts.map((font)=>{
-        return (
-            <option key={font.id} value={font.location} style={{fontFamily: font.name}}>{font.name}</option>
-        );
-    })
-    let fontSelection = (
-        <select 
-            className="border border-gray-300 cursor-pointer mr-2 w-48"
-            value={values.font.location} 
-            onChange={e=>setFontHandler(e.target.value)}
-        >
-            {fontItems}
-        </select>
-    )
-
     return (
         <div className="flex flex-col">
-            <h2 className="text-base lg:text-lg font-bold tracking-tight">Edit Text Layer</h2>
-            <div className="my-1">
-                <h3 className="text-sm font-semibold mb-1">Color:</h3>
-                <input type="color" value={values.textColor ?? "#000"} onChange={(e)=>editLayerHandler("textColor", e.target.value)}/>
-            </div>
-            <div className="mb-1">
-                <h3 className="text-sm font-semibold mb-1">Font:</h3>
-                {fontSelection}
-            </div>
-            <div className="my-1">
-                <h3 className="text-sm font-semibold mb-1">Font Size:</h3>
-                <input placeholder="16" min="1" type="number" value={Math.round(values.textSize).toString()} onChange={(e)=>editLayerHandler("textSize", parseInt(e.target.value))} className="p-1 border border-gray-300"/>
-            </div>
+            <h2 className="text-base lg:text-lg font-bold tracking-tight">Edit Image Layer</h2>
             <div className="my-1">
                 <h3 className="text-sm font-semibold mb-1">Rotation:</h3>
                 <input placeholder="0" min="0" type="number" value={Math.round(values.rotation).toString()} onChange={(e)=>editLayerHandler("rotation", parseInt(e.target.value))} className="p-1 border border-gray-300"/>
@@ -184,7 +118,7 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
             </button>
             <button 
                 className="p-1 w-32 bg-green-100 border border-green-600 text-green-600 hover:bg-green-200 hover:text-green-700 rounded mt-1" 
-                onClick={()=>setEditTextLayerMode(false)}
+                onClick={()=>setEditImgLayerMode(false)}
             >
                 Exit
             </button>

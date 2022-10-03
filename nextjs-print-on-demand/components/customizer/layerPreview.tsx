@@ -7,10 +7,11 @@ import { Dispatch, SetStateAction } from 'react';
 interface ILayerPreviewProps {
     layer: ILayer,
     index: number,
-    setEditTextLayerMode: Dispatch<SetStateAction<boolean>>
+    setEditTextLayerMode: Dispatch<SetStateAction<boolean>>,
+    setEditImgLayerMode: Dispatch<SetStateAction<boolean>>
 }
 
-export default function LayerPreview({layer, index, setEditTextLayerMode}: ILayerPreviewProps) {
+export default function LayerPreview({layer, index, setEditTextLayerMode, setEditImgLayerMode}: ILayerPreviewProps) {
 
     const {removeLayer, selectedLayer, setSelectedLayer} = useDesign();
 
@@ -47,6 +48,7 @@ export default function LayerPreview({layer, index, setEditTextLayerMode}: ILaye
                         alt=""
                     />
                 </div>
+                {selectedLayer === index && <PencilSquareIcon onClick={()=>setEditImgLayerMode(true)} className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />
             </div>
         )

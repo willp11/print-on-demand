@@ -3,7 +3,12 @@ import LayerPreview from './layerPreview';
 import { ArrowLeftIcon, ArrowRightIcon, ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-export default function Layers({setEditTextLayerMode}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>}) {
+interface ILayersProps {
+    setEditTextLayerMode: Dispatch<SetStateAction<boolean>>,
+    setEditImgLayerMode: Dispatch<SetStateAction<boolean>>
+}
+
+export default function Layers({setEditTextLayerMode, setEditImgLayerMode}: ILayersProps) {
     const { productSide, layers, selectedLayer, setSelectedLayer, moveLayerForward, moveLayerBackward} = useDesign();
 
     const [windowWidth, setWindowWidth] = useState(0);
@@ -25,7 +30,7 @@ export default function Layers({setEditTextLayerMode}: {setEditTextLayerMode: Di
         layerPreviews = layers[productSide].map((layer, idx)=>{
             if (setSelectedLayer ) return (
                 <div key={layer.id}>
-                    <LayerPreview layer={layer} index={idx} setEditTextLayerMode={setEditTextLayerMode} />
+                    <LayerPreview layer={layer} index={idx} setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
                 </div>
             )
         })
