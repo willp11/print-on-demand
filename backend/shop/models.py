@@ -25,7 +25,7 @@ class PrintArea(models.Model):
         LEFT = 'left', ('left')
         RIGHT = 'right', ('right')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='print_areas')
     side = models.CharField(max_length=8, choices=Side.choices)
     xPos = models.IntegerField()
     yPos = models.IntegerField()
@@ -46,9 +46,8 @@ class Size(models.Model):
         XXXL = '3XL', ('3xl')
         XXXXL = '4XL', ('4xl')
     
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')
     size = models.CharField(max_length=8, choices=Size.choices)
-    description = models.CharField(max_length=32, null=True)
     value = models.CharField(max_length=16) # e.g. size XS has value 32/34
 
     def __str__(self):
@@ -63,7 +62,7 @@ class Color(models.Model):
         blue = 'blue', ('blue')
         green = 'green', ('green')
     
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='colors')
     color = models.CharField(max_length=16, choices=Color.choices)
 
     def __str__(self):
@@ -75,20 +74,24 @@ class ProductImage(models.Model):
         BACK = 'back', ('back')
         LEFT = 'left', ('left')
         RIGHT = 'right', ('right')
+        FRONT_MASK = 'front_mask', ('front_mask')
+        BACK_MASK = 'back_mask', ('back_mask')
+        LEFT_MASK = 'left_mask', ('left_mask')
+        RIGHT_MASK = 'right_mask', ('right_mask')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    side = models.CharField(max_length=8, choices=Side.choices)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_images')
+    side = models.CharField(max_length=16, choices=Side.choices)
     image = models.ImageField(upload_to='images/products/')
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_images')
 
     def __str__(self):
         return f'{self.side} {self.product.name} {self.color.color}'
 
 class Discount(models.Model):
     discount = models.IntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='discounts')
     minQty = models.IntegerField()
-    maxQty = models.IntegerField(null=True)
+    maxQty = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.discount}% off {self.product.name}'
