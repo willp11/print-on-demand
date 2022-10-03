@@ -14,7 +14,6 @@ class Product(models.Model):
     image = models.ImageField(upload_to="images/products/")
     material = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
-    blankPriceRows = models.CharField(max_length=512)
 
     def __str__(self):
         return self.name
@@ -69,6 +68,21 @@ class Color(models.Model):
 
     def __str__(self):
         return f'{self.color} {self.product.name}'
+
+class ProductImage(models.Model):
+    class Side(models.TextChoices):
+        FRONT = 'front', ('front')
+        BACK = 'back', ('back')
+        LEFT = 'left', ('left')
+        RIGHT = 'right', ('right')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    side = models.CharField(max_length=8, choices=Side.choices)
+    image = models.ImageField(upload_to='images/products/')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.side} {self.product.name} {self.color.color}'
 
 class Discount(models.Model):
     discount = models.IntegerField()
