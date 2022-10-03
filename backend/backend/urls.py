@@ -25,4 +25,5 @@ urlpatterns = [
     path('auth/password/reset/', PasswordResetView.as_view(), name='password_reset'),
     path('auth/password/reset/confirm/<str:uid>/<str:token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/password/change/', PasswordChangeView.as_view(), name='password_change'),
+    path('api/v1/', include('shop.urls'))
 ]
