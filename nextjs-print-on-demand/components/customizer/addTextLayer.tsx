@@ -10,7 +10,7 @@ const fonts = [
 
 export default function AddTextLayer() {
     
-    const { addLayer, layers} = useDesign();
+    const { addLayer, layers, product, productSide, setSelectedLayer} = useDesign();
 
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
@@ -18,19 +18,32 @@ export default function AddTextLayer() {
 
     const setFontHandler = (name: string) => {
         fonts.forEach((font, idx)=>{
-            console.log(font.location, name)
             if (font.location === name) setSelectedFont(fonts[idx])
         })
     }
 
     const addTextLayer = () => {
         if (layers) {
+            let xPos=200, yPos=200;
+            if (productSide === "front") {
+                xPos = product?.drawableArea.front.xPos ?? 200;
+                yPos = product?.drawableArea.front.yPos ?? 200;
+            } else if (productSide === "back") {
+                xPos = product?.drawableArea?.back?.xPos ?? 200;
+                yPos = product?.drawableArea?.back?.yPos ?? 200;
+            } else if (productSide === "left") {
+                xPos = product?.drawableArea?.left?.xPos ?? 200;
+                yPos = product?.drawableArea?.left?.yPos ?? 200;
+            } else if (productSide === "right") {
+                xPos = product?.drawableArea?.right?.xPos ?? 200;
+                yPos = product?.drawableArea?.right?.yPos ?? 200;
+            }
             
             let layer: ILayer = {
                 id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
                 type: "text",
-                xPos: 200,
-                yPos: 200,
+                xPos: xPos,
+                yPos: yPos,
                 aspectRatio: 1,
                 size: 100,
                 width: 120,
@@ -40,8 +53,8 @@ export default function AddTextLayer() {
                 textContent: textLayerContent,
                 textSize: 50,
                 textBox: {
-                    x: 200,
-                    y: 200,
+                    x: xPos,
+                    y: yPos,
                     w: 120,
                     h: 60,
                     advance: 0
@@ -50,6 +63,10 @@ export default function AddTextLayer() {
             }
             addLayer(layer);
             setTextLayerContent("");
+            if (productSide !== undefined && setSelectedLayer) {
+                let numLayers = layers[productSide].length;
+                setSelectedLayer(numLayers);
+            }
         }
     }
 

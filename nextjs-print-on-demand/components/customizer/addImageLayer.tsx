@@ -44,26 +44,26 @@ export default function AddImageLayer() {
                 width = Math.min(100*aspectRatio, size);
                 height = Math.min(100, size/aspectRatio);
             }
-            let xPos, yPos;
+            let xPos=200, yPos=200;
             if (productSide === "front") {
-                xPos = product?.drawableArea.front.xPos;
-                yPos = product?.drawableArea.front.yPos;
+                xPos = product?.drawableArea.front.xPos ?? 200;
+                yPos = product?.drawableArea.front.yPos ?? 200;
             } else if (productSide === "back") {
-                xPos = product?.drawableArea?.back?.xPos;
-                yPos = product?.drawableArea?.back?.yPos;
+                xPos = product?.drawableArea?.back?.xPos ?? 200;
+                yPos = product?.drawableArea?.back?.yPos ?? 200;
             } else if (productSide === "left") {
-                xPos = product?.drawableArea?.left?.xPos;
-                yPos = product?.drawableArea?.left?.yPos;
+                xPos = product?.drawableArea?.left?.xPos ?? 200;
+                yPos = product?.drawableArea?.left?.yPos ?? 200;
             } else if (productSide === "right") {
-                xPos = product?.drawableArea?.right?.xPos;
-                yPos = product?.drawableArea?.right?.yPos;
+                xPos = product?.drawableArea?.right?.xPos ?? 200;
+                yPos = product?.drawableArea?.right?.yPos ?? 200;
             }
 
             let layer: ILayer = {
                 id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
                 type: "image",
-                xPos: 200,
-                yPos: 200,
+                xPos: xPos,
+                yPos: yPos,
                 aspectRatio: aspectRatio,
                 size: Math.min(layerImageWidth, 100),
                 width: width,
