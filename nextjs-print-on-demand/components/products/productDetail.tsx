@@ -44,7 +44,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="relative w-full max-w-[400px] h-[350px] xs:h-[450px]">
                     <Image
-                        src={product.colors[selectedColor]["front"]}
+                        src={`http://localhost:8000${product.colors[selectedColor]["front"]}`}
                         layout="fill"
                         objectFit="contain"
                         alt={product.name}
@@ -52,7 +52,6 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 </div>
                 <div className="md:h-[450px] p-4 pt-0 md:pt-4 md:mt-4">
                     <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
-                    <h2 className="text-sm text-gray-500 font-semibold">{product.brand}</h2>
                     <p className="text-2xl font-semibold my-4">${product.price}</p>
                     <div className="w-full max-w-[500px]">
                         <BlankPriceTable rows={product.blankPriceRows} />

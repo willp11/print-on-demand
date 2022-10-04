@@ -4,7 +4,6 @@ export const productList = [
         name: "SOL'S REGENT T-SHIRT",
         price: 3.69,
         image: "/images/products/sol_regent_tshirt_white.png",
-        brand: "Fruit of the Loom",
         material: "80% cotton, 20% polyester",
         description: [
             "Ribbed collar.",
@@ -124,7 +123,6 @@ export const productList = [
         name: "SOL'S REGENT T-SHIRT",
         price: 3.69,
         image: "/images/products/sol_regent_tshirt_white.png",
-        brand: "Fruit of the Loom",
         material: "80% cotton, 20% polyester",
         description: [
             "Ribbed collar.",
@@ -244,7 +242,6 @@ export const productList = [
         name: "SOL'S REGENT T-SHIRT",
         price: 3.69,
         image: "/images/products/sol_regent_tshirt_white.png",
-        brand: "Fruit of the Loom",
         material: "80% cotton, 20% polyester",
         description: [
             "Ribbed collar.",

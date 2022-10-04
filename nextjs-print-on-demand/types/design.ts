@@ -1,13 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { IProduct } from "./product";
 
-// export interface ILayerSides {
-//     "front": ILayer | never[],
-//     "back"?: ILayer | never[],
-//     "left"?: ILayer | never[],
-//     "right"?: ILayer | never[]
-// }
-
 export interface IDesignContext {
     product: IProduct,
     setProduct: Dispatch<SetStateAction<IProduct>>,
@@ -49,8 +42,6 @@ export interface ILayer {
     rotation: number,
     image?: string,
     font?: Font,
-    textOriginX?: number,
-    textOriginY?: number,
     textContent?: string,
     textSize?: number,
     textBox?: TextBox,
