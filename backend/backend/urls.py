@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth.views import PasswordChangeView
 
@@ -26,4 +28,4 @@ urlpatterns = [
     path('auth/password/reset/confirm/<str:uid>/<str:token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/password/change/', PasswordChangeView.as_view(), name='password_change'),
     path('api/v1/', include('shop.urls'))
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

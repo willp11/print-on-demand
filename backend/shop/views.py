@@ -11,6 +11,11 @@ class ProductListView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = ProductSerializer
 
+class ProductListIdsView(ListAPIView):
+    queryset = Product.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = ProductIdSerializer
+
 class ProductRetrieveView(APIView):
     permission_classes = [AllowAny]
 

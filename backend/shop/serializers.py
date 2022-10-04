@@ -27,6 +27,10 @@ class ColorSerializer(ModelSerializer):
         model = Color
         fields = ('color', 'product_images',)
 
+class ProductIdSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('id',)
 
 class ProductSerializer(ModelSerializer):
     colors = ColorSerializer(many=True)
@@ -35,4 +39,4 @@ class ProductSerializer(ModelSerializer):
     print_areas = PrintAreaSerializer(many=True)
     class Meta:
         model = Product
-        fields = ('name', 'category', 'price', 'image', 'material', 'description', 'colors', 'sizes', 'discounts', 'print_areas')
+        fields = ('id', 'name', 'price', 'image', 'material', 'description', 'colors', 'sizes', 'discounts', 'print_areas')
