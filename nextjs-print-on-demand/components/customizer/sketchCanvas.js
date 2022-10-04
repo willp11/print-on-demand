@@ -477,11 +477,10 @@ export default function SketchCanvas() {
                     p5.push();
 
                     if (layers[productSide][i].type === "image") {
-                        let translateX = (layers[productSide][i].xPos * (canvasSize/500)) + (0.5*layers[productSide][i].width);
-                        let translateY = (layers[productSide][i].yPos * (canvasSize/500)) + (0.5*layers[productSide][i].height);
+                        let translateX = (layers[productSide][i].xPos * (canvasSize/500)) + (0.5*layers[productSide][i].width*(canvasSize/500));
+                        let translateY = (layers[productSide][i].yPos * (canvasSize/500)) + (0.5*layers[productSide][i].height*(canvasSize/500));
                         p5.translate(translateX, translateY);
                         p5.rotate(layers[productSide][i].rotation);
-
                         p5.image(
                             allLayerImagesRef.current[i], 
                             (layers[productSide][i].xPos * (canvasSize/500)) - translateX,
