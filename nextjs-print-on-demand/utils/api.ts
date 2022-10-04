@@ -1,0 +1,1 @@
+export const imageApiPrefix = 'http://localhost:8000';

@@ -1,6 +1,7 @@
 import { useDesign } from "../../hooks/useDesign";
 import Image from "next/image";
 import {IProduct} from '../../types/product';
+import { imageApiPrefix } from '../../utils/api';
 
 type sideTypes = 'front' | 'back' | 'left' | 'right';
 interface ISideProps {
@@ -11,7 +12,7 @@ interface ISideProps {
 }
 
 const Side = ({product, side, color, selected}: ISideProps) => {
-    let src = product.colors[color][side];
+    let src = `${imageApiPrefix}${product.colors[color][side]}`;
     if (src !== undefined) {
         let className = "flex flex-col items-center border border-gray-300 rounded cursor-pointer hover:border-gray-500 min-w-[60px]";
         if (selected) className = "flex flex-col items-center border-2 border-blue-600 rounded cursor-pointer min-w-[60px]";

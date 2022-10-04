@@ -6,19 +6,42 @@ import SelectProductColor from '../../components/customizer/selectProductColor';
 import AddImageLayer from '../../components/customizer/addImageLayer';
 import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
 import EditImageLayer from '../../components/customizer/editImageLayer';
+import { IProduct } from '../../types/product';
+import axios from 'axios';
+import { useDesign } from '../../hooks/useDesign';
 
-export default function Customizer() {
+export async function getStaticProps() {
+    const url = 'http://localhost:8000/api/v1/get-product-list/';
+    const headers = {
+        'Content-Type': 'application/json'
+    }
+    const res = await axios.get(url, {headers: headers});
+    const products = res.data;
+    return {
+        props: {
+            products: products
+        }
+    }
+}
+
+export default function Customizer({products}: {products: IProduct[]}) {
 
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
+
+    const {setProduct} = useDesign();
+
+    useEffect(()=>{
+        if (setProduct) setProduct(products[0]);
+    }, [])
 
     return (
         <div className="p-1"> 
@@ -40,7 +63,7 @@ export default function Customizer() {
 
                 {
                     showSelectProductModal && 
-                    <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} />
+                    <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} products={products} />
                 }
             </div>
 
@@ -102,7 +125,7 @@ export default function Customizer() {
 
                 {
                     showSelectProductModal && 
-                    <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} />
+                    <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} products={products} />
                 }
             </div>
         </div>

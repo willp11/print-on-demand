@@ -1,17 +1,18 @@
 import GridItem from "./gridItem";
-import { productList } from "../../utils/productList";
 import { Dispatch, SetStateAction } from 'react';
+import { IProduct } from '../../types/product';
 
 interface IProductGridProps {
+    productList: IProduct[],
     setShowSelectProductModal?: Dispatch<SetStateAction<boolean>>
 }
 
-export default function ProductGrid(props: IProductGridProps) {
+export default function ProductGrid({productList, setShowSelectProductModal}: IProductGridProps) {
 
     let products;
-    if (props.setShowSelectProductModal !== undefined) {
+    if (setShowSelectProductModal !== undefined) {
         products = productList.map(product=>{
-            return <GridItem key={product.id} product={product} setShowSelectProductModal={props.setShowSelectProductModal} />
+            return <GridItem key={product.id} product={product} setShowSelectProductModal={setShowSelectProductModal} />
         })
     } else {
         products = productList.map(product=>{

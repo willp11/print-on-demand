@@ -32,7 +32,7 @@ export default function GridItem(props: IGridItemProps) {
         >
             <div className="relative w-full h-[225px] cursor-pointer" onClick={()=>router.push(`/product/${props.product.id}`)}>
                 <Image
-                    src={props.product.image}
+                    src={`http://localhost:8000${props.product.image}`}
                     layout="fill"
                     objectFit="contain"
                     alt={props.product.name}
