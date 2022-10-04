@@ -244,7 +244,6 @@ export default function SketchCanvas() {
             p5.stroke('gray');
             p5.strokeWeight(1)
 
-            // let incrementX = printable_size_x / 5;
             // grid
             for (let i=0; i<6; i++) {
                 p5.line(
@@ -298,7 +297,7 @@ export default function SketchCanvas() {
                         activeLayerSizeY += resizedX;
                     }
 
-                    // new drawing state for active layer, so can translate to middle of image and rotate around there
+                    // new drawing state for active layer, translate to middle of layer and rotate around there
                     p5.push();
 
                     let translateX = 0, translateY = 0;

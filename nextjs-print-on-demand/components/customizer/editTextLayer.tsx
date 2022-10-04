@@ -13,6 +13,24 @@ type AlignPos = 'left' | 'center' | 'right';
 
 export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>}) {
 
+    // get size of window
+    const [canvasSize, setCanvasSize] = useState(499);
+
+    // resize event listener
+    useEffect(() => {
+        windowResized();
+        window.addEventListener("resize", windowResized); 
+        return () => window.removeEventListener("resize", windowResized);
+    }, []);
+
+    function windowResized() {
+        if (window.innerWidth < 500) {
+            setCanvasSize(350);
+        } else {
+            setCanvasSize(499);
+        }
+    }
+
     const { product, layers, editLayer, selectedLayer, productSide } = useDesign();
 
     const [values, setValues] = useState({
@@ -86,7 +104,9 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
                 ...layers[productSide][selectedLayer]
             }
             let drawableArea = product?.drawableArea[productSide as keyof IDrawableArea];
-            let width = layer?.textBox?.w;
+            // check window size, if below 500 scale width by canvas size (=350)
+            let width;
+            if (layer?.textBox?.w) width = (layer?.textBox?.w / (canvasSize/500));
             let advance = layer?.textBox?.advance;
 
             switch (pos) {
@@ -96,7 +116,9 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
                 case 'center':
                     if (drawableArea) {
                         let center = drawableArea.xPos + (0.5*drawableArea.xSize);
-                        if (typeof width === "number" && typeof advance === "number") layer.xPos = center - (0.5*width) - advance;
+                        if (typeof width === "number" && typeof advance === "number") {
+                            layer.xPos = center - (0.5*width) - advance
+                        };
                     }
                     break;
                 case 'right':
