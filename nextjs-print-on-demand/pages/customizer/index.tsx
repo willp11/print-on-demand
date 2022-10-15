@@ -126,7 +126,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                 }
             </div>
             
-            {product && layers && showPreview && <DesignPreviewModal product={product} layers={layers}/>}
+            {product && layers && showPreview && <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} />}
         </div>
     )
 }

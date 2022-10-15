@@ -69,6 +69,7 @@ export const uploadDesign = async (token: string, layers: {[key: string]: ILayer
     try {
         const res = await axios.post(url, data, {headers: headers});
         console.log(res.data);
+        return res;
     } catch(e) {
         console.log(e);
     }

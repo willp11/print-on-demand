@@ -140,12 +140,13 @@ export const useDesign = () => {
 
     // save the design - a design consists of the layers, 
     // so then can be applied to any product that has same sides
-    const saveDesign = (token: string, previews: object[]) => {
+    const saveDesign = async (token: string, previews: object[]) => {
         if (layers !== undefined) {
             let img = layers.front[0].image;
             if (img !== undefined) {
                 try {
-                    uploadDesign(token, layers, previews)
+                    const res = await uploadDesign(token, layers, previews);
+                    if (res) return res;
                 } catch(e) {
                     console.log(e);
                 }
