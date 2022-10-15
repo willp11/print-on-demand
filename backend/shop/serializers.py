@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import *
+from drf_extra_fields.fields import Base64ImageField
 
 class SizeSerializer(ModelSerializer):
     class Meta:
@@ -40,3 +41,19 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'name', 'price', 'image', 'material', 'description', 'colors', 'sizes', 'discounts', 'print_areas')
+
+class DesignCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Design
+        fields = ('user', 'name')
+
+class TextLayerCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Layer
+        exclude = ('image',)
+
+class ImageLayerCreateSerializer(ModelSerializer):
+    image = Base64ImageField()
+    class Meta:
+        model = Layer
+        fields = ('design', 'side', 'type', 'xPos', 'yPos', 'aspectRatio', 'size', 'width', 'height', 'rotation', 'image')

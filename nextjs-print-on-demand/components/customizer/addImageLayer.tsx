@@ -9,6 +9,7 @@ export default function AddImageLayer() {
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
+    // const [imageFile, setImageFile] = useState<File | undefined>();
 
     const returnFile = (file: string) => {
         let img = new Image;
@@ -26,6 +27,7 @@ export default function AddImageLayer() {
         try {
             if (files !== null) {
                 getBase64(files[0], returnFile);
+                // setImageFile(files[0]);
             }
         } catch(e) {
             console.log(e);

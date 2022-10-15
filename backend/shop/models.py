@@ -121,7 +121,7 @@ class Layer(models.Model):
         IMAGE = 'image', ('image')
         TEXT = 'text', ('text')
 
-    design = models.ForeignKey(Design, on_delete=models.CASCADE)
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='layers')
     side = models.CharField(max_length=8, choices=Side.choices)
     type = models.CharField(max_length=8, choices=Type.choices)
     xPos = models.IntegerField()

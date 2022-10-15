@@ -3,6 +3,7 @@ import { IDesignContext, ILayer } from '../types/design';
 import { IProduct } from '../types/product';
 import { productList } from '../utils/productList';
 import { Dispatch, SetStateAction } from 'react';
+import { uploadDesign } from '../utils/api';
 
 const DesignContext = React.createContext<IDesignContext | undefined>(undefined);
 
@@ -140,8 +141,17 @@ export const useDesign = () => {
 
     // save the design - a design consists of the layers, 
     // so then can be applied to any product that has same sides
-    const saveDesign = () => {
-        console.log(layers)
+    const saveDesign = (token: string) => {
+        if (layers !== undefined) {
+            let img = layers.front[0].image;
+            if (img !== undefined) {
+                try {
+                    uploadDesign(token, layers)
+                } catch(e) {
+                    console.log(e);
+                }
+            }
+        }
     }
 
     return {

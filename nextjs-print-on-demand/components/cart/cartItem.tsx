@@ -14,9 +14,9 @@ export default function CartItem({item}: {item: ICartItem}) {
         return (
             <div className="w-full my-2 flex justify-start border-b border-gray-300 dark:border-gray-600">
                 <div className="h-[100px] min-w-[100px]">
-                    {item?.image && 
+                    {item?.image && item?.color && 
                         <Image
-                            src={item.colors[item.color]["front"]}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${item.colors[item.color]["front"]}`}
                             height={100}
                             width={100}
                             alt={item.name}

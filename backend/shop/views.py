@@ -2,14 +2,30 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from django.shortcuts import get_object_or_404, get_list_or_404
 from .serializers import *
 from .models import *
+from .util import prepareProductData
 
-class ProductListView(ListAPIView):
-    queryset = Product.objects.all()
+# class ProductListView(ListAPIView):
+#     queryset = Product.objects.all()
+#     permission_classes = [AllowAny]
+#     serializer_class = ProductSerializer
+
+class ProductListView(APIView):
     permission_classes = [AllowAny]
-    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get(self, request):
+        productList = []
+        for product in self.queryset.all():
+            serializer = ProductSerializer(product)
+            data = serializer.data.copy()
+            data = prepareProductData(data)
+            productList.append(data)
+
+        return Response(productList)
 
 class ProductListIdsView(ListAPIView):
     queryset = Product.objects.all()
@@ -23,52 +39,43 @@ class ProductRetrieveView(APIView):
         product = get_object_or_404(Product, pk=pk)
         serializer = ProductSerializer(product)
         data = serializer.data.copy()
-
-        # change shape of colors data
-        colors = {}
-        for color in data["colors"]:
-            colors[color["color"]] = {}
-            for side in color["product_images"]:
-                colors[color["color"]][side["side"]] = side["image"]
-        data["colors"] = colors
-
-        # change shape of sizes data
-        sizes = {}
-        for size in data["sizes"]:
-            sizes[size["size"]] = size["value"]
-        data["sizes"] = sizes
-
-        # split the description string into array
-        description = data["description"].split(".")
-        data["description"] = description
-
-        # change shape of print areas data
-        printable_area = {}
-        for area in data["print_areas"]:
-            printable_area[area["side"]] = {
-                "xPos": area["xPos"],
-                "yPos": area["yPos"],
-                "xSize": area["xSize"],
-                "ySize": area["ySize"]
-            }
-        data["drawableArea"] = printable_area
-        del data["print_areas"]
-
-        # change shape of discounts data
-        blank_price_rows = []
-        discounts = sorted(data["discounts"], key=lambda d: d["discount"])
-        for discount in discounts:
-            minQ = discount["minQty"]
-            maxQ = discount["maxQty"] 
-            price = round(data["price"] * ((100 - discount["discount"])/100), 2)
-            dis = discount["discount"]
-            if maxQ != None:
-                row = f"Buy {minQ} to {maxQ} for £{price} each - SAVE {dis}%"
-                blank_price_rows.append(row)
-            else:
-                row = f"Buy {minQ}+ for £{price} each - SAVE {dis}%"
-                blank_price_rows.append(row)
-        data["blankPriceRows"] = blank_price_rows
-        del data["discounts"]
+        data = prepareProductData(data)
 
         return Response(data)
+
+class DesignCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        design_data = request.data["design"]
+        design_data["user"] = request.user.pk
+        design_serializer = DesignCreateSerializer(data=design_data)
+        if design_serializer.is_valid():
+            design = design_serializer.save()
+            # serialize all the layers
+            layer_serializers = []
+            for layer in request.data["layers"]:
+                layer["design"] = design.pk
+                if layer["type"] == "text":
+                    layer_serializer = TextLayerCreateSerializer(data=layer)
+                    layer_serializers.append(layer_serializer)
+                elif layer["type"] == "image":
+                    layer_serializer = ImageLayerCreateSerializer(data=layer)
+                    layer_serializers.append(layer_serializer)
+            # check all the layers are valid
+            found_invalid = False
+            for serializer in layer_serializers:
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    found_invalid = True
+                    print(serializer.errors)
+                    break
+            if found_invalid == False:
+                return Response({"message":"success"}, status=HTTP_200_OK)
+            else:
+                # if we have any invalid layer, delete the design and will cascade and delete all the layers too
+                design.delete()
+                return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)

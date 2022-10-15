@@ -104,7 +104,7 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
                 ...layers[productSide][selectedLayer]
             }
             let drawableArea = product?.drawableArea[productSide as keyof IDrawableArea];
-            // check window size, if below 500 scale width by canvas size (=350)
+            // check window size, if below 500 scale width by canvas size
             let width;
             if (layer?.textBox?.w) width = (layer?.textBox?.w / (canvasSize/500));
             let advance = layer?.textBox?.advance;

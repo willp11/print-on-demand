@@ -3,9 +3,9 @@ import { useState } from "react";
 import { ILayer } from "../../types/design";
 
 const fonts = [
-    {id: 0, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
     {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
-    {id: 2, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
+    {id: 2, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
+    {id: 3, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
 ]
 
 export default function AddTextLayer() {
