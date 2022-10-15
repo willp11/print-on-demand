@@ -143,3 +143,4 @@ class Layer(models.Model):
     textBoxW = models.IntegerField(null=True)
     textBoxH = models.IntegerField(null=True)
     textBoxAdvance = models.IntegerField(null=True)
+    zIndex = models.IntegerField()
