@@ -2,10 +2,16 @@ import DesignPreviewCanvas from '../../components/customizer/designPreviewCanvas
 import { IProduct } from '../../types/product';
 import { ILayer } from '../../types/design';
 import { useEffect, useState } from 'react';
+import { useDesign } from '../../hooks/useDesign';
+import { useUser } from '../../hooks/useUser';
 
 type Side = 'front' | 'back' | 'left' | 'right';
 
 export default function DesignPreviewModal({product, layers}: {product: IProduct, layers: {[key: string]: ILayer[]}}) {
+
+    const [loading, setLoading] = useState(true);
+    const { saveDesign } = useDesign();
+    const { token } = useUser();
 
     // Need 4 individual so each sketch can update independently, or get sync issues as all update empty object
     const [frontPreview, setFrontPreview] = useState<string | null>(null);
@@ -26,8 +32,34 @@ export default function DesignPreviewModal({product, layers}: {product: IProduct
     }
 
     useEffect(()=>{
-        if (frontPreview && backPreview && leftPreview && rightPreview) console.log("All previews updated");
+        if (frontPreview && backPreview && leftPreview && rightPreview) {
+            setLoading(false);
+        }
     }, [frontPreview, backPreview, leftPreview, rightPreview]);
+
+    const saveHandler = () => {
+        if (token && frontPreview && backPreview && leftPreview && rightPreview) {
+            let previews = [
+                {
+                    side: "front",
+                    image: frontPreview
+                },
+                {
+                    side: "back",
+                    image: backPreview
+                },
+                {
+                    side: "left",
+                    image: leftPreview
+                },
+                {
+                    side: "right",
+                    image: rightPreview
+                }
+            ]
+            saveDesign(token, previews)
+        }
+    }
 
     if (product !== null && product !== undefined) {
         return (
@@ -46,7 +78,7 @@ export default function DesignPreviewModal({product, layers}: {product: IProduct
                     <div className="hidden">
                         <DesignPreviewCanvas product={product} side="right" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
                     </div>
-                    <button>Save</button>
+                    <button disabled={loading} onClick={saveHandler}>{loading ? "Loading" : "Save"}</button>
                 </div>
             </div>
         )

@@ -8,7 +8,6 @@ const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
 import { useRef } from 'react';
 import {useCanvasSize} from '../../hooks/useCanvasSize';
 import { imageApiPrefix } from '../../utils/api';
-import axios from 'axios';
 
 export default function DesignPreviewCanvas({product, side, color, updatePreviewImages, layers}) {
 
@@ -18,7 +17,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
     // images
     let productImageRef = useRef();
     let productImageMaskRef = useRef();
-    let allLayerImagesRef = useRef(undefined); // should rename it as also has fonts
+    let allLayersRef = useRef();
 
     // Preload
     const preload = (p5) => {
@@ -28,7 +27,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
                 productImageRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][side]}`);
                 productImageMaskRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][`${side}_mask`]}`);
 
-                allLayerImagesRef.current = layers[side].map((layer)=>{
+                allLayersRef.current = layers[side].map((layer)=>{
                     if (layer.type === "image") {
                         return p5.loadImage(layer.image);
                     } else if (layer.type === "text") {
@@ -58,14 +57,14 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
     const draw = (p5) => {
         p5.background(255);
 
-        if (productImageRef.current && productImageMaskRef.current && allLayerImagesRef.current) {
+        if (productImageRef.current && productImageMaskRef.current && allLayersRef.current) {
             // draw product
             p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
 
             // draw layers
             p5.push();
 
-            allLayerImagesRef.current.forEach((layer, i)=>{
+            allLayersRef.current.forEach((layer, i)=>{
                 p5.push();
 
                 if (layers[side][i].type === "image") {

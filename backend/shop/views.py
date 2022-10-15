@@ -59,8 +59,10 @@ class DesignCreateView(APIView):
         design_data = request.data["design"]
         design_data["user"] = request.user.pk
         design_serializer = DesignCreateSerializer(data=design_data)
-        if design_serializer.is_valid():
+        preview_serializer = PreviewSerializer(data=request.data["previews"], many=True)
+        if design_serializer.is_valid() and preview_serializer.is_valid():
             design = design_serializer.save()
+            preview_serializer.save(design=design)
             # serialize all the layers
             layer_serializers = []
             for layer in request.data["layers"]:

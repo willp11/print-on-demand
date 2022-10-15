@@ -146,4 +146,12 @@ class Layer(models.Model):
     zIndex = models.IntegerField()
 
 class Preview(models.Model):
+    class Side(models.TextChoices):
+        FRONT = 'front', ('front')
+        BACK = 'back', ('back')
+        LEFT = 'left', ('left')
+        RIGHT = 'right', ('right')
+
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='previews')
     image = models.ImageField(upload_to='images/previews/')
+    side = models.CharField(max_length=8, choices=Side.choices)

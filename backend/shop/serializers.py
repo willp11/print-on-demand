@@ -67,4 +67,4 @@ class PreviewSerializer(ModelSerializer):
     image = Base64ImageField()
     class Meta:
         model = Preview
-        fields = ('image',)
+        fields = ('image', 'side')
