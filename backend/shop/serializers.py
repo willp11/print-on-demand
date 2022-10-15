@@ -17,6 +17,11 @@ class DiscountSerializer(ModelSerializer):
         model = Discount
         fields = '__all__'
 
+class FontSerializer(ModelSerializer):
+    class Meta:
+        model = Font
+        fields = '__all__'
+
 class ProductImageSerializer(ModelSerializer):
     class Meta:
         model = ProductImage

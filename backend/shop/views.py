@@ -13,6 +13,11 @@ from .util import prepareProductData
 #     permission_classes = [AllowAny]
 #     serializer_class = ProductSerializer
 
+class FontListView(ListAPIView):
+    queryset = Font.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = FontSerializer
+
 class ProductListView(APIView):
     permission_classes = [AllowAny]
     queryset = Product.objects.all()
