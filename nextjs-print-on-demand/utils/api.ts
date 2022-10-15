@@ -87,6 +87,31 @@ export const fetchFonts = async () => {
     }
 }
 
+// Send API request to fetch all products from server
+export const fetchProducts = async () => {
+    const url = `${imageApiPrefix}/api/v1/get-product-list/`;
+    const headers = {
+        "Content-Type": "application/json"
+    }
+    try {
+        const res = await axios.get(url, {headers: headers});
+        return res.data;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const savePreview = async (imageData: string) => {
+    const headers = {
+        'Content-Type': 'application/json',
+    }
+    const data = {
+        image: imageData
+    }
+    const res = await axios.post('http://localhost:8000/api/v1/preview/', data, {headers: headers});
+    console.log(res);
+}
+
 // input a base64 encoded image
 export const checkFileType = (file: string) => {
     let fileType = "";

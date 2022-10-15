@@ -12,16 +12,12 @@ import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
 import EditImageLayer from '../../components/customizer/editImageLayer';
 import { IProduct } from '../../types/product';
-import axios from 'axios';
 import { useDesign } from '../../hooks/useDesign';
+import { fetchProducts } from '../../utils/api';
+import DesignPreviewModal from '../../components/customizer/designPreviewModal';
 
 export async function getStaticProps() {
-    const url = 'http://localhost:8000/api/v1/get-product-list/';
-    const headers = {
-        'Content-Type': 'application/json'
-    }
-    const res = await axios.get(url, {headers: headers});
-    const products = res.data;
+    const products = await fetchProducts();
     return {
         props: {
             products: products
@@ -31,22 +27,23 @@ export async function getStaticProps() {
 
 export default function Customizer({products}: {products: IProduct[]}) {
 
+    const [showPreview, setShowPreview] = useState(false);
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
 
-    const {setProduct} = useDesign();
+    const {product, setProduct, layers} = useDesign();
 
     useEffect(()=>{
         if (setProduct) setProduct(products[0]);
-    }, [])
-
+    }, []);
+    
     return (
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
-                <LeftMenu setShowSelectProductModal={setShowSelectProductModal}/>
+                <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview}/>
                 <div className="touch-none">
                     <SketchCanvas />
                 </div>
@@ -73,7 +70,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                         <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
                         <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
                     </div>
-                    <SaveDesign />
+                    <SaveDesign setShowPreview={setShowPreview} />
                 </div>
 
                 <SelectProductColor />
@@ -128,6 +125,8 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} products={products} />
                 }
             </div>
+            
+            {product && layers && showPreview && <DesignPreviewModal product={product} layers={layers}/>}
         </div>
     )
 }

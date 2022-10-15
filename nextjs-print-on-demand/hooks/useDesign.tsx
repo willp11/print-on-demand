@@ -1,14 +1,13 @@
 import React, {useContext, useState, useMemo} from 'react';
 import { IDesignContext, ILayer } from '../types/design';
 import { IProduct } from '../types/product';
-import { productList } from '../utils/productList';
 import { Dispatch, SetStateAction } from 'react';
 import { uploadDesign } from '../utils/api';
 
 const DesignContext = React.createContext<IDesignContext | undefined>(undefined);
 
 export const DesignProvider = ({children}: {children: React.ReactNode}) => {
-    const [product, setProduct] = useState<IProduct>(productList[0]);
+    const [product, setProduct] = useState<IProduct | null>(null);
     const [productSide, setProductSide] = useState<string>("front");
     const [color, setColor] = useState<string>("white");
     const [layers, setLayers] = useState<{[key: string]: ILayer[]}>({
@@ -29,7 +28,7 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
 export const useDesign = () => {
     const contextValue = useContext(DesignContext);
 
-    let product: IProduct | undefined, setProduct: Dispatch<SetStateAction<IProduct>> | undefined;
+    let product: IProduct | null | undefined, setProduct: Dispatch<SetStateAction<IProduct | null>> | undefined;
     let productSide: string | undefined, setProductSide: Dispatch<SetStateAction<string>> | undefined;
     let color: string | undefined, setColor: Dispatch<SetStateAction<string>> | undefined;
     let layers: {[key: string]: ILayer[]} | undefined, setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>> | undefined;

@@ -52,16 +52,16 @@ export default function SelectSide() {
             <h2 className="text-base lg:text-lg font-bold tracking-tight">Select Side</h2>
             <div className="flex lg:flex-col">
                 <div onClick={()=>setSideHandler("front")}>
-                    {product !== undefined ? <Side product={product} side="front" color="white" selected={productSide === "front"} /> : null}
+                    {product !== undefined && product !== null ? <Side product={product} side="front" color="white" selected={productSide === "front"} /> : null}
                 </div>
                 <div onClick={()=>setSideHandler("back")}>
-                    {product !== undefined ? <Side product={product} side="back" color="white" selected={productSide === "back"}  /> : null}
+                    {product !== undefined && product !== null ? <Side product={product} side="back" color="white" selected={productSide === "back"}  /> : null}
                 </div>
                 <div onClick={()=>setSideHandler("left")}>
-                    {product !== undefined ? <Side product={product} side="left" color="white" selected={productSide === "left"}  /> : null}
+                    {product !== undefined && product !== null ? <Side product={product} side="left" color="white" selected={productSide === "left"}  /> : null}
                 </div>
                 <div onClick={()=>setSideHandler("right")}>
-                    {product !== undefined ? <Side product={product} side="right" color="white" selected={productSide === "right"}  /> : null}
+                    {product !== undefined && product !== null ? <Side product={product} side="right" color="white" selected={productSide === "right"}  /> : null}
                 </div>
             </div>
         </div>

@@ -1,35 +1,20 @@
+// draw a editable design on canvas
+
 import dynamic from 'next/dynamic';
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
     ssr: false,
 });
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDesign } from '../../hooks/useDesign';
+import {useCanvasSize} from '../../hooks/useCanvasSize';
 import { drawResizeIcon, drawRotateIcon, isInsideArea } from '../../utils/customizer';
 import { imageApiPrefix } from '../../utils/api';
 
 export default function SketchCanvas() {
 
     const p5ref = useRef();
-    const [canvasSize, setCanvasSize] = useState(499);
-
-    // resize event listener
-    useEffect(() => {
-        window.addEventListener("resize", windowResized); 
-        return () => window.removeEventListener("resize", windowResized);
-    }, []);
-
-    function windowResized() {
-        if (p5ref.current) {
-            if (window.innerWidth < 500) {
-                p5ref.current.resizeCanvas(350, 350);
-                setCanvasSize(350);
-            } else {
-                p5ref.current.resizeCanvas(499, 499);
-                setCanvasSize(499);
-            }
-        }
-    }
+    const [canvasSize, setCanvasSize] = useCanvasSize(p5ref);
 
     // get new point given a point and an angle of rotation
     const getRotatedPoint = (x, y, angle) => {
@@ -61,7 +46,7 @@ export default function SketchCanvas() {
 
     // load product image to productImageRef
     useEffect(()=>{
-        if (p5ref.current && product.colors[color][productSide] && product.colors[color][`${productSide}_mask`]) {
+        if (p5ref.current && product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
             productImageRef.current = p5ref.current.loadImage(`${imageApiPrefix}${product.colors[color][productSide]}`);
             productImageMaskRef.current = p5ref.current.loadImage(`${imageApiPrefix}${product.colors[color][`${productSide}_mask`]}`);
         }
@@ -99,7 +84,7 @@ export default function SketchCanvas() {
     // Preload
     const preload = (p5) => {
         p5.angleMode(p5.DEGREES);
-        if (imageApiPrefix && product.colors[color][productSide] && product.colors[color][`${productSide}_mask`]) {
+        if (imageApiPrefix && product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
             try {
                 productImageRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][productSide]}`);
                 productImageMaskRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][`${productSide}_mask`]}`);
@@ -231,7 +216,9 @@ export default function SketchCanvas() {
         p5.background(255);
 
         // PRODUCT
-        p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
+        if (productImageRef.current) {
+            p5.image(productImageRef.current, 1, 1, canvasSize, canvasSize);
+        }
 
         // PRINTABLE AREA
         let printable_x_start = product.drawableArea[productSide].xPos * (canvasSize/500);

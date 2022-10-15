@@ -1,14 +1,10 @@
 import ProductGrid from "../../components/products/productGrid";
 import axios from "axios";
 import { IProduct } from "../../types/product";
+import { fetchProducts } from "../../utils/api";
 
 export async function getStaticProps() {
-    const url = 'http://localhost:8000/api/v1/get-product-list/';
-    const headers = {
-        'Content-Type': 'application/json'
-    }
-    const res = await axios.get(url, {headers: headers});
-    const products = res.data;
+    const products = await fetchProducts();
     return {
         props: {
             products: products

@@ -4,12 +4,17 @@ import SelectProductColor from "./selectProductColor";
 import SaveDesign from "./saveDesign";
 import { Dispatch, SetStateAction } from "react";
 
-export default function LeftMenu({setShowSelectProductModal}: {setShowSelectProductModal: Dispatch<SetStateAction<boolean>>}) {
+interface ILeftMenuProps {
+    setShowSelectProductModal: Dispatch<SetStateAction<boolean>>, 
+    setShowPreview: Dispatch<SetStateAction<boolean>>
+}
+
+export default function LeftMenu({setShowSelectProductModal, setShowPreview}: ILeftMenuProps) {
 
     return (
         <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
             <div className="border-b border-gray-400 pb-4">
-                <SaveDesign />
+                <SaveDesign setShowPreview={setShowPreview} />
             </div>
             <div className="border-b border-gray-400 pt-2 pb-4">
                 <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>

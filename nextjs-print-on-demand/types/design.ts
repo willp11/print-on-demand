@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction } from "react";
 import { IProduct } from "./product";
 
 export interface IDesignContext {
-    product: IProduct,
-    setProduct: Dispatch<SetStateAction<IProduct>>,
+    product: IProduct | null,
+    setProduct: Dispatch<SetStateAction<IProduct | null>>,
     productSide: string,
     setProductSide: Dispatch<SetStateAction<string>>,
     color: string,
