@@ -62,3 +62,9 @@ class ImageLayerCreateSerializer(ModelSerializer):
     class Meta:
         model = Layer
         fields = ('design', 'side', 'type', 'xPos', 'yPos', 'aspectRatio', 'size', 'width', 'height', 'rotation', 'image', 'zIndex')
+
+class PreviewSerializer(ModelSerializer):
+    image = Base64ImageField()
+    class Meta:
+        model = Preview
+        fields = ('image',)

@@ -144,3 +144,6 @@ class Layer(models.Model):
     textBoxH = models.IntegerField(null=True)
     textBoxAdvance = models.IntegerField(null=True)
     zIndex = models.IntegerField()
+
+class Preview(models.Model):
+    image = models.ImageField(upload_to='images/previews/')

@@ -6,5 +6,6 @@ urlpatterns = [
     path('get-product-ids/', ProductListIdsView.as_view(), name='get_product_ids'),
     path('get-product/<int:pk>/', ProductRetrieveView.as_view(), name='get_product'),
     path('create-design/', DesignCreateView.as_view(), name="create_design"),
-    path('fonts/', FontListView.as_view(), name='fonts')
+    path('fonts/', FontListView.as_view(), name='fonts'),
+    path('preview/', PreviewCreateView.as_view(), name='preview'),
 ]
