@@ -5,13 +5,14 @@ export const imageApiPrefix = 'http://localhost:8000';
 
 interface APILayer extends ILayer {
     side: string,
+    zIndex: number,
 }
 
 // transform layers object to list of layers for api
 const transformLayers = (layers: {[key: string]: ILayer[]}) => {
     const layersList: APILayer[] = [];
     for (const key in layers) {
-        layers[key].forEach(layer => {
+        layers[key].forEach((layer, idx) => {
             if (layer.type === "image") {
                 let newLayer = {
                     ...layer, 
@@ -20,6 +21,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
                     height: Math.round(layer.height),
                     width: Math.round(layer.width),
                     rotation: Math.round(layer.rotation),
+                    zIndex: idx,
                     side: key
                 };
                 layersList.push(newLayer);
@@ -39,6 +41,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
                         textBoxH: Math.round(layer.textBox.h),
                         textBoxW: Math.round(layer.textBox.w),
                         textBoxAdvance: Math.round(layer.textBox.advance),
+                        zIndex: idx,
                         side: key
                     };
                     layersList.push(newLayer);
@@ -49,62 +52,36 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
     return layersList;
 }
 
+// Send API request to upload design to server
 export const uploadDesign = async (token: string, layers: {[key: string]: ILayer[]}) => {
-    const url = "http://localhost:8000/api/v1/create-design/";
+    const url = `${imageApiPrefix}/api/v1/create-design/`;
     const headers = {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
     }
-    console.log(layers);
     const data = {
         design: {
             name: "test_design"
         },
         layers: transformLayers(layers)
-        // layers: [
-        //     {
-        //         side: "front",
-        //         type: "image",
-        //         xPos: 200,
-        //         yPos: 200,
-        //         aspectRatio: 1,
-        //         size: 100,
-        //         width: 100,
-        //         height: 100,
-        //         rotation: 0,
-        //         image: image
-        //     },
-        //     {
-        //         side: "front",
-        //         type: "text",
-        //         xPos: 200,
-        //         yPos: 200,
-        //         aspectRatio: 1,
-        //         size: 100,
-        //         width: 100,
-        //         height: 100,
-        //         rotation: 0,
-        //         font: 1,
-        //         textContent: "hi",
-        //         textSize: 50,
-        //         translateX: 0,
-        //         translateY: 0,
-        //         textColor: "black",
-        //         textBoxX: 100,
-        //         textBoxY: 100,
-        //         textBoxW: 100,
-        //         textBoxH: 30,
-        //         textBoxAdvance: 2
-        //     }
-        // ]
     }
     try {
-        // if (checkFileType(image)) {
         const res = await axios.post(url, data, {headers: headers});
         console.log(res.data);
-        // } else {
-        //     console.log("incorrect file type")
-        // }
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+// Send API request to fetch all fonts from server
+export const fetchFonts = async () => {
+    const url = `${imageApiPrefix}/api/v1/fonts/`;
+    const headers = {
+        "Content-Type": "application/json"
+    }
+    try {
+        const res = await axios.get(url, {headers: headers});
+        return res.data;
     } catch(e) {
         console.log(e);
     }

@@ -81,7 +81,7 @@ export default function SketchCanvas() {
                     if (layer.type === "image") {
                         return p5ref.current.loadImage(layer.image);
                     } else if (layer.type === "text") {
-                        return p5ref.current.loadFont(layer.font.location);
+                        return p5ref.current.loadFont(layer.font.file);
                     }
                 })
             } else {

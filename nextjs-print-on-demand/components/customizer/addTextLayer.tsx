@@ -1,12 +1,7 @@
 import { useDesign } from "../../hooks/useDesign";
-import { useState } from "react";
-import { ILayer } from "../../types/design";
-
-const fonts = [
-    {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
-    {id: 2, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
-    {id: 3, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
-]
+import { useEffect, useState } from "react";
+import { ILayer, Font } from "../../types/design";
+import { fetchFonts } from "../../utils/api";
 
 export default function AddTextLayer() {
     
@@ -14,11 +9,19 @@ export default function AddTextLayer() {
 
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
-    const [selectedFont, setSelectedFont] = useState(fonts[0]);
+    const [fonts, setFonts] = useState<Font[]>([]);
+    const [selectedFont, setSelectedFont] = useState<Font | undefined>();
+
+    useEffect(()=>{
+        fetchFonts().then((res)=>{
+            setFonts(res);
+            setSelectedFont(res[0]);
+        })
+    }, []);
 
     const setFontHandler = (name: string) => {
         fonts.forEach((font, idx)=>{
-            if (font.location === name) setSelectedFont(fonts[idx])
+            if (font.file === name) setSelectedFont(fonts[idx])
         })
     }
 
@@ -71,20 +74,26 @@ export default function AddTextLayer() {
     }
 
     // FONT SELECTION
-    let fontItems = fonts.map((font)=>{
-        return (
-            <option key={font.id} value={font.location} style={{fontFamily: font.name}}>{font.name}</option>
-        );
-    })
-    let fontSelection = (
-        <select 
-            className="border border-gray-300 cursor-pointer mr-2 w-48"
-            value={selectedFont.location} 
-            onChange={e=>setFontHandler(e.target.value)}
-        >
-            {fontItems}
-        </select>
-    )
+    let fontItems = null;
+    if (fonts) {
+        fontItems = fonts.map((font)=>{
+            return (
+                <option key={font.id} value={font.file} style={{fontFamily: font.name}}>{font.name}</option>
+            );
+        })
+    }
+    let fontSelection = null;
+    if (selectedFont) {
+        fontSelection = (
+            <select 
+                className="border border-gray-300 cursor-pointer mr-2 w-48"
+                value={selectedFont.file} 
+                onChange={e=>setFontHandler(e.target.value)}
+            >
+                {fontItems}
+            </select>
+        )
+    } 
 
     return (
         <div className="flex flex-col">

@@ -26,7 +26,7 @@ interface TextBox {
 
 export interface Font {
     id: number,
-    location: string,
+    file: string,
     name: string
 }
 
