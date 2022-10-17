@@ -53,6 +53,7 @@ class DesignCreateSerializer(ModelSerializer):
         fields = ('user', 'name')
 
 class TextLayerCreateSerializer(ModelSerializer):
+    font = FontSerializer()
     class Meta:
         model = Layer
         exclude = ('image',)

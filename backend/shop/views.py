@@ -6,12 +6,9 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from django.shortcuts import get_object_or_404, get_list_or_404
 from .serializers import *
 from .models import *
-from .util import prepareProductData
-
-# class ProductListView(ListAPIView):
-#     queryset = Product.objects.all()
-#     permission_classes = [AllowAny]
-#     serializer_class = ProductSerializer
+from .util import prepareProductData, createDesign, updateDesign
+import base64
+from django.conf import settings
 
 class PreviewCreateView(CreateAPIView):
     serializer_class = PreviewSerializer
@@ -53,47 +50,53 @@ class ProductRetrieveView(APIView):
         return Response(data)
 
 class DesignCreateView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        design_data = request.data["design"]
-        design_data["user"] = request.user.pk
-        design_serializer = DesignCreateSerializer(data=design_data)
-        preview_serializer = PreviewSerializer(data=request.data["previews"], many=True)
-        if design_serializer.is_valid() and preview_serializer.is_valid():
-            design = design_serializer.save()
-            preview_serializer.save(design=design)
-            # serialize all the layers
-            layer_serializers = []
-            for layer in request.data["layers"]:
-                layer["design"] = design.pk
-                if layer["type"] == "text":
-                    layer_serializer = TextLayerCreateSerializer(data=layer)
-                    layer_serializers.append(layer_serializer)
-                elif layer["type"] == "image":
-                    layer_serializer = ImageLayerCreateSerializer(data=layer)
-                    layer_serializers.append(layer_serializer)
-            # check all the layers are valid
-            found_invalid = False
-            for serializer in layer_serializers:
-                if serializer.is_valid():
-                    serializer.save()
-                else:
-                    found_invalid = True
-                    print(serializer.errors)
-                    break
-            if found_invalid == False:
-                return Response({"message":"success"}, status=HTTP_200_OK)
-            else:
-                # if we have any invalid layer, delete the design and will cascade and delete all the layers too
-                design.delete()
-                return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
-
-class DesignListView(ListAPIView):
-    serializer_class = DesignGetSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Design.objects.filter(user=self.request.user)
+    def post(self, request):
+        return createDesign(request)
+
+    def put(self, request):
+        return updateDesign(request)
+
+class DesignListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        designs = get_list_or_404(Design, user=request.user)
+        all_designs_data = []
+        for design in designs:
+            design_serializer = DesignGetSerializer(design)
+            product_serializer = ProductSerializer(design.product)
+            product_data = product_serializer.data.copy()
+            product_data = prepareProductData(product_data)
+            design_data = design_serializer.data.copy()
+            design_data['product'] = product_data
+            design_data['color'] = design.color.color
+            
+            # iterate over all the layers, get the image data for each as base64
+            for layer in design_data["layers"]:
+                if layer["type"] == "image":
+                    with open(f"{settings.BASE_DIR}{layer['image']}", "rb") as image_file:
+                        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+                    image_ext = layer["image"].split(".")[-1]
+                    layer["image"] = f"data:image/{image_ext};base64,{image_data}"
+                elif layer["type"] == "text":
+                    font = get_object_or_404(Font, pk=layer["font"])
+                    font_data = FontSerializer(font).data
+                    layer["font"] = font_data
+                    text_box = {
+                        "x": layer["textBoxX"],
+                        "y": layer["textBoxY"],
+                        "w": layer["textBoxW"],
+                        "h": layer["textBoxH"],
+                        "advance": layer["textBoxAdvance"]
+                    }
+                    del layer["textBoxX"]
+                    del layer["textBoxY"]
+                    del layer["textBoxW"]
+                    del layer["textBoxH"]
+                    del layer["textBoxAdvance"]
+                    layer["text_box"] = text_box
+
+            all_designs_data.append(design_data)
+        return Response(all_designs_data)

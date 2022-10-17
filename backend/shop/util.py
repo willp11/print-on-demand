@@ -1,6 +1,8 @@
-import base64
-import io
-from PIL import Image
+from itertools import product
+from .serializers import *
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 
 # data = ProductSerializer(product).data
 # takes the data outputted from a product serializer and prepares it to format client wants
@@ -53,3 +55,70 @@ def prepareProductData(data):
     del data["discounts"]
 
     return data
+
+def serializerLayers(design, layers):
+    layer_serializers = []
+    for layer in layers:
+        layer["design"] = design.pk
+        if layer["type"] == "text":
+            layer_serializer = TextLayerCreateSerializer(data=layer)
+            layer_serializers.append(layer_serializer)
+        elif layer["type"] == "image":
+            layer_serializer = ImageLayerCreateSerializer(data=layer)
+            layer_serializers.append(layer_serializer)
+    return layer_serializers
+
+def layersAreValid(layer_serializers):
+    for layer_serializer in layer_serializers:
+        if not layer_serializer.is_valid():
+            return False
+        else:
+            layer_serializer.save()
+    return True
+
+def createDesign(request):
+    design_data = request.data["design"]
+    design_data["user"] = request.user.pk
+    design_serializer = DesignCreateSerializer(data=design_data)
+    preview_serializer = PreviewSerializer(data=request.data["previews"], many=True)
+    product = get_object_or_404(Product, pk=request.data["product"])
+    color = get_object_or_404(Color, product=product, color=request.data["color"])
+    if design_serializer.is_valid() and preview_serializer.is_valid():
+        design = design_serializer.save(product=product, color=color)
+        preview_serializer.save(design=design)
+        layer_serializers = serializerLayers(design, request.data["layers"])
+        valid_layers = layersAreValid(layer_serializers)
+        if valid_layers == True:
+            return Response({"message":"success"}, status=HTTP_200_OK)
+        else:
+            # if we have any invalid layer, delete the design and will cascade and delete all the layers too
+            design.delete()
+            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+
+def updateDesign(request):
+    # try:
+    design_data = request.data
+    design = get_object_or_404(Design, pk=design_data["design"]["id"])
+    design.name = design_data["design"]["name"]
+    product = get_object_or_404(Product, pk=design_data["product"])
+    color = get_object_or_404(Color, product=product, color=design_data["color"])
+    design.product = product
+    design.color = color
+    preview_serializer = PreviewSerializer(data=design_data["previews"], many=True)
+    if preview_serializer.is_valid():
+        design.save()
+        preview_serializer.save(design=design)
+        layer_serializers = serializerLayers(design, design_data["layers"])
+        valid_layers = layersAreValid(layer_serializers)
+        if valid_layers == True:
+            return Response({"message":"success"}, status=HTTP_200_OK)
+        else:
+            # if we have any invalid layer, delete the design and will cascade and delete all the layers too
+            design.delete()
+            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+    # except:
+    #     return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)

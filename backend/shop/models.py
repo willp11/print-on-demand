@@ -106,6 +106,8 @@ class Font(models.Model):
 class Design(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='designs')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name} by {self.user.email}'
