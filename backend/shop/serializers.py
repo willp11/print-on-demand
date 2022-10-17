@@ -68,3 +68,15 @@ class PreviewSerializer(ModelSerializer):
     class Meta:
         model = Preview
         fields = ('image', 'side')
+
+class LayerSerializer(ModelSerializer):
+    class Meta:
+        model = Layer
+        fields = '__all__'
+
+class DesignGetSerializer(ModelSerializer):
+    layers = LayerSerializer(many=True)
+    previews = PreviewSerializer(many=True)
+    class Meta:
+        model = Design
+        fields = ('id', 'name', 'layers', 'previews')
