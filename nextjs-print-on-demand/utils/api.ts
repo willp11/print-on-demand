@@ -54,25 +54,31 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
 }
 
 // Send API request to upload design to server
-export const uploadDesign = async (token: string, product: number, color: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[]) => {
+export const uploadDesign = async (token: string, product: number, color: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[], id?: number) => {
     const url = `${imageApiPrefix}/api/v1/create-design/`;
     const headers = {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
     }
-    const data = {
+    let data = {
         design: {
+            id: id,
             name: name
         },
         product: product,
         color: color,
         layers: transformLayers(layers),
-        previews: previews
+        previews: previews,
     }
     try {
-        const res = await axios.post(url, data, {headers: headers});
-        console.log(res.data);
-        return res;
+
+        if (id === undefined) {
+            const res = await axios.post(url, data, {headers: headers});
+            return res;
+        } else {
+            const res = await axios.put(url, data, {headers: headers});
+            return res;
+        }
     } catch(e) {
         console.log(e);
     }
@@ -130,9 +136,6 @@ export const fetchDesigns = async (token: string) => {
             design.layers = layers;
             designs.push(design);
         })
-
-        console.log(designs);
-    
         return designs;
     } catch(e) {
         console.log(e);
