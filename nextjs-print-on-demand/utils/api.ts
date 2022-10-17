@@ -1,5 +1,6 @@
 import axios from "axios";
 import { IDesign, ILayer } from "../types/design";
+import { getBase64 } from "./customizer";
 
 export const imageApiPrefix = 'http://localhost:8000';
 
@@ -33,7 +34,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
                         yPos: Math.round(layer.yPos),
                         rotation: Math.round(layer.rotation),
                         textSize: Math.round(layer.textSize),
-                        font: layer.font?.id,
+                        font: layer.font,
                         translateX: Math.round(layer.translateX),
                         translateY: Math.round(layer.translateY),
                         textBoxX: Math.round(layer.textBox.x),
@@ -53,7 +54,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
 }
 
 // Send API request to upload design to server
-export const uploadDesign = async (token: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[]) => {
+export const uploadDesign = async (token: string, product: number, color: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[]) => {
     const url = `${imageApiPrefix}/api/v1/create-design/`;
     const headers = {
         "Content-Type": "application/json",
@@ -63,6 +64,8 @@ export const uploadDesign = async (token: string, name: string, layers: {[key: s
         design: {
             name: name
         },
+        product: product,
+        color: color,
         layers: transformLayers(layers),
         previews: previews
     }
@@ -103,19 +106,6 @@ export const fetchProducts = async () => {
     }
 }
 
-
-
-// export const savePreview = async (imageData: string) => {
-//     const headers = {
-//         'Content-Type': 'application/json',
-//     }
-//     const data = {
-//         image: imageData
-//     }
-//     const res = await axios.post('http://localhost:8000/api/v1/preview/', data, {headers: headers});
-//     console.log(res);
-// }
-
 export const fetchDesigns = async (token: string) => {
     const url = `${imageApiPrefix}/api/v1/get-designs/`;
     const headers = {
@@ -140,6 +130,8 @@ export const fetchDesigns = async (token: string) => {
             design.layers = layers;
             designs.push(design);
         })
+
+        console.log(designs);
     
         return designs;
     } catch(e) {

@@ -54,7 +54,7 @@ export default function SketchCanvas() {
 
     // load new layers
     useEffect(()=>{
-        if (p5ref.current && layers[productSide].length > 0) {
+        if (p5ref.current) {
             if (layers[productSide].length > 0) {
                 // active layer
                 let activeLayer = layers[productSide][selectedLayer];
@@ -66,7 +66,7 @@ export default function SketchCanvas() {
                     if (layer.type === "image") {
                         return p5ref.current.loadImage(layer.image);
                     } else if (layer.type === "text") {
-                        return p5ref.current.loadFont(layer.font.file);
+                        return p5ref.current.loadFont(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${layer.font.file}`);
                     }
                 })
             } else {
@@ -74,7 +74,7 @@ export default function SketchCanvas() {
                 allLayerImagesRef.current = undefined;
             }
         }
-    }, [layers, selectedLayer, productSide]);
+    }, [p5ref.current, layers, selectedLayer, productSide]);
 
     // Layer edited by controls outside sketch component
     useEffect(()=>{
@@ -83,6 +83,7 @@ export default function SketchCanvas() {
 
     // Preload
     const preload = (p5) => {
+        p5ref.current = p5;
         p5.angleMode(p5.DEGREES);
         if (imageApiPrefix && product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
             try {
@@ -96,7 +97,6 @@ export default function SketchCanvas() {
 
     // Setup canvas
     const setup = (p5, canvasParentRef) => {
-        p5ref.current = p5;
         if (window.innerWidth < 500) {
             setCanvasSize(350);
             p5.createCanvas(350, 350).parent(canvasParentRef);

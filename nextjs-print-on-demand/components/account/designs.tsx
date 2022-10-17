@@ -1,10 +1,10 @@
 import { fetchDesigns } from "../../utils/api";
 import { useUser } from "../../hooks/useUser";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IDesign } from "../../types/design";
 import Design from "./design";
 
-export default function Designs() {
+export default function Designs({setShowDesignsModal}: {setShowDesignsModal: Dispatch<SetStateAction<boolean>>}) {
 
     const { token } = useUser();
     const [designs, setDesigns] = useState<IDesign[]>([]);
@@ -22,7 +22,7 @@ export default function Designs() {
     if (designs.length !== 0) {
         return (
             <div>
-                {designs.map(design => <Design design={design} />)}
+                {designs.map((design, i) => <Design key={i} design={design} setShowDesignsModal={setShowDesignsModal} />)}
             </div>
         )
     } else return <></>

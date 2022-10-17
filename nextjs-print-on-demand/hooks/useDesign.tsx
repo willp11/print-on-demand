@@ -141,15 +141,12 @@ export const useDesign = () => {
     // save the design - a design consists of the layers, 
     // so then can be applied to any product that has same sides
     const saveDesign = async (token: string, name: string, previews: object[]) => {
-        if (layers !== undefined) {
-            let img = layers.front[0].image;
-            if (img !== undefined) {
-                try {
-                    const res = await uploadDesign(token, name, layers, previews);
-                    if (res) return res;
-                } catch(e) {
-                    console.log(e);
-                }
+        if (layers !== undefined && product !== undefined && product !== null && color !== undefined) {
+            try {
+                const res = await uploadDesign(token, product.id, color, name, layers, previews);
+                if (res) return res;
+            } catch(e) {
+                console.log(e);
             }
         }
     }
@@ -162,6 +159,7 @@ export const useDesign = () => {
         color,
         setColor,
         layers,
+        setLayers,
         addLayer,
         selectedLayer,
         setSelectedLayer,

@@ -42,7 +42,7 @@ export interface ILayer {
     rotation: number,
     image?: string,
     imageFile?: File,
-    font?: Font | number,
+    font?: Font,
     textContent?: string,
     textSize?: number,
     textBox?: TextBox,
@@ -61,5 +61,7 @@ export interface IDesign {
     layers: {
         [key: string]: ILayer[]
     },
-    previews: IPreview[]
+    previews: IPreview[],
+    product: IProduct,
+    color: string
 }

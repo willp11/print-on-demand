@@ -1,6 +1,7 @@
 // given a product side, draw the corresponding design preview canvas
 
 import dynamic from 'next/dynamic';
+import { env } from 'process';
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
     ssr: false,
 });
@@ -31,7 +32,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
                     if (layer.type === "image") {
                         return p5.loadImage(layer.image);
                     } else if (layer.type === "text") {
-                        return p5.loadFont(layer.font.file);
+                        return p5.loadFont(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${layer.font.file}`);
                     }
                 })
             } catch(e) {

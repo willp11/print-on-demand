@@ -27,7 +27,6 @@ export default function AddImageLayer() {
         try {
             if (files !== null) {
                 getBase64(files[0], returnFile);
-                // setImageFile(files[0]);
             }
         } catch(e) {
             console.log(e);

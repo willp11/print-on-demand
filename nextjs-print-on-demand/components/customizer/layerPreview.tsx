@@ -1,5 +1,4 @@
 import { ILayer } from "../../types/design";
-import Image from "next/image";
 import { XCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useDesign } from "../../hooks/useDesign";
 import { Dispatch, SetStateAction } from 'react';
@@ -41,12 +40,7 @@ export default function LayerPreview({layer, index, setEditTextLayerMode, setEdi
         return (
             <div className={className}>
                 <div style={{width: width, height: height}} className="relative" onClick={()=>selectLayerHandler(index)}>
-                    <Image
-                        src={layer?.image}
-                        layout="fill"
-                        objectFit="contain"
-                        alt=""
-                    />
+                    <img src={layer?.image} className="object-contain" />
                 </div>
                 {selectedLayer === index && <PencilSquareIcon onClick={()=>setEditImgLayerMode(true)} className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />
