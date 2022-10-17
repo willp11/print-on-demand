@@ -143,7 +143,7 @@ export const useDesign = () => {
     const saveDesign = async (token: string, name: string, previews: object[]) => {
         if (layers !== undefined && product !== undefined && product !== null && color !== undefined) {
             try {
-                const res = await uploadDesign(token, product.id, color, name, layers, previews, 52);
+                const res = await uploadDesign(token, product.id, color, name, layers, previews, 54);
                 if (res) return res;
             } catch(e) {
                 console.log(e);

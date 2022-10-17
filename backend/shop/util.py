@@ -1,10 +1,9 @@
 from itertools import product
 from .serializers import *
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework.response import Response
 
-# data = ProductSerializer(product).data
 # takes the data outputted from a product serializer and prepares it to format client wants
 def prepareProductData(data):
     # change shape of colors data
@@ -72,8 +71,6 @@ def layersAreValid(layer_serializers):
     for layer_serializer in layer_serializers:
         if not layer_serializer.is_valid():
             return False
-        else:
-            layer_serializer.save()
     return True
 
 def createDesign(request):
@@ -89,6 +86,8 @@ def createDesign(request):
         layer_serializers = serializerLayers(design, request.data["layers"])
         valid_layers = layersAreValid(layer_serializers)
         if valid_layers == True:
+            for layer_serializer in layer_serializers:
+                layer_serializer.save()
             return Response({"message":"success"}, status=HTTP_200_OK)
         else:
             # if we have any invalid layer, delete the design and will cascade and delete all the layers too
@@ -98,27 +97,35 @@ def createDesign(request):
         return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
 
 def updateDesign(request):
-    # try:
-    design_data = request.data
-    design = get_object_or_404(Design, pk=design_data["design"]["id"])
-    design.name = design_data["design"]["name"]
-    product = get_object_or_404(Product, pk=design_data["product"])
-    color = get_object_or_404(Color, product=product, color=design_data["color"])
-    design.product = product
-    design.color = color
-    preview_serializer = PreviewSerializer(data=design_data["previews"], many=True)
-    if preview_serializer.is_valid():
-        design.save()
-        preview_serializer.save(design=design)
-        layer_serializers = serializerLayers(design, design_data["layers"])
-        valid_layers = layersAreValid(layer_serializers)
-        if valid_layers == True:
-            return Response({"message":"success"}, status=HTTP_200_OK)
+    try:
+        design_data = request.data
+        design = get_object_or_404(Design, pk=design_data["design"]["id"])
+        design.name = design_data["design"]["name"]
+        product = get_object_or_404(Product, pk=design_data["product"])
+        color = get_object_or_404(Color, product=product, color=design_data["color"])
+        old_previews = get_list_or_404(Preview, design=design)
+        old_layers = get_list_or_404(Layer, design=design)
+        design.product = product
+        design.color = color
+        preview_serializer = PreviewSerializer(data=design_data["previews"], many=True)
+        if preview_serializer.is_valid():
+            layer_serializers = serializerLayers(design, design_data["layers"])
+            valid_layers = layersAreValid(layer_serializers)
+            if valid_layers == True:
+                # if everything valid - delete old previews and layers
+                for preview in old_previews:
+                    preview.delete()
+                for layer in old_layers:
+                    layer.delete()
+                # save new design, preview, layer
+                design.save()
+                preview_serializer.save(design=design)
+                for layer_serializer in layer_serializers:
+                    layer_serializer.save()
+                return Response({"message":"success"}, status=HTTP_200_OK)
+            else:
+                return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
         else:
-            # if we have any invalid layer, delete the design and will cascade and delete all the layers too
-            design.delete()
             return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
-    else:
+    except:
         return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
-    # except:
-    #     return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
