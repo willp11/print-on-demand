@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ILayer } from "../types/design";
+import { IDesign, ILayer } from "../types/design";
 
 export const imageApiPrefix = 'http://localhost:8000';
 
@@ -103,15 +103,49 @@ export const fetchProducts = async () => {
     }
 }
 
-export const savePreview = async (imageData: string) => {
+
+
+// export const savePreview = async (imageData: string) => {
+//     const headers = {
+//         'Content-Type': 'application/json',
+//     }
+//     const data = {
+//         image: imageData
+//     }
+//     const res = await axios.post('http://localhost:8000/api/v1/preview/', data, {headers: headers});
+//     console.log(res);
+// }
+
+export const fetchDesigns = async (token: string) => {
+    const url = `${imageApiPrefix}/api/v1/get-designs/`;
     const headers = {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        "Authorization": "Token " + token
     }
-    const data = {
-        image: imageData
+    try {
+        const res = await axios.get(url, {headers: headers});
+        let designs: IDesign[] = [];
+        // @ts-ignore
+        res.data.forEach(design=>{
+            let layers: {[key: string]: ILayer[]} = {
+                front: [],
+                back: [],
+                left: [],
+                right: []
+            }
+            // @ts-ignore
+            design.layers.forEach(layer=>{
+                layers[layer.side].push(layer);
+            })
+            design.layers = layers;
+            designs.push(design);
+        })
+    
+        return designs;
+    } catch(e) {
+        console.log(e);
+        return null;
     }
-    const res = await axios.post('http://localhost:8000/api/v1/preview/', data, {headers: headers});
-    console.log(res);
 }
 
 // input a base64 encoded image
@@ -129,6 +163,7 @@ export const checkFileType = (file: string) => {
         i++
     }
     let isValid = false;
+    fileType = fileType.toLowerCase();
     if (fileType === "png" || fileType === "jpg" || fileType === "jpeg") isValid = true;
     return isValid;
 }

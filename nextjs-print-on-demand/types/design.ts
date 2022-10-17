@@ -51,8 +51,15 @@ export interface ILayer {
     translateY?: number
 }
 
+interface IPreview {
+    side: string,
+    image: string
+}
+
 export interface IDesign {
+    name: string,
     layers: {
         [key: string]: ILayer[]
-    }
+    },
+    previews: IPreview[]
 }
