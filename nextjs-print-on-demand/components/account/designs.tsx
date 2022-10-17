@@ -14,7 +14,6 @@ export default function Designs() {
             if (token) {
                 const designs = await fetchDesigns(token);
                 if (designs !== null) setDesigns(designs);
-                console.log(designs)
             }
         }
         getDesigns();

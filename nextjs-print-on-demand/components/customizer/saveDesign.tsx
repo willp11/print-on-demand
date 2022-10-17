@@ -1,15 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { useDesign } from "../../hooks/useDesign";
-import { useUser } from "../../hooks/useUser";
 
 export default function SaveDesign({setShowPreview}: {setShowPreview: Dispatch<SetStateAction<boolean>>}) {
-
-    const { saveDesign } = useDesign();
-    const {token} = useUser();
-
-    const saveHandler = () => {
-        if (typeof token === "string") saveDesign(token)
-    }
 
     return (
         <div>

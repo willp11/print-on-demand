@@ -1,7 +1,6 @@
 import { useState } from "react";
 import AccountMenu from "../../components/account/accountMenu";
 import AccountDetails from "../../components/account/accountDetails";
-import WishList from "../../components/account/wishList";
 import MyOrders from "../../components/account/myOrders";
 import Designs from "../../components/account/designs";
 
@@ -15,8 +14,7 @@ export default function Account() {
                 <AccountMenu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 {(selectedIndex === 0) && <AccountDetails />}
                 {(selectedIndex === 1) && <MyOrders />}
-                {(selectedIndex === 2) && <WishList />}
-                {(selectedIndex === 3) && <Designs />}
+                {(selectedIndex === 2) && <Designs />}
             </div>
         </div>
     )

@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction } from "react";
 const menuItems = [
     "Account Details",
     "My Orders",
-    "Wishlist",
     "My Designs"
 ]
 

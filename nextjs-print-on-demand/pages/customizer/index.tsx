@@ -6,6 +6,7 @@ import SelectProductColor from '../../components/customizer/selectProductColor';
 import AddImageLayer from '../../components/customizer/addImageLayer';
 import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
+import LoadDesign from '../../components/customizer/loadDesign';
 import { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
@@ -15,6 +16,7 @@ import { IProduct } from '../../types/product';
 import { useDesign } from '../../hooks/useDesign';
 import { fetchProducts } from '../../utils/api';
 import DesignPreviewModal from '../../components/customizer/designPreviewModal';
+import LoadDesignModal from '../../components/customizer/loadDesignModal';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -28,6 +30,7 @@ export async function getStaticProps() {
 export default function Customizer({products}: {products: IProduct[]}) {
 
     const [showPreview, setShowPreview] = useState(false);
+    const [showDesignsModal, setShowDesignsModal] = useState(false);
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
@@ -43,7 +46,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
     return (
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
-                <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview}/>
+                <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
                 <div className="touch-none">
                     <SketchCanvas />
                 </div>
@@ -66,14 +69,20 @@ export default function Customizer({products}: {products: IProduct[]}) {
 
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
                 <div className='flex'>
-                    <div className="mr-16">
-                        <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
-                        <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                    <div className="mr-4">
+                        <LoadDesign setShowDesigns={setShowDesignsModal} />
                     </div>
                     <SaveDesign setShowPreview={setShowPreview} />
                 </div>
 
-                <SelectProductColor />
+                <div className="flex">
+                    <div className="mr-4">
+                        <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
+                        <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                    </div>
+                    <SelectProductColor />
+                </div>
+                
 
                 <div className="touch-none w-full flex justify-center">
                     <SketchCanvas />
@@ -127,6 +136,9 @@ export default function Customizer({products}: {products: IProduct[]}) {
             </div>
             
             {product && layers && showPreview && <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} />}
+            
+            {showDesignsModal && <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />}
+
         </div>
     )
 }

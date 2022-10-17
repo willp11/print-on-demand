@@ -2,17 +2,22 @@ import AddImageLayer from "./addImageLayer";
 import AddTextLayer from "./addTextLayer";
 import SelectProductColor from "./selectProductColor";
 import SaveDesign from "./saveDesign";
+import LoadDesign from "./loadDesign";
 import { Dispatch, SetStateAction } from "react";
 
 interface ILeftMenuProps {
     setShowSelectProductModal: Dispatch<SetStateAction<boolean>>, 
-    setShowPreview: Dispatch<SetStateAction<boolean>>
+    setShowPreview: Dispatch<SetStateAction<boolean>>,
+    setShowDesigns: Dispatch<SetStateAction<boolean>>
 }
 
-export default function LeftMenu({setShowSelectProductModal, setShowPreview}: ILeftMenuProps) {
+export default function LeftMenu({setShowSelectProductModal, setShowPreview, setShowDesigns}: ILeftMenuProps) {
 
     return (
         <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
+            <div className="border-b border-gray-400 pb-4">
+                <LoadDesign setShowDesigns={setShowDesigns} />
+            </div>
             <div className="border-b border-gray-400 pb-4">
                 <SaveDesign setShowPreview={setShowPreview} />
             </div>
