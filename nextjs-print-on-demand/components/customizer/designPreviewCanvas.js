@@ -112,10 +112,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
 
             // save canvas
             p5ref.current.saveFrames('design', 'png', 1, 1, (data) => {
-                console.log(side, data);
                 updatePreviewImages(side, data[0].imageData);
-                // productImageRef.current = p5ref.current.loadImage(data[0].imageData);
-                // savePreview(data[0].imageData);
             })
         }
     }

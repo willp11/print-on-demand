@@ -26,8 +26,11 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
     const [leftPreview, setLeftPreview] = useState<string | null>(null);
     const [rightPreview, setRightPreview] = useState<string | null>(null);
 
-    const [selectedPreview, setSelectedPreview] = useState<string>('front');
+    const [selectedPreview, setSelectedPreview] = useState('front');
     const [errorMsg, setErrorMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+    const [designName, setDesignName] = useState("");
+
 
     const updatePreviewImages = (side: Side, image: string) => {
         if (side === "front") {
@@ -48,8 +51,13 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
     }, [frontPreview, backPreview, leftPreview, rightPreview]);
 
     const saveHandler = async () => {
+        if (designName === "") {
+            setErrorMsg("Design name is required");
+            return;
+        }
         if (token && frontPreview && backPreview && leftPreview && rightPreview) {
             setErrorMsg("");
+            setSuccessMsg("");
             setLoading(true);
             let previews = [
                 {
@@ -69,9 +77,9 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
                     image: rightPreview
                 }
             ]
-            const res = await saveDesign(token, previews);
+            const res = await saveDesign(token, designName, previews);
             if (res?.data?.message === "success") {
-                setShowPreview(false);
+                setSuccessMsg("Design uploaded successfully. Check your profile page to see all your designs.");
             } else {
                 setErrorMsg("There was an error uploading your design. Please try again later.");
             }
@@ -120,7 +128,8 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
                     </div>
 
                     {!loading && <div className="flex">{sideBtns}</div>}
-
+                    
+                    <input className="px-2 py-1 mt-4 border border-gray-300" placeholder="Type design name..." onChange={(e)=>setDesignName(e.target.value)} />
                     <button 
                         disabled={loading} 
                         onClick={saveHandler}
@@ -132,7 +141,8 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
                         {loading ? "Loading..." : "Save"}
                     </button>
 
-                    {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+                    {errorMsg && <p className="text-red-500 text-sm font-semibold mt-2">{errorMsg}</p>}
+                    {successMsg && <p className="text-green-500 text-sm font-semibold mt-2">{successMsg}</p>}
                 </div>
             </div>
         )

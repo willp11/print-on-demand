@@ -53,7 +53,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
 }
 
 // Send API request to upload design to server
-export const uploadDesign = async (token: string, layers: {[key: string]: ILayer[]}, previews: object[]) => {
+export const uploadDesign = async (token: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[]) => {
     const url = `${imageApiPrefix}/api/v1/create-design/`;
     const headers = {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const uploadDesign = async (token: string, layers: {[key: string]: ILayer
     }
     const data = {
         design: {
-            name: "test_design"
+            name: name
         },
         layers: transformLayers(layers),
         previews: previews
