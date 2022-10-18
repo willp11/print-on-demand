@@ -5,16 +5,22 @@ import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { useDesign } from '../../hooks/useDesign';
 import { useUser } from '../../hooks/useUser';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import SaveDesignBtns from './saveDesignBtns';
+import ConfirmAddToCart from './confirmAddToCart';
 
 type Side = 'front' | 'back' | 'left' | 'right';
 const sides = ["front", "back", "left", "right"];
+
 interface DesignPreviewModalProps {
     product: IProduct, 
     layers: {[key: string]: ILayer[]}, 
-    setShowPreview: Dispatch<SetStateAction<boolean>>
+    setShowPreview: Dispatch<SetStateAction<boolean>>,
+    from: 'save' | 'addToCart',
+    setShowSaveConfirmation: Dispatch<SetStateAction<boolean>>,
+    total: number
 }
 
-export default function DesignPreviewModal({product, layers, setShowPreview}: DesignPreviewModalProps) {
+export default function DesignPreviewModal({product, layers, setShowPreview, from, setShowSaveConfirmation, total}: DesignPreviewModalProps) {
 
     const [loading, setLoading] = useState(true);
     const { saveDesign, updateDesign, currentDesign } = useDesign();
@@ -115,7 +121,10 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
         return (
             <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20 flex justify-center items-center">
                 <div className="relative bg-white w-full max-w-[600px] flex flex-col justify-center items-center p-4">
-                    <XMarkIcon className="w-6 h-6 absolute top-2 right-2 cursor-pointer" onClick={()=>setShowPreview(false)}/>
+                    <XMarkIcon 
+                        className="w-6 h-6 absolute top-2 right-2 cursor-pointer" 
+                        onClick={from === "save" ? ()=>setShowPreview(false) : ()=>setShowSaveConfirmation(false)}
+                    />
                     <h2 className="text-4xl font-bold pb-2">Preview</h2>
                     <div className={
                         selectedPreview === "front" ? "block" : "hidden"
@@ -139,28 +148,9 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
                     </div>
 
                     {!loading && <div className="flex">{sideBtns}</div>}
-                    
-                    <input value={designName} className="px-2 py-1 mt-4 border border-gray-300" placeholder="Type design name..." onChange={(e)=>setDesignName(e.target.value)} />
-                    <button 
-                        disabled={loading || !currentDesign} 
-                        onClick={()=>saveHandler("update")}
-                        className={
-                            loading ? "w-32 p-2 mt-2 text-gray-800 text-sm font-semibold bg-gray-300 rounded cursor-not-allowed"
-                            : "w-32 p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded cursor-pointer"
-                        }
-                    >
-                        {loading ? "Loading..." : "Update existing"}
-                    </button>
-                    <button 
-                        disabled={loading} 
-                        onClick={()=>saveHandler("save")}
-                        className={
-                            loading ? "w-32 p-2 mt-2 text-gray-800 text-sm font-semibold bg-gray-300 rounded cursor-not-allowed"
-                            : "w-32 p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded cursor-pointer"
-                        }
-                    >
-                        {loading ? "Loading..." : "Save New"}
-                    </button>
+
+                    {from === "save" && <SaveDesignBtns loading={loading} designName={designName} setDesignName={setDesignName} saveHandler={saveHandler} currentDesign={currentDesign} /> }
+                    {from === "addToCart" && <ConfirmAddToCart total={total} loading={loading} />}
 
                     {errorMsg && <p className="text-red-500 text-sm font-semibold mt-2">{errorMsg}</p>}
                     {successMsg && <p className="text-green-500 text-sm font-semibold mt-2">{successMsg}</p>}

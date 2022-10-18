@@ -7,7 +7,7 @@ import AddImageLayer from '../../components/customizer/addImageLayer';
 import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
 import LoadDesign from '../../components/customizer/loadDesign';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
@@ -33,12 +33,14 @@ export async function getStaticProps() {
 export default function Customizer({products}: {products: IProduct[]}) {
 
     const [showPreview, setShowPreview] = useState(false);
+    const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
     const [showDesignsModal, setShowDesignsModal] = useState(false);
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
+    const [price, setPrice] = useState(10);
 
     const {product, setProduct, layers, currentDesign, productSide} = useDesign();
 
@@ -48,6 +50,16 @@ export default function Customizer({products}: {products: IProduct[]}) {
         if (setProduct) setProduct(products[0]);
     }, []);
 
+    const total = useMemo(() => {
+        if (qty !== null) {
+            let total = 0;
+            Object.keys(qty).map(size=>{
+                total += qty[size] * price;
+            })
+            return total;
+        } else return 0;
+    }, [qty, price]);
+
     let disabledAddLayers = false;
     if (!layers || !productSide || layers[productSide].length >= 6) disabledAddLayers = true;
     
@@ -55,13 +67,15 @@ export default function Customizer({products}: {products: IProduct[]}) {
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
                 <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
-                <div className="px-2">
+                <div className="px-2 flex flex-col items-center justify-start">
                     <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
                     <div className="touch-none">
                         <SketchCanvas />
                     </div>
                     {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
-                    <AddToCart qty={qty} price={10} />
+                    <div className="w-full">
+                        <AddToCart total={total} setShowSaveConfirmation={setShowSaveConfirmation}/>
+                    </div>
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
@@ -120,7 +134,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                         <SketchCanvas />
                     </div>
                     {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
-                    <AddToCart qty={qty} price={10} />
+                    <AddToCart total={total} setShowSaveConfirmation={setShowSaveConfirmation} />
                 </div>
 
                 {
@@ -152,7 +166,13 @@ export default function Customizer({products}: {products: IProduct[]}) {
                 }
             </div>
             
-            {product && layers && showPreview && <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} />}
+            {product && layers && showPreview && 
+                <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} from="save" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+            }
+
+            {product && layers && showSaveConfirmation && 
+                <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} from="addToCart" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+            }
             
             {showDesignsModal && <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />}
 
