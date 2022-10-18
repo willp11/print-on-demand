@@ -40,13 +40,16 @@ export default function Customizer({products}: {products: IProduct[]}) {
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
 
-    const {product, setProduct, layers, currentDesign} = useDesign();
+    const {product, setProduct, layers, currentDesign, productSide} = useDesign();
 
     const {qty, updateQtyHandler} = useProductQty(product);
 
     useEffect(()=>{
         if (setProduct) setProduct(products[0]);
     }, []);
+
+    let disabledAddLayers = false;
+    if (!layers || !productSide || layers[productSide].length >= 6) disabledAddLayers = true;
     
     return (
         <div className="p-1"> 
@@ -101,8 +104,8 @@ export default function Customizer({products}: {products: IProduct[]}) {
                         <SelectSide />
                         <div>
                             <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Layer</h2>
-                            <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
-                            <button className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
+                            <button disabled={disabledAddLayers} className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
+                            <button disabled={disabledAddLayers} className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
                         </div>
 
                         <div className="min-h-[100px]">
