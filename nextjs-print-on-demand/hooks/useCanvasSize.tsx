@@ -5,9 +5,15 @@ export function useCanvasSize(p5ref: React.MutableRefObject<any>) {
 
     // resize event listener
     useEffect(() => {
-        window.addEventListener("resize", windowResized); 
-        return () => window.removeEventListener("resize", windowResized);
-    }, []);
+        if (p5ref.current !== undefined) {
+            if (window.innerWidth < 500) {
+                p5ref.current.resizeCanvas(350, 350);
+                setCanvasSize(350);
+            }
+            window.addEventListener("resize", windowResized); 
+            return () => window.removeEventListener("resize", windowResized);
+        }
+    }, [p5ref.current]);
 
     function windowResized() {
         if (p5ref.current) {

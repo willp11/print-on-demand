@@ -113,7 +113,7 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
     if (product !== null && product !== undefined) {
         return (
             <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20 flex justify-center items-center">
-                <div className="relative bg-white flex flex-col justify-center items-center p-4">
+                <div className="relative bg-white w-full max-w-[600px] flex flex-col justify-center items-center p-4">
                     <XMarkIcon className="w-6 h-6 absolute top-2 right-2 cursor-pointer" onClick={()=>setShowPreview(false)}/>
                     <h2 className="text-4xl font-bold pb-2">Preview</h2>
                     <div className={
