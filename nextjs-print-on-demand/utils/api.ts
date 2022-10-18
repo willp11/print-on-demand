@@ -142,23 +142,3 @@ export const fetchDesigns = async (token: string) => {
         return null;
     }
 }
-
-// input a base64 encoded image
-export const checkFileType = (file: string) => {
-    let fileType = "";
-    let end = false;
-    let i=11;
-    while (!end) {
-        let char = file[i];
-        if (char === ";") {
-            end=true
-        } else {
-            fileType += char;
-        }
-        i++
-    }
-    let isValid = false;
-    fileType = fileType.toLowerCase();
-    if (fileType === "png" || fileType === "jpg" || fileType === "jpeg") isValid = true;
-    return isValid;
-}

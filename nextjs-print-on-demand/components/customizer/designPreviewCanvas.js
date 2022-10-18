@@ -32,6 +32,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
                     if (layer.type === "image") {
                         return p5.loadImage(layer.image);
                     } else if (layer.type === "text") {
+                        if (layer.font.file.includes(process.env.NEXT_PUBLIC_BACKEND_PREFIX)) return p5.loadFont(layer.font.file);
                         return p5.loadFont(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${layer.font.file}`);
                     }
                 })
@@ -110,6 +111,9 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
     
                 p5.pop();
             })
+
+            // draw mask
+            p5.image(productImageMaskRef.current, 1, 1, canvasSize, canvasSize);
 
             // save canvas
             p5ref.current.saveFrames('design', 'png', 1, 1, (data) => {

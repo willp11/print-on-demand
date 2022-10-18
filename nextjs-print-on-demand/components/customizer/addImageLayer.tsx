@@ -9,7 +9,7 @@ export default function AddImageLayer() {
     const [layerImage, setLayerImage] = useState<string | null>(null)
     const [layerImageWidth, setLayerImageWidth] = useState(0);
     const [layerImageHeight, setLayerImageHeight] = useState(0);
-    // const [imageFile, setImageFile] = useState<File | undefined>();
+    const [errorMsg, setErrorMsg] = useState("");
 
     const returnFile = (file: string) => {
         let img = new Image;
@@ -26,7 +26,12 @@ export default function AddImageLayer() {
     const setImageHandler = (files: FileList | null) => {
         try {
             if (files !== null) {
-                getBase64(files[0], returnFile);
+                if (files[0].type === "image/png" || files[0].type === "image/jpeg") {
+                    setErrorMsg("");
+                    getBase64(files[0], returnFile);
+                } else {
+                    setErrorMsg("Invalid file type");
+                }
             }
         } catch(e) {
             console.log(e);
@@ -92,7 +97,15 @@ export default function AddImageLayer() {
                         onChange={(e)=>setImageHandler(e.target.files)}
                     />
                 </label>
-                <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1" onClick={addImageLayer}>Add Layer</button>
+                <button
+                    disabled={errorMsg === "Invalid file type"}
+                    className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1" 
+                    onClick={addImageLayer}
+                >
+                    Add Layer
+                </button>
+                <p className="text-xs mt-2">Accepted file formats: png, jpg</p>
+                {errorMsg !== "" ? <p className="text-xs text-red-500 mt-2">{errorMsg}</p> : null}
             </div>
         </div>
     )
