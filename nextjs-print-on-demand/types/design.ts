@@ -11,7 +11,9 @@ export interface IDesignContext {
     layers: {[key: string]: ILayer[]}
     setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>>,
     selectedLayer: number | null,
-    setSelectedLayer: Dispatch<SetStateAction<number | null>>
+    setSelectedLayer: Dispatch<SetStateAction<number | null>>,
+    currentDesign: IDesign | null | undefined,
+    setCurrentDesign: Dispatch<SetStateAction<IDesign | null>>,
 }
 
 type LayerType = "image" | "text";
@@ -57,6 +59,7 @@ interface IPreview {
 }
 
 export interface IDesign {
+    id: number,
     name: string,
     layers: {
         [key: string]: ILayer[]

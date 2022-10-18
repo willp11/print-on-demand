@@ -13,21 +13,23 @@ interface IDesignProps {
 export default function Design({design, setShowDesignsModal}: IDesignProps) {
 
     const router = useRouter();
-    const { setSelectedLayer, setProduct, setColor, setLayers} = useDesign();
+    const { setSelectedLayer, setProduct, setColor, setLayers, setCurrentDesign} = useDesign();
 
     // if we are on account page, we want to load the design in the customizer
     const handleLoadDesign = () => {
-        if (setProduct && setColor && setLayers && setSelectedLayer) {
+        if (setProduct && setColor && setLayers && setSelectedLayer && setCurrentDesign) {
             if (router.pathname === "/account") {
                 setProduct(design.product);
                 setColor(design.color);
                 setLayers(design.layers);
                 setSelectedLayer(0);
+                setCurrentDesign(design);
                 router.push('/customizer');
             } else if (router.pathname === "/customizer" && setShowDesignsModal) {
                 setProduct(design.product);
                 setColor(design.color);
                 setLayers(design.layers);
+                setCurrentDesign(design);
                 setShowDesignsModal(false);
             }
         }

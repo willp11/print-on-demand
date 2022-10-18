@@ -37,7 +37,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
 
-    const {product, setProduct, layers} = useDesign();
+    const {product, setProduct, layers, currentDesign} = useDesign();
 
     useEffect(()=>{
         if (setProduct) setProduct(products[0]);
@@ -47,8 +47,11 @@ export default function Customizer({products}: {products: IProduct[]}) {
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
                 <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
-                <div className="touch-none">
-                    <SketchCanvas />
+                <div>
+                    <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                    <div className="touch-none">
+                        <SketchCanvas />
+                    </div>
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}

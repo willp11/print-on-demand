@@ -1,5 +1,5 @@
 import React, {useContext, useState, useMemo} from 'react';
-import { IDesignContext, ILayer } from '../types/design';
+import { IDesign, IDesignContext, ILayer } from '../types/design';
 import { IProduct } from '../types/product';
 import { Dispatch, SetStateAction } from 'react';
 import { uploadDesign } from '../utils/api';
@@ -17,10 +17,11 @@ export const DesignProvider = ({children}: {children: React.ReactNode}) => {
         "right": []
     });
     const [selectedLayer, setSelectedLayer] = useState<number | null>(null);
+    const [currentDesign, setCurrentDesign] = useState<IDesign | null>(null);
 
     const contextValue = useMemo(()=>{
-        return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers, selectedLayer, setSelectedLayer}
-    }, [product, productSide, color, layers, selectedLayer]);
+        return {product, setProduct, productSide, setProductSide, color, setColor, layers, setLayers, selectedLayer, setSelectedLayer, currentDesign, setCurrentDesign}
+    }, [product, productSide, color, layers, selectedLayer, currentDesign]);
 
     return <DesignContext.Provider value={contextValue}>{children}</DesignContext.Provider>
 }
@@ -34,6 +35,9 @@ export const useDesign = () => {
     let layers: {[key: string]: ILayer[]} | undefined, setLayers: Dispatch<SetStateAction<{[key: string]: ILayer[]}>> | undefined;
     let selectedLayer: number | null | undefined, setSelectedLayer: Dispatch<SetStateAction<number | null>> | undefined;
 
+    // if user loads a saved design
+    let currentDesign: IDesign | null | undefined, setCurrentDesign: Dispatch<SetStateAction<IDesign | null>> | undefined;
+
     if (contextValue) {
         product = contextValue.product;
         setProduct = contextValue.setProduct;
@@ -45,6 +49,8 @@ export const useDesign = () => {
         setLayers = contextValue.setLayers;
         selectedLayer = contextValue.selectedLayer;
         setSelectedLayer = contextValue.setSelectedLayer;
+        currentDesign = contextValue.currentDesign;
+        setCurrentDesign = contextValue.setCurrentDesign;
     }
 
     // add a layer
@@ -138,12 +144,25 @@ export const useDesign = () => {
         }
     }
 
-    // save the design - a design consists of the layers, 
-    // so then can be applied to any product that has same sides
+    // save a new design
     const saveDesign = async (token: string, name: string, previews: object[]) => {
         if (layers !== undefined && product !== undefined && product !== null && color !== undefined) {
+            let id = currentDesign?.id;
             try {
-                const res = await uploadDesign(token, product.id, color, name, layers, previews, 54);
+                const res = await uploadDesign(token, product.id, color, name, layers, previews);
+                if (res) return res;
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    }
+
+    // update an existing design
+    const updateDesign = async (token: string, name: string, previews: object[]) => {
+        if (layers !== undefined && product !== undefined && product !== null && color !== undefined && currentDesign !== null && currentDesign !== undefined) {
+            let id = currentDesign?.id;
+            try {
+                const res = await uploadDesign(token, product.id, color, name, layers, previews, id);
                 if (res) return res;
             } catch(e) {
                 console.log(e);
@@ -171,6 +190,9 @@ export const useDesign = () => {
         moveLayerForward,
         moveLayerBackward,
         editLayer,
-        saveDesign
+        saveDesign,
+        updateDesign,
+        currentDesign,
+        setCurrentDesign
     }
 }

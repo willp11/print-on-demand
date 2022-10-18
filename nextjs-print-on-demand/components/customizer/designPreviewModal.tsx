@@ -17,7 +17,7 @@ interface DesignPreviewModalProps {
 export default function DesignPreviewModal({product, layers, setShowPreview}: DesignPreviewModalProps) {
 
     const [loading, setLoading] = useState(true);
-    const { saveDesign } = useDesign();
+    const { saveDesign, updateDesign, currentDesign } = useDesign();
     const { token } = useUser();
 
     // Need 4 individual so each sketch can update independently, or get sync issues as all update empty object
@@ -30,6 +30,11 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
     const [designName, setDesignName] = useState("");
+
+    // Update design name if user loads a saved design
+    useEffect(()=>{
+        if (currentDesign) setDesignName(currentDesign.name);
+    }, [currentDesign]);
 
 
     const updatePreviewImages = (side: Side, image: string) => {
@@ -50,7 +55,7 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
         }
     }, [frontPreview, backPreview, leftPreview, rightPreview]);
 
-    const saveHandler = async () => {
+    const saveHandler = async (type: 'save' | 'update') => {
         if (designName === "") {
             setErrorMsg("Design name is required");
             return;
@@ -77,7 +82,12 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
                     image: rightPreview
                 }
             ]
-            const res = await saveDesign(token, designName, previews);
+            let res;
+            if (type === "save") {
+                res = await saveDesign(token, designName, previews);
+            } else if (type === "update") {
+                res = await updateDesign(token, designName, previews);
+            }
             if (res?.data?.message === "success") {
                 setSuccessMsg("Design uploaded successfully. Check your profile page to see all your designs.");
             } else {
@@ -129,16 +139,26 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
 
                     {!loading && <div className="flex">{sideBtns}</div>}
                     
-                    <input className="px-2 py-1 mt-4 border border-gray-300" placeholder="Type design name..." onChange={(e)=>setDesignName(e.target.value)} />
+                    <input value={designName} className="px-2 py-1 mt-4 border border-gray-300" placeholder="Type design name..." onChange={(e)=>setDesignName(e.target.value)} />
                     <button 
-                        disabled={loading} 
-                        onClick={saveHandler}
+                        disabled={loading || !currentDesign} 
+                        onClick={()=>saveHandler("update")}
                         className={
                             loading ? "w-32 p-2 mt-2 text-gray-800 text-sm font-semibold bg-gray-300 rounded cursor-not-allowed"
                             : "w-32 p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded cursor-pointer"
                         }
                     >
-                        {loading ? "Loading..." : "Save"}
+                        {loading ? "Loading..." : "Update existing"}
+                    </button>
+                    <button 
+                        disabled={loading} 
+                        onClick={()=>saveHandler("save")}
+                        className={
+                            loading ? "w-32 p-2 mt-2 text-gray-800 text-sm font-semibold bg-gray-300 rounded cursor-not-allowed"
+                            : "w-32 p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded cursor-pointer"
+                        }
+                    >
+                        {loading ? "Loading..." : "Save New"}
                     </button>
 
                     {errorMsg && <p className="text-red-500 text-sm font-semibold mt-2">{errorMsg}</p>}
