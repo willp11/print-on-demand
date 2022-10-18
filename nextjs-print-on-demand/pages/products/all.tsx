@@ -1,5 +1,4 @@
 import ProductGrid from "../../components/products/productGrid";
-import axios from "axios";
 import { IProduct } from "../../types/product";
 import { fetchProducts } from "../../utils/api";
 

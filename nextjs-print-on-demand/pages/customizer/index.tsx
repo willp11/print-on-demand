@@ -86,9 +86,11 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     <SelectProductColor />
                 </div>
                 
-
-                <div className="touch-none w-full flex justify-center">
-                    <SketchCanvas />
+                <div>
+                    <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                    <div className="touch-none w-full flex justify-center">
+                        <SketchCanvas />
+                    </div>
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}

@@ -100,7 +100,8 @@ export default function DesignPreviewModal({product, layers, setShowPreview}: De
     // select side btns
     const sideBtns = sides.map((side)=>{
         return (
-            <button 
+            <button
+                key={side}
                 className={selectedPreview === side ? "p-2 mx-2 mb-2 border bg-gray-700 text-white border-gray-300 rounded w-24" 
                 : "p-2 mx-2 mb-2 border border-gray-300 rounded w-24 hover:bg-gray-100"}
                 onClick={()=>setSelectedPreview(side)}

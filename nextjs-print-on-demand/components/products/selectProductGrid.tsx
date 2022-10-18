@@ -1,16 +1,16 @@
-import GridItem from "./gridItem";
+import SelectProductItem from "./selectProductItem";
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../types/product';
 
-interface IProductGridProps {
+interface ISelectProductGridProps {
     productList: IProduct[],
-    setShowSelectProductModal?: Dispatch<SetStateAction<boolean>>
+    setShowSelectProductModal: Dispatch<SetStateAction<boolean>>
 }
 
-export default function ProductGrid({productList, setShowSelectProductModal}: IProductGridProps) {
+export default function SelectProductGrid({productList, setShowSelectProductModal}: ISelectProductGridProps) {
 
     const products = productList.map(product=>{
-        return <GridItem key={product.id} product={product} />
+        return <SelectProductItem key={product.id} product={product} setShowSelectProductModal={setShowSelectProductModal} />
     })
 
     return (
