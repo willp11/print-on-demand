@@ -1,21 +1,22 @@
-import { useState } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { useMemo } from "react";
+import { ISize } from "../../types/size";
 
-export default function AddToCart() {
+export default function AddToCart({qty, price}: {qty: ISize | null, price: number}) {
 
-    const [quantity, setQuantity] = useState(1);
-    const [price, setPrice] = useState(10);
+    const total = useMemo(() => {
+        if (qty !== null) {
+            let total = 0;
+            Object.keys(qty).map(size=>{
+                total += qty[size] * price;
+            })
+            return total;
+        } else return 0;
+    }, [qty, price]);
 
     return (
         <div className="border border-gray-300 p-2 m-2 flex justify-around items-center rounded">
-            <div className="flex items-center">
-                <MinusIcon className="h-6 w-6 cursor-pointer" onClick={()=>setQuantity(quantity-1)} />
-                <p className="mx-2 text-lg">{quantity}</p>
-                <PlusIcon className="h-6 w-6 cursor-pointer" onClick={()=>setQuantity(quantity+1)} />
-            </div>
-            <p>
-                <span className="text-lg">x ${price.toFixed(2)}</span>
-                <span className="ml-4 text-xl font-bold">= ${(quantity*price).toFixed(2)}</span>
+            <p className="ml-4 text-xl font-bold">
+                Total: ${total.toFixed(2)}
             </p>
             <button className="btn w-32">Add to cart</button>
         </div>

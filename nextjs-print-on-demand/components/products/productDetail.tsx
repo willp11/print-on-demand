@@ -1,42 +1,29 @@
 import {IProduct} from '../../types/product';
-import { ISize } from '../../types/size';
 import Image from 'next/image';
 import BlankPriceTable from './blankPriceTable';
 import SelectColor from './selectColor';
 import SelectQuantity from './selectQuantity';
 import SizeDescription from './sizeDescription';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import { useRouter } from 'next/router';
+import { useProductQty } from '../../hooks/useProductQty';
 
 export default function ProductDetail({product}: {product: IProduct}) {
 
     const [selectedColor, setSelectedColor] = useState("white");
-    const [qty, setQty] = useState<ISize>({})
-
-    // On mount - create the qty object
-    useEffect(()=>{
-        let qtyObj: ISize = {};
-        Object.keys(product.sizes).map(size=>{
-            qtyObj[size] = 0;
-        })
-        setQty(qtyObj);
-    }, []);
-
-    const updateQtyHandler = (size: string, value: string) => {
-        let newQty = {...qty};
-        (value === "") ? newQty[size] = 0 : newQty[size] = parseInt(value);
-        setQty(newQty);
-    }
+    const {qty, updateQtyHandler} = useProductQty(product);
 
     const {addItem} = useCart();
     const router = useRouter();
 
     const addToCartHandler = () => {
-        // for each size, add item to cart if qty>0
-        Object.keys(qty).forEach(size=>{
-            (qty[size] > 0) && addItem(product, selectedColor, size, qty[size])
-        })
+        if (qty !== null) {
+            // for each size, add item to cart if qty>0
+            Object.keys(qty).forEach(size=>{
+                (qty[size] > 0) && addItem(product, selectedColor, size, qty[size])
+            })
+        }
     }
 
     return (
@@ -44,7 +31,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
             <div className="flex flex-col md:flex-row justify-center">
                 <div className="relative w-full max-w-[400px] h-[350px] xs:h-[450px]">
                     <Image
-                        src={`http://localhost:8000${product.colors[selectedColor]["front"]}`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[selectedColor]["front"]}`}
                         layout="fill"
                         objectFit="contain"
                         alt={product.name}
@@ -62,7 +49,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 </div>
             </div>
             <div className="w-full max-w-[660px] md:mx-auto p-2">
-                <SelectQuantity updateQtyHandler={updateQtyHandler} />
+                {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
                 <div className="mt-4">
                     <div className="my-2">
                         <button className="btn" onClick={()=>router.push('/customizer')}>CUSTOMIZE</button>

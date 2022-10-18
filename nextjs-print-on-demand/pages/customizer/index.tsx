@@ -18,6 +18,8 @@ import { fetchProducts } from '../../utils/api';
 import DesignPreviewModal from '../../components/customizer/designPreviewModal';
 import LoadDesignModal from '../../components/customizer/loadDesignModal';
 import AddToCart from '../../components/customizer/addToCart';
+import { useProductQty } from '../../hooks/useProductQty';
+import SelectQuantity  from '../../components/products/selectQuantity';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -40,6 +42,8 @@ export default function Customizer({products}: {products: IProduct[]}) {
 
     const {product, setProduct, layers, currentDesign} = useDesign();
 
+    const {qty, updateQtyHandler} = useProductQty(product);
+
     useEffect(()=>{
         if (setProduct) setProduct(products[0]);
     }, []);
@@ -48,12 +52,13 @@ export default function Customizer({products}: {products: IProduct[]}) {
         <div className="p-1"> 
             <div className="hidden lg:flex lg:justify-center">
                 <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
-                <div>
+                <div className="px-2">
                     <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
                     <div className="touch-none">
                         <SketchCanvas />
                     </div>
-                    <AddToCart />
+                    {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
+                    <AddToCart qty={qty} price={10} />
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
@@ -87,14 +92,6 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     </div>
                     <SelectProductColor />
                 </div>
-                
-                <div>
-                    <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
-                    <div className="touch-none w-full flex justify-center">
-                        <SketchCanvas />
-                    </div>
-                    <AddToCart />
-                </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
                 {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
@@ -113,6 +110,15 @@ export default function Customizer({products}: {products: IProduct[]}) {
                         </div>
                     </>
                 }
+
+                <div>
+                    <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                    <div className="touch-none w-full flex justify-center">
+                        <SketchCanvas />
+                    </div>
+                    {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
+                    <AddToCart qty={qty} price={10} />
+                </div>
 
                 {
                     showImageLayerModal && 
