@@ -17,6 +17,7 @@ import { useDesign } from '../../hooks/useDesign';
 import { fetchProducts } from '../../utils/api';
 import DesignPreviewModal from '../../components/customizer/designPreviewModal';
 import LoadDesignModal from '../../components/customizer/loadDesignModal';
+import AddToCart from '../../components/customizer/addToCart';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -52,6 +53,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     <div className="touch-none">
                         <SketchCanvas />
                     </div>
+                    <AddToCart />
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
@@ -91,6 +93,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     <div className="touch-none w-full flex justify-center">
                         <SketchCanvas />
                     </div>
+                    <AddToCart />
                 </div>
 
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}

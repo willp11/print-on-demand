@@ -4,7 +4,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IDesign } from "../../types/design";
 import Design from "./design";
 
-export default function Designs({setShowDesignsModal}: {setShowDesignsModal: Dispatch<SetStateAction<boolean>>}) {
+interface IDesignsProps {
+    setShowDesignsModal?: Dispatch<SetStateAction<boolean>>
+}
+
+export default function Designs({setShowDesignsModal}: IDesignsProps) {
 
     const { token } = useUser();
     const [designs, setDesigns] = useState<IDesign[]>([]);
