@@ -13,8 +13,9 @@ import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
 import EditImageLayer from '../../components/customizer/editImageLayer';
 import { IProduct } from '../../types/product';
+import { Font } from '../../types/design';
 import { useDesign } from '../../hooks/useDesign';
-import { fetchProducts } from '../../utils/api';
+import { fetchFonts, fetchProducts } from '../../utils/api';
 import DesignPreviewModal from '../../components/customizer/designPreviewModal';
 import LoadDesignModal from '../../components/customizer/loadDesignModal';
 import AddToCart from '../../components/customizer/addToCart';
@@ -23,14 +24,16 @@ import SelectQuantity  from '../../components/products/selectQuantity';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
+    const fonts = await fetchFonts();
     return {
         props: {
-            products: products
+            products: products,
+            fonts: fonts
         }
     }
 }
 
-export default function Customizer({products}: {products: IProduct[]}) {
+export default function Customizer({products, fonts}: {products: IProduct[], fonts: Font[]}) {
 
     const [showPreview, setShowPreview] = useState(false);
     const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
@@ -78,7 +81,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     </div>
                 </div>
 
-                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
+                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />}
                 {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
 
                 {(!editTextLayerMode && !editImgLayerMode) && 
@@ -110,7 +113,7 @@ export default function Customizer({products}: {products: IProduct[]}) {
                     <SelectProductColor />
                 </div>
 
-                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} />}
+                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />}
                 {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
 
                 {(!editTextLayerMode && !editImgLayerMode) && 

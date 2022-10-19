@@ -3,15 +3,9 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { ILayer, Font } from "../../types/design";
 import {IDrawableArea} from "../../types/product";
 
-const fonts = [
-    {id: 0, location: '/fonts/BungeeSpice-Regular.ttf', name: "Bungee Spice"},
-    {id: 1, location: '/fonts/OpenSans-Medium.ttf', name: "Open Sans"},
-    {id: 2, location: '/fonts/BlakaInk-Regular.ttf', name: "Blaka Ink"}
-]
-
 type AlignPos = 'left' | 'center' | 'right';
 
-export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>}) {
+export default function EditTextLayer({setEditTextLayerMode, fonts}: {setEditTextLayerMode: Dispatch<SetStateAction<boolean>>, fonts: Font[]}) {
 
     // get size of window
     const [canvasSize, setCanvasSize] = useState(499);
@@ -89,7 +83,7 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
 
     const setFontHandler = (name: string) => {
         fonts.forEach((font, idx)=>{
-            if (font.location === name) {
+            if (font.file === name) {
                 let vals = {...values};
                 vals.font = fonts[idx];
                 setValues(vals);
@@ -160,13 +154,13 @@ export default function EditTextLayer({setEditTextLayerMode}: {setEditTextLayerM
     // FONT SELECTION
     let fontItems = fonts.map((font)=>{
         return (
-            <option key={font.id} value={font.location} style={{fontFamily: font.name}}>{font.name}</option>
+            <option key={font.id} value={font.file} style={{fontFamily: font.name}}>{font.name}</option>
         );
     })
     let fontSelection = (
         <select 
             className="border border-gray-300 cursor-pointer mr-2 w-48"
-            value={values.font.location} 
+            value={values.font.file} 
             onChange={e=>setFontHandler(e.target.value)}
         >
             {fontItems}
