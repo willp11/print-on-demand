@@ -60,6 +60,7 @@ def serializerLayers(design, layers):
     for layer in layers:
         layer["design"] = design.pk
         if layer["type"] == "text":
+            layer["font"] = layer["font"]["id"]
             layer_serializer = TextLayerCreateSerializer(data=layer)
             layer_serializers.append(layer_serializer)
         elif layer["type"] == "image":
