@@ -59,7 +59,7 @@ interface IPreview {
 }
 
 export interface IDesign {
-    id: number,
+    id?: number,
     name: string,
     layers: {
         [key: string]: ILayer[]

@@ -1,7 +1,8 @@
 import DesignPreviewCanvas from '../../components/customizer/designPreviewCanvas';
 import { IProduct } from '../../types/product';
 import { ILayer } from '../../types/design';
-import { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { IDesign } from '../../types/design';
+import { useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
 import { useDesign } from '../../hooks/useDesign';
 import { useUser } from '../../hooks/useUser';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -14,13 +15,14 @@ const sides = ["front", "back", "left", "right"];
 interface DesignPreviewModalProps {
     product: IProduct, 
     layers: {[key: string]: ILayer[]}, 
+    color: string,
     setShowPreview: Dispatch<SetStateAction<boolean>>,
     from: 'save' | 'addToCart',
     setShowSaveConfirmation: Dispatch<SetStateAction<boolean>>,
     total: number
 }
 
-export default function DesignPreviewModal({product, layers, setShowPreview, from, setShowSaveConfirmation, total}: DesignPreviewModalProps) {
+export default function DesignPreviewModal({product, layers, color, setShowPreview, from, setShowSaveConfirmation, total}: DesignPreviewModalProps) {
 
     const [loading, setLoading] = useState(true);
     const { saveDesign, updateDesign, currentDesign } = useDesign();
@@ -37,12 +39,47 @@ export default function DesignPreviewModal({product, layers, setShowPreview, fro
     const [successMsg, setSuccessMsg] = useState("");
     const [designName, setDesignName] = useState("");
 
+    // create a design object to pass to confirmAddToCart
+    const design: IDesign | null = useMemo(()=>{
+        if (frontPreview && backPreview && leftPreview && rightPreview) {
+            let previews = [
+                {
+                    side: "front",
+                    image: frontPreview
+                },
+                {
+                    side: "back",
+                    image: backPreview
+                },
+                {
+                    side: "left",
+                    image: leftPreview
+                },
+                {
+                    side: "right",
+                    image: rightPreview
+                }
+            ]
+            let designObj: IDesign = {
+                name: designName,
+                layers: layers,
+                previews: previews,
+                product: product,
+                color: color
+            };
+            if (currentDesign) designObj.id = currentDesign.id;
+            return designObj;
+        } else {
+            return null;
+        }
+    }, [product, color, layers, designName, frontPreview, backPreview, leftPreview, rightPreview])
+
     // Update design name if user loads a saved design
     useEffect(()=>{
         if (currentDesign) setDesignName(currentDesign.name);
     }, [currentDesign]);
 
-
+    // function to update preview images state
     const updatePreviewImages = (side: Side, image: string) => {
         if (side === "front") {
             setFrontPreview(image);
@@ -55,12 +92,14 @@ export default function DesignPreviewModal({product, layers, setShowPreview, fro
         }
     }
 
+    // when previews all loaded, setLoading to false
     useEffect(()=>{
         if (frontPreview && backPreview && leftPreview && rightPreview) {
             setLoading(false);
         }
     }, [frontPreview, backPreview, leftPreview, rightPreview]);
 
+    // handler function to save or update a design
     const saveHandler = async (type: 'save' | 'update') => {
         if (designName === "") {
             setErrorMsg("Design name is required");
@@ -150,7 +189,7 @@ export default function DesignPreviewModal({product, layers, setShowPreview, fro
                     {!loading && <div className="flex">{sideBtns}</div>}
 
                     {from === "save" && <SaveDesignBtns loading={loading} designName={designName} setDesignName={setDesignName} saveHandler={saveHandler} currentDesign={currentDesign} /> }
-                    {from === "addToCart" && <ConfirmAddToCart total={total} loading={loading} />}
+                    {from === "addToCart" && <ConfirmAddToCart total={total} loading={loading} design={design} />}
 
                     {errorMsg && <p className="text-red-500 text-sm font-semibold mt-2">{errorMsg}</p>}
                     {successMsg && <p className="text-green-500 text-sm font-semibold mt-2">{successMsg}</p>}

@@ -10,6 +10,14 @@ export default function CartItem({item}: {item: ICartItem}) {
         removeItem,
     } = useCart();
 
+    const addItemHandler = () => {
+        if (item.custom) {
+            addItem(item, item.color, item.size, 1, item.custom, item.design);
+        } else {
+            addItem(item, item.color, item.size, 1, item.custom);   
+        }
+    }
+
     if (item.quantity > 0) {
         return (
             <div className="w-full my-2 flex justify-start border-b border-gray-300 dark:border-gray-600">
@@ -24,7 +32,7 @@ export default function CartItem({item}: {item: ICartItem}) {
                     }
                 </div>
                 <div className="flex flex-col items-start justify-center ml-4">
-                    <p className="dark:text-gray-100">{item.itemName}</p>
+                    <p className="dark:text-gray-100">{item.custom ? `CUSTOM ${item.itemName}` : `BLANK ${item.itemName}`}</p>
                     <div className="flex pt-2 items-center">
                         <div onClick={()=>removeItem(item, item.color, item.size, 1)}>
                             <MinusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-red-600 dark:hover:stroke-red-400" />

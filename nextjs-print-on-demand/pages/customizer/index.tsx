@@ -45,7 +45,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
     const [price, setPrice] = useState(10);
 
-    const {product, setProduct, layers, currentDesign, productSide} = useDesign();
+    const {product, setProduct, color, layers, currentDesign, productSide} = useDesign();
 
     const {qty, updateQtyHandler} = useProductQty(product);
 
@@ -169,12 +169,12 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 }
             </div>
             
-            {product && layers && showPreview && 
-                <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} from="save" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+            {product && layers && showPreview && color &&
+                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="save" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
             }
 
-            {product && layers && showSaveConfirmation && 
-                <DesignPreviewModal product={product} layers={layers} setShowPreview={setShowPreview} from="addToCart" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+            {product && layers && showSaveConfirmation && color &&
+                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="addToCart" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
             }
             
             {showDesignsModal && <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />}

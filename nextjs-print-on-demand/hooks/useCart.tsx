@@ -3,6 +3,7 @@ import useLocalStorageReducer from "./useLocalStorageReducer";
 import { IProduct } from "../types/product";
 import { Cart, UpdateCartAction, ICartContext } from "../types/cart";
 import { useMessage } from "./useMessage";
+import { IDesign } from "../types/design";
 
 const initialCart: Cart = {
     items: {},
@@ -10,7 +11,7 @@ const initialCart: Cart = {
     total_qty: 0
 }
 
-const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number, custom: boolean) => {
+const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign) => {
     let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
     let item = state?.items?.[itemName];
     if (item) {
@@ -24,6 +25,7 @@ const addItem = (state: Cart, product: IProduct, color: string, size: string, qu
             itemName,
             custom
         }
+        if (design) item.design = design;
     }
     let updatedCart = {
         ...state,
@@ -53,6 +55,9 @@ const removeItem = (state: Cart, product: IProduct, color: string, size: string,
         value: Math.max(0, state.value - (product.price * quantity)),
         total_qty: Math.max(0, state.total_qty - quantity)
     }
+    if (item.quantity === 0) {
+        delete updatedCart["items"][itemName];
+    }
     return updatedCart;
 }
 
@@ -63,7 +68,7 @@ const clearCart = () => {
 const cartReducer: Reducer<Cart, UpdateCartAction> = (state: Cart, action: UpdateCartAction) => {
     switch (action.type) {
         case 'ADD_ITEM':
-            return addItem(state, action.product, action.color, action.size, action.quantity, action.custom);
+            return addItem(state, action.product, action.color, action.size, action.quantity, action.custom, action.design);
         case 'REMOVE_ITEM':
             return removeItem(state, action.product, action.color, action.size, action.quantity);
         case 'CLEAR_CART':
@@ -103,8 +108,8 @@ export const useCart = () => {
 
     const { setMessage } = useMessage();
 
-    const addItem = (product: IProduct, color: string, size: string, quantity: number, custom: boolean) => {
-        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity});
+    const addItem = (product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign) => {
+        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity, custom, design});
         if (setMessage) setMessage("Item added to cart");
     }
     const removeItem = (product: IProduct, color: string, size: string, quantity: number) => {
