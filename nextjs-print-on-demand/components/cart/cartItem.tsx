@@ -30,7 +30,7 @@ export default function CartItem({item}: {item: ICartItem}) {
                             <MinusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-red-600 dark:hover:stroke-red-400" />
                         </div>
                         <p className="text-lg mx-4 dark:text-gray-100">{item.quantity}</p>
-                        <div onClick={()=>addItem(item, item.color, item.size, 1)}>
+                        <div onClick={()=>addItem(item, item.color, item.size, 1, item.custom)}>
                             <PlusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-green-600 dark:hover:stroke-green-500" />
                         </div>
                         <div className="ml-8 flex items-center">

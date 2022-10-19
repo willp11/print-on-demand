@@ -5,7 +5,8 @@ export interface ICartItem extends IProduct {
     quantity: number,
     color: string,
     size: string,
-    itemName: string
+    itemName: string,
+    custom: boolean
 }
 
 export interface Cart {
@@ -19,7 +20,8 @@ export interface UpdateCartAction {
     product: IProduct,
     color: string,
     size: string,
-    quantity: number
+    quantity: number,
+    custom: boolean
 }
 
 export interface ICartContext {
