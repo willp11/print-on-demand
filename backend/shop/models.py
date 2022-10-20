@@ -157,3 +157,31 @@ class Preview(models.Model):
     design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='previews')
     image = models.ImageField(upload_to='images/previews/')
     side = models.CharField(max_length=8, choices=Side.choices)
+
+class DeliveryAddress(models.Model):
+    name = models.CharField(max_length=64)
+    address = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    state = models.CharField(max_length=64)
+    zipCode = models.CharField(max_length=16)
+    country = models.CharField(max_length=64)
+    phone = models.CharField(max_length=16)
+
+class Order(models.Model):
+    class DeliveryStatus(models.TextChoices):
+        PENDING = 'pending', ('pending')
+        IN_PROGRESS = 'in_progress', ('in_progress')
+        DELIVERED = 'delivered', ('delivered')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
+    stripeId = models.CharField(max_length=128)
+    paid = models.BooleanField(default=False)
+    deliveryStatus = models.BooleanField(choices=DeliveryStatus.choices, default=DeliveryStatus.PENDING)
+    DeliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.CASCADE, null=True)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='order_items')
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='order_items')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='order_items')
+    quantity = models.IntegerField()

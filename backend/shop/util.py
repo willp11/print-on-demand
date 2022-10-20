@@ -89,7 +89,8 @@ def createDesign(request):
         if valid_layers == True:
             for layer_serializer in layer_serializers:
                 layer_serializer.save()
-            return Response({"message":"success"}, status=HTTP_200_OK)
+            design_data = DesignGetSerializer(design).data
+            return Response({"message":"success", "design": design_data}, status=HTTP_200_OK)
         else:
             # if we have any invalid layer, delete the design and will cascade and delete all the layers too
             design.delete()
@@ -123,7 +124,8 @@ def updateDesign(request):
                 preview_serializer.save(design=design)
                 for layer_serializer in layer_serializers:
                     layer_serializer.save()
-                return Response({"message":"success"}, status=HTTP_200_OK)
+                design_data = DesignGetSerializer(design).data
+                return Response({"message":"success", "design": design_data}, status=HTTP_200_OK)
             else:
                 return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
         else:
