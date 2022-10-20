@@ -1,11 +1,12 @@
 import { IProduct } from "./product";
 import { Dispatch } from "react";
 import { IDesign } from "./design";
+import { ISize } from "./size";
 
 export interface ICartItem extends IProduct {
-    quantity: number,
+    value: number,
     color: string,
-    size: string,
+    sizeQuantities: ISize,
     itemName: string,
     custom: boolean,
     design?: IDesign,
@@ -22,8 +23,7 @@ export interface UpdateCartAction {
     type: string,
     product: IProduct,
     color: string,
-    size: string,
-    quantity: number,
+    sizeQuantities: ISize,
     custom: boolean,
     design?: IDesign,
     customPrice?: number

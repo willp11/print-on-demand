@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { ISize } from "../../types/size";
 
 function QuantityInput({label, updateQtyHandler, pathname}: {label: string, updateQtyHandler: (size: string, value: string) => void, pathname: string}) {
 
@@ -8,7 +9,7 @@ function QuantityInput({label, updateQtyHandler, pathname}: {label: string, upda
     return (
         <div className={className}>
             <p>{label}</p>
-            <input 
+            <input
                 className="py-1 w-full text-center border border-gray-300 rounded" 
                 type="number" 
                 placeholder="0"
@@ -19,12 +20,18 @@ function QuantityInput({label, updateQtyHandler, pathname}: {label: string, upda
     )
 }
 
-export default function SelectQuantity({updateQtyHandler}: {updateQtyHandler: (size: string, value: string) => void}) {
+export default function SelectQuantity({qty, updateQtyHandler}: {qty: ISize, updateQtyHandler: (size: string, value: string) => void}) {
 
     const router = useRouter();
 
     let className = "mx-auto w-[300px] xs:w-[450px] sm:w-[600px] grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 place-items-center";
     if (router.pathname === "/customizer") className = "mx-auto w-[300px] xs:w-[400px] md:w-[600px] grid grid-cols-3 xs:grid-cols-4 md:grid-cols-6 place-items-center";
+
+    let inputs = Object.keys(qty).map(size=>{
+        return (
+            <QuantityInput key={size} label={size} updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
+        )
+    })
 
     return (
         <div>
@@ -33,12 +40,7 @@ export default function SelectQuantity({updateQtyHandler}: {updateQtyHandler: (s
                 <p className="text-xs">UK Size</p>
             </div>
             <div className={className}>
-                <QuantityInput label="XS" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
-                <QuantityInput label="S" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
-                <QuantityInput label="M" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
-                <QuantityInput label="L" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
-                <QuantityInput label="XL" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
-                <QuantityInput label="XXL" updateQtyHandler={updateQtyHandler} pathname={router.pathname} />
+                {inputs}
             </div>
         </div>
     )

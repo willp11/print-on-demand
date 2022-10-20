@@ -21,7 +21,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
         if (qty !== null) {
             // for each size, add item to cart if qty>0
             Object.keys(qty).forEach(size=>{
-                (qty[size] > 0) && addItem(product, selectedColor, size, qty[size], false);
+                (qty[size] > 0) && addItem(product, selectedColor, qty, false);
             })
         }
     }
@@ -49,7 +49,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 </div>
             </div>
             <div className="w-full max-w-[660px] md:mx-auto p-2">
-                {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
+                {qty && updateQtyHandler && <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> }
                 <div className="mt-4">
                     <div className="my-2">
                         <button className="btn" onClick={()=>router.push('/customizer')}>CUSTOMIZE</button>

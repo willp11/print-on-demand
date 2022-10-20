@@ -66,5 +66,5 @@ export interface IDesign {
     },
     previews: IPreview[],
     product: IProduct,
-    color: string
+    color: string,
 }

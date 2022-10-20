@@ -37,7 +37,7 @@ export default function Design({design, setShowDesignsModal}: IDesignProps) {
 
     return (
         <div 
-            className="w-[200px] xs:w-[300px] md:w-[620px] m-2 overflow-x-auto border border-gray-300 rounded shadow cursor-pointer hover:border-blue-600 hover:shadow-lg"
+            className="w-[200px] xs:w-[300px] md:w-[620px] m-4 overflow-x-auto border border-gray-200 rounded shadow cursor-pointer hover:shadow-lg hover:shadow-gray-300 hover:border-gray-300"
             onClick={handleLoadDesign}
         >
             <h2 className="text-center text-lg font-bold">{design.name}</h2>

@@ -32,7 +32,6 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
     //         setIsLoading(false);
     //     }
     // }
-    console.log(cart);
 
     let cartItems = null;
     if (cart) {

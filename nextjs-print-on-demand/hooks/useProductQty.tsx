@@ -6,12 +6,23 @@ export function useProductQty(product: IProduct | null | undefined) {
 
     const [qty, setQty] = useState<ISize>({})
 
-    // On mount - create the qty object
+    // On mount - create the original qty object with all values=0
     useEffect(()=>{
         if (product !== null && product !== undefined) {
             let qtyObj: ISize = {};
             Object.keys(product.sizes).map(size=>{
                 qtyObj[size] = 0;
+            })
+            setQty(qtyObj);
+        }
+    }, []);
+
+    // When product changes, make sure the new product has same sizes as old product, add any extra / remove any missing
+    useEffect(()=>{
+        if (product !== null && product !== undefined) {
+            let qtyObj: ISize = {};
+            Object.keys(product.sizes).map(size=>{
+                Object.keys(qty).includes(size) ? qtyObj[size] = qty[size] : qtyObj[size] = 0;
             })
             setQty(qtyObj);
         }

@@ -28,7 +28,7 @@ interface DesignPreviewModalProps {
 export default function DesignPreviewModal({product, layers, color, setShowPreview, from, setShowAddToCart, total, price, qty}: DesignPreviewModalProps) {
 
     const [loading, setLoading] = useState(true);
-    const { saveDesign, updateDesign, currentDesign } = useDesign();
+    const { saveDesign, updateDesign, currentDesign, setCurrentDesign } = useDesign();
     const { token } = useUser();
 
     // Need 4 individual so each sketch can update independently, or get sync issues as all update empty object
@@ -138,6 +138,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
             }
             if (res?.data?.message === "success") {
                 setSuccessMsg("Design uploaded successfully. Check your profile page to see all your designs.");
+                if (setCurrentDesign) setCurrentDesign(res.data.design);
             } else {
                 setErrorMsg("There was an error uploading your design. Please try again later.");
             }

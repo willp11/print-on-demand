@@ -61,14 +61,14 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
             console.log(layers)
             Object.values(layers).forEach(layersArr => {
                 if (layersArr.length > 0) total += pricePerSide;
-            })
-            return total;
+            });
         }
-        return 0;
+        return total;
     }, [product, layers])
 
     // total is derived from price + quantity
     const total = useMemo(() => {
+        console.log(qty)
         if (qty) {
             let total = 0;
             Object.keys(qty).map(size=>{
@@ -99,7 +99,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     <div className="touch-none">
                         <SketchCanvas />
                     </div>
-                    {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
+                    {updateQtyHandler !== null && <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> }
                     <div className="w-full">
                         <AddToCart total={total} setShowAddToCart={setShowAddToCart}/>
                     </div>
@@ -164,7 +164,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     <div className="touch-none w-full flex justify-center">
                         <SketchCanvas />
                     </div>
-                    {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
+                    {qty && updateQtyHandler && <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> }
                     <AddToCart total={total} setShowAddToCart={setShowAddToCart} />
                 </div>
 

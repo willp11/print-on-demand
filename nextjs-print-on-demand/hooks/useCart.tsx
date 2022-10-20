@@ -1,9 +1,11 @@
 import React, { ReactNode, useContext, useMemo, Reducer, Dispatch } from "react";
 import useLocalStorageReducer from "./useLocalStorageReducer";
 import { IProduct } from "../types/product";
-import { Cart, UpdateCartAction, ICartContext } from "../types/cart";
+import { Cart, UpdateCartAction, ICartContext, ICartItem } from "../types/cart";
 import { useMessage } from "./useMessage";
 import { IDesign } from "../types/design";
+import { ISize } from "../types/size";
+import hash from 'object-hash';
 
 const initialCart: Cart = {
     items: {},
@@ -11,17 +13,63 @@ const initialCart: Cart = {
     total_qty: 0
 }
 
-const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign, customPrice?: number) => {
-    let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
-    let item = state?.items?.[itemName];
+const getIdentifier = (itemName: string, color: string, design?: IDesign) => {
+    if (design) {
+        let itemIdentifier = `${itemName}${color}${JSON.stringify(design)}`;
+        return hash(itemIdentifier);
+    } else {
+        let itemIdentifier = `${itemName}${color}`;
+        return hash(itemIdentifier);
+    }
+}
+
+// get the total value of the item
+const calcItemValue = (item: ICartItem, price: number) => {
+    let itemQty = 0;
+    Object.values(item.sizeQuantities).forEach(qty => itemQty += qty);
+    return  price * itemQty;
+}
+
+// update cart with new item
+const updateCartItems = (state: Cart, item: ICartItem, itemIdentifier: string) => {
+    let newItems: {[key: string]: ICartItem} = {
+        ...state.items,
+        [itemIdentifier]: item
+    };
+
+    // get the total value of cart
+    let totalValue = 0;
+    Object.values(newItems).forEach(item=>{
+        totalValue += item.value;
+    })
+
+    let updatedCart = {
+        ...state,
+        items: newItems,
+        value: totalValue,
+        total_qty: Object.keys(newItems).length
+    }
+    return updatedCart;
+}
+
+const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: ISize, custom: boolean, design?: IDesign, customPrice?: number) => {
+
+    let itemName = `${product.name} - ${color.toUpperCase()}`;
+
+    let itemIdentifier = getIdentifier(itemName, color, design);
+
+    let item = state?.items?.[itemIdentifier];
+
     if (item) {
-        item.quantity += quantity;
+        Object.keys(sizeQuantities).forEach(size => {
+            item.sizeQuantities[size] += sizeQuantities[size];
+        })
     } else {
         item = {
             ...product,
-            quantity,
+            value: 0,
             color,
-            size,
+            sizeQuantities,
             itemName,
             custom
         }
@@ -30,37 +78,42 @@ const addItem = (state: Cart, product: IProduct, color: string, size: string, qu
             item.customPrice = Math.round(customPrice * 100) / 100;
         }
     }
-    let updatedCart = {
-        ...state,
-        items: {
-            ...state.items,
-            [itemName]: item
-        },
-        value: Math.max(0, state.value + (product.price * quantity)),
-        total_qty: Math.max(0, state.total_qty + quantity)
-    }
+    // get the total value of the item
+    const itemPrice = customPrice ? customPrice : product.price;
+    const value = calcItemValue(item, itemPrice)
+    item.value = value;
+
+    // get an updated cart object
+    const updatedCart = updateCartItems(state, item, itemIdentifier);
+
     return updatedCart;
 }
 
-const removeItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number) => {
-    let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
-    let item = state?.items?.[itemName];
-    if (item) {
-        item.quantity -= quantity;
-    } else return state;
+const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantities: ISize, design?: IDesign, customPrice?: number) => {
+    let itemName = `${product.name} - ${color.toUpperCase()}`;
 
-    let updatedCart = {
-        ...state,
-        items: {
-            ...state.items,
-            [itemName]: item
-        },
-        value: Math.max(0, state.value - (product.price * quantity)),
-        total_qty: Math.max(0, state.total_qty - quantity)
-    }
-    if (item.quantity === 0) {
-        delete updatedCart["items"][itemName];
-    }
+    let itemIdentifier = getIdentifier(itemName, color, design);
+
+    let item = state?.items?.[itemIdentifier];
+    let itemQty = 0;
+    if (item) {
+        Object.keys(sizeQuantities).forEach(size => {
+            item.sizeQuantities[size] -= sizeQuantities[size];
+            itemQty += item.sizeQuantities[size];
+        })
+    } else return state; // item not found in cart, return state
+
+    // get the total value of the item
+    const itemPrice = customPrice ? customPrice : product.price;
+    const value = calcItemValue(item, itemPrice)
+    item.value = value;
+
+    // get an updated cart object
+    const updatedCart = updateCartItems(state, item, itemIdentifier);
+
+    // remove from cart if it hit 0 quantity on all sizes
+    if (itemQty === 0) delete updatedCart.items[itemIdentifier];
+
     return updatedCart;
 }
 
@@ -71,9 +124,9 @@ const clearCart = () => {
 const cartReducer: Reducer<Cart, UpdateCartAction> = (state: Cart, action: UpdateCartAction) => {
     switch (action.type) {
         case 'ADD_ITEM':
-            return addItem(state, action.product, action.color, action.size, action.quantity, action.custom, action.design, action.customPrice);
+            return addItem(state, action.product, action.color, action.sizeQuantities, action.custom, action.design, action.customPrice);
         case 'REMOVE_ITEM':
-            return removeItem(state, action.product, action.color, action.size, action.quantity);
+            return removeItem(state, action.product, action.color, action.sizeQuantities, action.design, action.customPrice);
         case 'CLEAR_CART':
             return clearCart();
         default:
@@ -111,12 +164,12 @@ export const useCart = () => {
 
     const { setMessage } = useMessage();
 
-    const addItem = (product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign, customPrice?: number) => {
-        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity, custom, design, customPrice});
+    const addItem = (product: IProduct, color: string, sizeQuantities: ISize, custom: boolean, design?: IDesign, customPrice?: number) => {
+        if (dispatch) dispatch({type: "ADD_ITEM", product, color, sizeQuantities, custom, design, customPrice});
         if (setMessage) setMessage("Item added to cart");
     }
-    const removeItem = (product: IProduct, color: string, size: string, quantity: number) => {
-        if (dispatch) dispatch({type: "REMOVE_ITEM", product, color, size, quantity});
+    const removeItem = (product: IProduct, color: string, sizeQuantities: ISize, design?: IDesign, customPrice?: number) => {
+        if (dispatch) dispatch({type: "REMOVE_ITEM", product, color, sizeQuantities, design, customPrice});
         if (setMessage) setMessage("Item removed from cart");
     }
 
