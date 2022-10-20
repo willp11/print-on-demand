@@ -35,6 +35,7 @@ export async function getStaticProps() {
 
 export default function Customizer({products, fonts}: {products: IProduct[], fonts: Font[]}) {
 
+    // state
     const [showPreview, setShowPreview] = useState(false);
     const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
     const [showDesignsModal, setShowDesignsModal] = useState(false);
@@ -43,25 +44,43 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     const [showSelectProductModal, setShowSelectProductModal] = useState(false);
     const [editTextLayerMode, setEditTextLayerMode] = useState(false);
     const [editImgLayerMode, setEditImgLayerMode] = useState(false);
-    const [price, setPrice] = useState(10);
 
+    // get all the design info from the custom hook
     const {product, setProduct, color, layers, currentDesign, productSide} = useDesign();
 
+    // get the quantity of the product from the custom hook
     const {qty, updateQtyHandler} = useProductQty(product);
 
-    useEffect(()=>{
-        if (setProduct) setProduct(products[0]);
-    }, []);
+    // price is derived from the selected product base price + the total of all the layers
+    const price = useMemo(()=> {
+        let total = 0;
+        const pricePerSide = 2;
+        if (product && layers) {
+            const basePrice = product.price;
+            Object.values(layers).forEach(layersArr => {
+                if (layersArr.length > 0) total += pricePerSide;
+            })
+            return total;
+        }
+        return 0;
+    }, [])
 
+    // total is derived from price + quantity
     const total = useMemo(() => {
-        if (qty !== null) {
+        if (qty) {
             let total = 0;
             Object.keys(qty).map(size=>{
                 total += qty[size] * price;
             })
             return total;
-        } else return 0;
+        }
+        return 0;
     }, [qty, price]);
+
+    // set the product to the first product in the list as default
+    useEffect(()=>{
+        if (setProduct) setProduct(products[0]);
+    }, []);
 
     let disabledAddLayers = false;
     if (!layers || !productSide || layers[productSide].length >= 6) disabledAddLayers = true;

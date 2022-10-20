@@ -55,22 +55,26 @@ export const useDesign = () => {
 
     // add a layer
     const addLayer = (layer: ILayer) => {
-        let newLayers = {...layers};
-        if (typeof productSide === "string" && typeof layers !== "undefined") newLayers[productSide] = [...layers[productSide], layer];
-        if (setLayers && layers) setLayers(newLayers);
+        if (productSide && layers && setLayers) {
+            let newLayers = {...layers};
+            newLayers[productSide] = [...layers[productSide], layer];
+            setLayers(newLayers);
+        }
     }
 
     // remove a layer
     const removeLayer = (index: number) => {
-        if (setSelectedLayer) setSelectedLayer(null);
-        let newLayers = {...layers};
-        if (typeof productSide === "string" && typeof layers !== "undefined") newLayers[productSide].splice(index, 1);
-        if (setLayers && layers) setLayers(newLayers);
+        if (setSelectedLayer && productSide && layers && setLayers) {
+            setSelectedLayer(null);
+            let newLayers = {...layers};
+            newLayers[productSide].splice(index, 1);
+            setLayers(newLayers);
+        }
     }
 
     // update layer position on the canvas
     const updateLayerPosition = (movedX: number, movedY: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+        if (layers && productSide && selectedLayer && setLayers) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].xPos += movedX;
             newLayers[productSide][selectedLayer].yPos += movedY;
@@ -80,7 +84,7 @@ export const useDesign = () => {
 
     // update layer size on the canvas
     const updateLayerSize = (width: number, height: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+        if (layers && productSide && selectedLayer && setLayers) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].width = width;
             newLayers[productSide][selectedLayer].height = height;
@@ -90,7 +94,7 @@ export const useDesign = () => {
 
     // update layer rotation
     const updateLayerRotation = (angle: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+        if (layers && productSide && selectedLayer && setLayers) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].rotation = angle;
             setLayers(newLayers)
@@ -99,7 +103,7 @@ export const useDesign = () => {
 
     // update layer textSize
     const updateLayerTextSize = (textSize: number) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+        if (layers && productSide && selectedLayer && setLayers) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].textSize = textSize;
             setLayers(newLayers)
@@ -108,7 +112,7 @@ export const useDesign = () => {
 
     // move layer forward (draw later, so further back in layer array)
     const moveLayerForward = () => {
-        if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
+        if (layers && selectedLayer && productSide && setLayers && setSelectedLayer) {
             // ensure selected layer is not the furthest back already
             if (selectedLayer < layers[productSide].length - 1) {
                 // swap the layer with next one further back
@@ -122,7 +126,7 @@ export const useDesign = () => {
 
     // move layer backward (draw earlier, so further forward in layer array)
     const moveLayerBackward = () => {
-        if (layers !== undefined && selectedLayer !== null && selectedLayer !== undefined && productSide !== undefined && setLayers !== undefined && setSelectedLayer !== undefined) {
+        if (layers && selectedLayer && productSide && setLayers && setSelectedLayer) {
             // ensure selected layer is not the furthest back already
             if (selectedLayer > 0) {
                 // swap the layer with one further forward
@@ -137,7 +141,7 @@ export const useDesign = () => {
     // edit a text layer - textContent, font, color, fontSize, position, rotation
     // edit an image layer -  position, rotation
     const editLayer = (layer: ILayer) => {
-        if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null && setLayers !== undefined) {
+        if (layers && productSide && selectedLayer && setLayers) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer] = layer;
             setLayers(newLayers);
@@ -146,7 +150,7 @@ export const useDesign = () => {
 
     // save a new design
     const saveDesign = async (token: string, name: string, previews: object[]) => {
-        if (layers !== undefined && product !== undefined && product !== null && color !== undefined) {
+        if (layers && product && product && color) {
             let id = currentDesign?.id;
             try {
                 const res = await uploadDesign(token, product.id, color, name, layers, previews);
@@ -159,7 +163,7 @@ export const useDesign = () => {
 
     // update an existing design
     const updateDesign = async (token: string, name: string, previews: object[]) => {
-        if (layers !== undefined && product !== undefined && product !== null && color !== undefined && currentDesign !== null && currentDesign !== undefined) {
+        if (layers && product && product && color && currentDesign) {
             let id = currentDesign?.id;
             try {
                 const res = await uploadDesign(token, product.id, color, name, layers, previews, id);
