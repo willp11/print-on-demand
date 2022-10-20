@@ -82,11 +82,14 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
         if (setProduct) setProduct(products[0]);
     }, []);
 
+    // maximum 6 layers per side
     let disabledAddLayers = false;
     if (!layers || !productSide || layers[productSide].length >= 6) disabledAddLayers = true;
     
     return (
         <div className="p-1"> 
+
+            {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">
                 <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
                 <div className="px-2 flex flex-col items-center justify-start">
@@ -116,6 +119,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 }
             </div>
 
+            {/* Small screens only */}
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
                 <div className='flex'>
                     <div className="mr-4">
@@ -132,9 +136,11 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     <SelectProductColor />
                 </div>
 
+                {/* Edit Layers */}
                 {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />}
                 {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
 
+                {/* Edit layer is off - show select side and layer previews */}
                 {(!editTextLayerMode && !editImgLayerMode) && 
                     <>
                         <SelectSide />
@@ -150,6 +156,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     </>
                 }
 
+                {/* Canvas */}
                 <div>
                     <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
                     <div className="touch-none w-full flex justify-center">
@@ -159,6 +166,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     <AddToCart total={total} setShowSaveConfirmation={setShowSaveConfirmation} />
                 </div>
 
+                {/* Add layer and select product modals */}
                 {
                     showImageLayerModal && 
                     <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20">
@@ -181,13 +189,13 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                         </div>
                     </div>
                 }
-
                 {
                     showSelectProductModal && 
                     <SelectProductModal setShowSelectProductModal={setShowSelectProductModal} products={products} />
                 }
             </div>
             
+            {/* Load design, Save design and Add to cart modals */}
             {product && layers && showPreview && color &&
                 <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="save" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
             }
@@ -196,7 +204,9 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="addToCart" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
             }
             
-            {showDesignsModal && <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />}
+            {showDesignsModal && 
+                <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />
+            }
 
         </div>
     )

@@ -74,7 +74,7 @@ export const useDesign = () => {
 
     // update layer position on the canvas
     const updateLayerPosition = (movedX: number, movedY: number) => {
-        if (layers && productSide && selectedLayer && setLayers) {
+        if (layers && productSide && setLayers && selectedLayer !== null && selectedLayer !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].xPos += movedX;
             newLayers[productSide][selectedLayer].yPos += movedY;
@@ -84,7 +84,7 @@ export const useDesign = () => {
 
     // update layer size on the canvas
     const updateLayerSize = (width: number, height: number) => {
-        if (layers && productSide && selectedLayer && setLayers) {
+        if (layers && productSide && setLayers && selectedLayer !== null && selectedLayer !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].width = width;
             newLayers[productSide][selectedLayer].height = height;
@@ -94,7 +94,7 @@ export const useDesign = () => {
 
     // update layer rotation
     const updateLayerRotation = (angle: number) => {
-        if (layers && productSide && selectedLayer && setLayers) {
+        if (layers && productSide && setLayers && selectedLayer !== null && selectedLayer !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].rotation = angle;
             setLayers(newLayers)
@@ -103,7 +103,7 @@ export const useDesign = () => {
 
     // update layer textSize
     const updateLayerTextSize = (textSize: number) => {
-        if (layers && productSide && selectedLayer && setLayers) {
+        if (layers && productSide && setLayers && selectedLayer !== null && selectedLayer !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer].textSize = textSize;
             setLayers(newLayers)
@@ -112,7 +112,7 @@ export const useDesign = () => {
 
     // move layer forward (draw later, so further back in layer array)
     const moveLayerForward = () => {
-        if (layers && selectedLayer && productSide && setLayers && setSelectedLayer) {
+        if (layers && productSide && setLayers && setSelectedLayer && selectedLayer !== null && selectedLayer !== undefined) {
             // ensure selected layer is not the furthest back already
             if (selectedLayer < layers[productSide].length - 1) {
                 // swap the layer with next one further back
@@ -126,7 +126,7 @@ export const useDesign = () => {
 
     // move layer backward (draw earlier, so further forward in layer array)
     const moveLayerBackward = () => {
-        if (layers && selectedLayer && productSide && setLayers && setSelectedLayer) {
+        if (layers && productSide && setLayers && setSelectedLayer && selectedLayer !== null && selectedLayer !== undefined) {
             // ensure selected layer is not the furthest back already
             if (selectedLayer > 0) {
                 // swap the layer with one further forward
@@ -141,7 +141,7 @@ export const useDesign = () => {
     // edit a text layer - textContent, font, color, fontSize, position, rotation
     // edit an image layer -  position, rotation
     const editLayer = (layer: ILayer) => {
-        if (layers && productSide && selectedLayer && setLayers) {
+        if (layers && productSide && setLayers && selectedLayer !== null && selectedLayer !== undefined) {
             let newLayers = {...layers};
             newLayers[productSide][selectedLayer] = layer;
             setLayers(newLayers);
