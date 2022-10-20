@@ -222,10 +222,10 @@ export default function SketchCanvas() {
         }
 
         // PRINTABLE AREA
-        let printable_x_start = product.drawableArea[productSide].xPos * (canvasSize/500);
-        let printable_y_start = product.drawableArea[productSide].yPos * (canvasSize/500);
-        let printable_size_x = product.drawableArea[productSide].xSize * (canvasSize/500);
-        let printable_size_y = product.drawableArea[productSide].ySize * (canvasSize/500);
+        let printable_x_start = product?.drawableArea[productSide].xPos * (canvasSize/500);
+        let printable_y_start = product?.drawableArea[productSide].yPos * (canvasSize/500);
+        let printable_size_x = product?.drawableArea[productSide].xSize * (canvasSize/500);
+        let printable_size_y = product?.drawableArea[productSide].ySize * (canvasSize/500);
 
         if (selectedLayer !== null && selectedLayer !== undefined && activeLayerRef.current !== undefined) {
             // printable rectangle
