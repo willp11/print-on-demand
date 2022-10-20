@@ -12,11 +12,13 @@ export default function CartItem({item}: {item: ICartItem}) {
 
     const addItemHandler = () => {
         if (item.custom) {
-            addItem(item, item.color, item.size, 1, item.custom, item.design);
+            addItem(item, item.color, item.size, 1, item.custom, item.design, item.customPrice);
         } else {
             addItem(item, item.color, item.size, 1, item.custom);   
         }
     }
+
+    console.log(item)
 
     if (item.quantity > 0) {
         return (
@@ -38,12 +40,12 @@ export default function CartItem({item}: {item: ICartItem}) {
                             <MinusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-red-600 dark:hover:stroke-red-400" />
                         </div>
                         <p className="text-lg mx-4 dark:text-gray-100">{item.quantity}</p>
-                        <div onClick={()=>addItem(item, item.color, item.size, 1, item.custom)}>
+                        <div onClick={addItemHandler}>
                             <PlusIcon className="h-[20px] w-[20px] cursor-pointer dark:stroke-gray-200 hover:stroke-green-600 dark:hover:stroke-green-500" />
                         </div>
                         <div className="ml-8 flex items-center">
                             <p className="ml-8 mr-2 text-lg text-gray-500 dark:text-gray-400">x</p>
-                            <p className="text-lg font-semibold dark:text-gray-100">${item.price}</p>
+                            <p className="text-lg font-semibold dark:text-gray-100">${item.custom ? item.customPrice : item.price}</p>
                         </div>
                     </div>
                 </div>

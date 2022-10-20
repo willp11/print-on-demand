@@ -1,24 +1,32 @@
-import { useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { IDesign } from "../../types/design";
+import { ISize } from "../../types/size";
 import { useCart } from "../../hooks/useCart";
 
 interface IConfirmAddToCartProps {
     total: number, 
+    price: number,
+    qty: ISize | null,
     loading: boolean,
-    design: IDesign | null
+    design: IDesign | null,
+    setShowAddToCart: Dispatch<SetStateAction<boolean>>,
 }
 
-export default function ConfirmAddToCart({total, loading, design}: IConfirmAddToCartProps) {
+export default function ConfirmAddToCart({total, price, qty, loading, design, setShowAddToCart}: IConfirmAddToCartProps) {
 
     const {addItem} = useCart();
 
     const addToCartHandler = () => {
-        if (design) addItem(design.product, design.color, "S", 1, true, design)
+        // iterate over keys of qty object to get qty for each size, then add each to cart seperately
+        if (design && qty) {
+            Object.keys(qty).map(size=>{
+                if (qty[size] > 0) {
+                    addItem(design.product, design.color, size, qty[size], true, design, price);
+                }
+            })
+            setShowAddToCart(false);
+        }
     }
-
-    useEffect(()=>{
-        console.log(design)
-    }, [design])
 
     return (
         <div className="w-full border border-gray-300 p-2 m-2 flex justify-around items-center rounded">

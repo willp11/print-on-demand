@@ -8,7 +8,8 @@ export interface ICartItem extends IProduct {
     size: string,
     itemName: string,
     custom: boolean,
-    design?: IDesign
+    design?: IDesign,
+    customPrice?: number
 }
 
 export interface Cart {
@@ -24,7 +25,8 @@ export interface UpdateCartAction {
     size: string,
     quantity: number,
     custom: boolean,
-    design?: IDesign
+    design?: IDesign,
+    customPrice?: number
 }
 
 export interface ICartContext {

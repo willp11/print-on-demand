@@ -2,6 +2,7 @@ import DesignPreviewCanvas from '../../components/customizer/designPreviewCanvas
 import { IProduct } from '../../types/product';
 import { ILayer } from '../../types/design';
 import { IDesign } from '../../types/design';
+import { ISize } from '../../types/size';
 import { useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
 import { useDesign } from '../../hooks/useDesign';
 import { useUser } from '../../hooks/useUser';
@@ -18,11 +19,13 @@ interface DesignPreviewModalProps {
     color: string,
     setShowPreview: Dispatch<SetStateAction<boolean>>,
     from: 'save' | 'addToCart',
-    setShowSaveConfirmation: Dispatch<SetStateAction<boolean>>,
-    total: number
+    setShowAddToCart: Dispatch<SetStateAction<boolean>>,
+    total: number,
+    price: number,
+    qty: ISize | null
 }
 
-export default function DesignPreviewModal({product, layers, color, setShowPreview, from, setShowSaveConfirmation, total}: DesignPreviewModalProps) {
+export default function DesignPreviewModal({product, layers, color, setShowPreview, from, setShowAddToCart, total, price, qty}: DesignPreviewModalProps) {
 
     const [loading, setLoading] = useState(true);
     const { saveDesign, updateDesign, currentDesign } = useDesign();
@@ -162,7 +165,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                 <div className="relative bg-white w-full max-w-[600px] flex flex-col justify-center items-center p-4">
                     <XMarkIcon 
                         className="w-6 h-6 absolute top-2 right-2 cursor-pointer" 
-                        onClick={from === "save" ? ()=>setShowPreview(false) : ()=>setShowSaveConfirmation(false)}
+                        onClick={from === "save" ? ()=>setShowPreview(false) : ()=>setShowAddToCart(false)}
                     />
                     <h2 className="text-4xl font-bold pb-2">Preview</h2>
                     <div className={
@@ -189,7 +192,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                     {!loading && <div className="flex">{sideBtns}</div>}
 
                     {from === "save" && <SaveDesignBtns loading={loading} designName={designName} setDesignName={setDesignName} saveHandler={saveHandler} currentDesign={currentDesign} /> }
-                    {from === "addToCart" && <ConfirmAddToCart total={total} loading={loading} design={design} />}
+                    {from === "addToCart" && <ConfirmAddToCart total={total} price={price} qty={qty} loading={loading} design={design} setShowAddToCart={setShowAddToCart} />}
 
                     {errorMsg && <p className="text-red-500 text-sm font-semibold mt-2">{errorMsg}</p>}
                     {successMsg && <p className="text-green-500 text-sm font-semibold mt-2">{successMsg}</p>}

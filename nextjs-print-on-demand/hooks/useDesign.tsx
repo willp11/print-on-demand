@@ -151,7 +151,6 @@ export const useDesign = () => {
     // save a new design
     const saveDesign = async (token: string, name: string, previews: object[]) => {
         if (layers && product && product && color) {
-            let id = currentDesign?.id;
             try {
                 const res = await uploadDesign(token, product.id, color, name, layers, previews);
                 if (res) return res;

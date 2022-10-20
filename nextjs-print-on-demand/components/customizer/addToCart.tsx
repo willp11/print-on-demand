@@ -1,6 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 
-export default function AddToCart({total, setShowSaveConfirmation}: {total: number, setShowSaveConfirmation: Dispatch<SetStateAction<boolean>>}) {
+interface IAddToCartProps {
+    total: number;
+    setShowAddToCart: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function AddToCart({total, setShowAddToCart}: IAddToCartProps) {
 
     let className="btn w-32 cursor-pointer";
     if (total === 0) className="btn w-32 cursor-not-allowed";
@@ -10,7 +15,7 @@ export default function AddToCart({total, setShowSaveConfirmation}: {total: numb
             <p className="ml-4 text-xl font-bold">
                 Total: ${total.toFixed(2)}
             </p>
-            <button disabled={total === 0} className={className} onClick={()=>setShowSaveConfirmation(true)}>Add to cart</button>
+            <button disabled={total === 0} className={className} onClick={()=>setShowAddToCart(true)}>Add to cart</button>
         </div>
     )
 }

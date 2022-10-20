@@ -37,7 +37,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
 
     // state
     const [showPreview, setShowPreview] = useState(false);
-    const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
+    const [showSaveConfirmation, setShowAddToCart] = useState(false);
     const [showDesignsModal, setShowDesignsModal] = useState(false);
     const [showImageLayerModal, setShowImageLayerModal] = useState(false);
     const [showTextLayerModal, setShowTextLayerModal] = useState(false);
@@ -57,13 +57,15 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
         const pricePerSide = 2;
         if (product && layers) {
             const basePrice = product.price;
+            total += basePrice;
+            console.log(layers)
             Object.values(layers).forEach(layersArr => {
                 if (layersArr.length > 0) total += pricePerSide;
             })
             return total;
         }
         return 0;
-    }, [])
+    }, [product, layers])
 
     // total is derived from price + quantity
     const total = useMemo(() => {
@@ -99,7 +101,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     </div>
                     {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
                     <div className="w-full">
-                        <AddToCart total={total} setShowSaveConfirmation={setShowSaveConfirmation}/>
+                        <AddToCart total={total} setShowAddToCart={setShowAddToCart}/>
                     </div>
                 </div>
 
@@ -156,14 +158,14 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     </>
                 }
 
-                {/* Canvas */}
+                {/* Canvas, select quantity and add to cart */}
                 <div>
                     <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
                     <div className="touch-none w-full flex justify-center">
                         <SketchCanvas />
                     </div>
                     {updateQtyHandler !== null && <SelectQuantity updateQtyHandler={updateQtyHandler} /> }
-                    <AddToCart total={total} setShowSaveConfirmation={setShowSaveConfirmation} />
+                    <AddToCart total={total} setShowAddToCart={setShowAddToCart} />
                 </div>
 
                 {/* Add layer and select product modals */}
@@ -197,11 +199,11 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
             
             {/* Load design, Save design and Add to cart modals */}
             {product && layers && showPreview && color &&
-                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="save" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="save" setShowAddToCart={setShowAddToCart} total={total} price={price} qty={qty} />
             }
 
             {product && layers && showSaveConfirmation && color &&
-                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="addToCart" setShowSaveConfirmation={setShowSaveConfirmation} total={total} />
+                <DesignPreviewModal product={product} layers={layers} color={color} setShowPreview={setShowPreview} from="addToCart" setShowAddToCart={setShowAddToCart} total={total} price={price} qty={qty} />
             }
             
             {showDesignsModal && 

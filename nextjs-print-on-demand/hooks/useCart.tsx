@@ -11,7 +11,7 @@ const initialCart: Cart = {
     total_qty: 0
 }
 
-const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign) => {
+const addItem = (state: Cart, product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign, customPrice?: number) => {
     let itemName = `${product.name} - ${color.toUpperCase()} - ${size}`;
     let item = state?.items?.[itemName];
     if (item) {
@@ -25,7 +25,10 @@ const addItem = (state: Cart, product: IProduct, color: string, size: string, qu
             itemName,
             custom
         }
-        if (design) item.design = design;
+        if (design && customPrice) {
+            item.design = design;
+            item.customPrice = Math.round(customPrice * 100) / 100;
+        }
     }
     let updatedCart = {
         ...state,
@@ -68,7 +71,7 @@ const clearCart = () => {
 const cartReducer: Reducer<Cart, UpdateCartAction> = (state: Cart, action: UpdateCartAction) => {
     switch (action.type) {
         case 'ADD_ITEM':
-            return addItem(state, action.product, action.color, action.size, action.quantity, action.custom, action.design);
+            return addItem(state, action.product, action.color, action.size, action.quantity, action.custom, action.design, action.customPrice);
         case 'REMOVE_ITEM':
             return removeItem(state, action.product, action.color, action.size, action.quantity);
         case 'CLEAR_CART':
@@ -108,8 +111,8 @@ export const useCart = () => {
 
     const { setMessage } = useMessage();
 
-    const addItem = (product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign) => {
-        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity, custom, design});
+    const addItem = (product: IProduct, color: string, size: string, quantity: number, custom: boolean, design?: IDesign, customPrice?: number) => {
+        if (dispatch) dispatch({type: "ADD_ITEM", product, color, size, quantity, custom, design, customPrice});
         if (setMessage) setMessage("Item added to cart");
     }
     const removeItem = (product: IProduct, color: string, size: string, quantity: number) => {
