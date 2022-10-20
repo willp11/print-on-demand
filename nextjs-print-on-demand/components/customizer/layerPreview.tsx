@@ -39,7 +39,7 @@ export default function LayerPreview({layer, index, setEditTextLayerMode, setEdi
         if (selectedLayer === index) className="relative flex items-center justify-center p-2 border-2 border-blue-600 w-[100px] h-[100px] cursor-pointer";
         return (
             <div className={className}>
-                <div style={{width: width, height: height}} className="relative" onClick={()=>selectLayerHandler(index)}>
+                <div style={{width: width, height: height}} className="relative flex justify-center items-center" onClick={()=>selectLayerHandler(index)}>
                     <img src={layer?.image} className="object-contain" />
                 </div>
                 {selectedLayer === index && <PencilSquareIcon onClick={()=>setEditImgLayerMode(true)} className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}

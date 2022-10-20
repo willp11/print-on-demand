@@ -95,11 +95,11 @@ const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantitie
     let itemIdentifier = getIdentifier(itemName, color, design);
 
     let item = state?.items?.[itemIdentifier];
-    let itemQty = 0;
     if (item) {
         Object.keys(sizeQuantities).forEach(size => {
-            item.sizeQuantities[size] -= sizeQuantities[size];
-            itemQty += item.sizeQuantities[size];
+            if (item.sizeQuantities[size] > 0) {
+                item.sizeQuantities[size] -= sizeQuantities[size];
+            }
         })
     } else return state; // item not found in cart, return state
 
@@ -112,6 +112,8 @@ const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantitie
     const updatedCart = updateCartItems(state, item, itemIdentifier);
 
     // remove from cart if it hit 0 quantity on all sizes
+    let itemQty = 0;
+    Object.values(item.sizeQuantities).forEach(qty => itemQty += qty);
     if (itemQty === 0) delete updatedCart.items[itemIdentifier];
 
     return updatedCart;
