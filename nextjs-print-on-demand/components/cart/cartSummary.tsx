@@ -4,10 +4,13 @@ import {useState, useEffect} from 'react';
 // import getStripe from '../../utils/get-stripe';
 // import axios from 'axios';
 import Spinner from "../ui/spinner";
+import { useUser } from "../../hooks/useUser";
+import { createOrder } from "../../utils/api";
 
 export default function CartSummary({showSummary}: {showSummary: boolean}) {
 
     const {cart, clearCart} = useCart();
+    const {token} = useUser();
 
     const [isSSR, setIsSSR] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +18,12 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
     useEffect(() => {
         setIsSSR(false);
     }, []);
+
+    const createOrderHandler = () => {
+        if (cart) {
+            createOrder(token, "test-stripe", cart);
+        }
+    }
 
     // const redirectToCheckout = async () => {
     //     if (typeof cart !== "undefined") {
@@ -64,6 +73,7 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                 <button 
                     className={`p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
                     // onClick={redirectToCheckout}
+                    onClick={createOrderHandler}
                     disabled={cart?.total_qty === 0}
                 >
                     CHECKOUT

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IDesign, ILayer } from "../types/design";
-import { getBase64 } from "./customizer";
+import { Cart } from "../types/cart";
 
 export const imageApiPrefix = 'http://localhost:8000';
 
@@ -137,6 +137,63 @@ export const fetchDesigns = async (token: string) => {
             designs.push(design);
         })
         return designs;
+    } catch(e) {
+        console.log(e);
+        return null;
+    }
+}
+
+export const createOrder = async (token: string | undefined, stripeId: string, cart: Cart) => {
+
+    // for every item in cart, create a separate order item for every size
+    let items = [];
+    for (const key in cart.items) {
+        const cartItem = cart.items[key];
+        for (const size in cartItem.sizeQuantities) {
+            if (cartItem.sizeQuantities[size] > 0) {
+                let design = cartItem.design;
+                let item;
+
+                // NOTE - got weird bug where design field in item obj was null when updating a design data variable to pass into item 
+                // but create item object verbosely works
+                if (design) {
+                    let layers = transformLayers(design.layers);
+                    item = {
+                        product: cartItem.id,
+                        design: {...cartItem.design, layers},
+                        size: size,
+                        color: cartItem.color,
+                        quantity: cartItem.sizeQuantities[size]
+                    }
+                } else {
+                    item = {
+                        product: cartItem.id,
+                        design: null,
+                        size: size,
+                        color: cartItem.color,
+                        quantity: cartItem.sizeQuantities[size]
+                    }
+                }
+                
+                console.log(item)
+                items.push(item)
+            }
+        }
+    }
+    console.log(items);
+    const url = `${imageApiPrefix}/api/v1/create-order/`;
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + token
+    }
+    const data = {
+        order: {stripeId},
+        items: items
+    }
+    try {
+        const res = await axios.post(url, data, {headers: headers});
+        console.log(res);
+        return res.data;
     } catch(e) {
         console.log(e);
         return null;

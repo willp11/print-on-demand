@@ -68,7 +68,6 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
 
     // total is derived from price + quantity
     const total = useMemo(() => {
-        console.log(qty)
         if (qty) {
             let total = 0;
             Object.keys(qty).map(size=>{
