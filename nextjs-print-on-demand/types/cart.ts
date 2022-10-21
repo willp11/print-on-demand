@@ -10,7 +10,8 @@ export interface ICartItem extends IProduct {
     itemName: string,
     custom: boolean,
     design?: IDesign,
-    customPrice?: number
+    customPrice?: number,
+    totalQty: number,
 }
 
 export interface Cart {

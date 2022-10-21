@@ -1,8 +1,8 @@
 import { useCart } from "../../hooks/useCart";
 import CartItem from "./cartItem";
 import {useState, useEffect} from 'react';
-// import getStripe from '../../utils/get-stripe';
-// import axios from 'axios';
+import getStripe from '../../utils/get-stripe';
+import axios from 'axios';
 import Spinner from "../ui/spinner";
 import { useUser } from "../../hooks/useUser";
 import { createOrder } from "../../utils/api";
@@ -25,22 +25,40 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
         }
     }
 
-    // const redirectToCheckout = async () => {
-    //     if (typeof cart !== "undefined") {
-    //         setIsLoading(true);
-    //         const {
-    //             data: { id },
-    //         } = await axios.post('/api/checkout_sessions', {
-    //             items: Object.entries(cart.items).map(([_, {stripeId, quantity}]) => ({
-    //                 price: stripeId,
-    //                 quantity
-    //             }))
-    //         })
-    //         const stripe = await getStripe();
-    //         await stripe.redirectToCheckout({sessionId: id});
-    //         setIsLoading(false);
-    //     }
-    // }
+    const redirectToCheckout = async () => {
+        if (typeof cart !== "undefined") {
+            setIsLoading(true);
+
+            // TO DO
+            // Add types to line items
+
+            try {
+                const lineItems = [];
+                Object.keys(cart.items).map(key=>{
+                    let item = cart.items[key];
+                    let price = item.customPrice ? item.customPrice : item.price;
+                    lineItems.push({
+                        price_data: {
+                            unit_amount: price * 100,
+                            currency: 'usd',
+                            product: "prod_MebyqVT2sUkIre",
+                        },
+                        quantity: item.totalQty
+                    })
+                })
+                console.log(lineItems);
+                const {
+                    data: { id },
+                } = await axios.post('/api/checkout_sessions', {items: lineItems} )
+                const stripe = await getStripe();
+                await stripe.redirectToCheckout({sessionId: id});
+            } catch(e) {
+                console.log(e);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    }
 
     let cartItems = null;
     if (cart) {
@@ -72,8 +90,8 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                 </div>}
                 <button 
                     className={`p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
-                    // onClick={redirectToCheckout}
-                    onClick={createOrderHandler}
+                    onClick={redirectToCheckout}
+                    // onClick={createOrderHandler}
                     disabled={cart?.total_qty === 0}
                 >
                     CHECKOUT

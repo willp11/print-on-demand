@@ -59,11 +59,14 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
     let itemIdentifier = getIdentifier(itemName, color, design);
 
     let item = state?.items?.[itemIdentifier];
+    let totalQty = 0;
 
     if (item) {
         Object.keys(sizeQuantities).forEach(size => {
             item.sizeQuantities[size] += sizeQuantities[size];
+            totalQty += sizeQuantities[size];
         })
+        item.totalQty = totalQty;
     } else {
         item = {
             ...product,
@@ -71,7 +74,8 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
             color,
             sizeQuantities,
             itemName,
-            custom
+            custom,
+            totalQty
         }
         if (design && customPrice) {
             item.design = design;
@@ -95,13 +99,17 @@ const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantitie
     let itemIdentifier = getIdentifier(itemName, color, design);
 
     let item = state?.items?.[itemIdentifier];
+    let totalQty = 0;
     if (item) {
         Object.keys(sizeQuantities).forEach(size => {
             if (item.sizeQuantities[size] > 0) {
                 item.sizeQuantities[size] -= sizeQuantities[size];
+                totalQty += sizeQuantities[size];
             }
         })
     } else return state; // item not found in cart, return state
+
+    item.totalQty = totalQty;
 
     // get the total value of the item
     const itemPrice = customPrice ? customPrice : product.price;
