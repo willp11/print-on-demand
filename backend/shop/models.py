@@ -175,6 +175,7 @@ class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
     stripeId = models.CharField(max_length=128)
+    total = models.FloatField(null=True)
     paid = models.BooleanField(default=False)
     posted = models.BooleanField(default=False)
     delivered = models.BooleanField(default=False)
@@ -191,3 +192,10 @@ class OrderItem(models.Model):
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='order_items')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='order_items')
     quantity = models.IntegerField()
+    subtotal = models.FloatField()
+
+    def __str__(self):
+        if self.design != None:
+            return f'custom {self.product.name} {self.size.size} {self.color.color}'
+        else:
+            return f'blank {self.product.name} {self.size.size} {self.color.color}'

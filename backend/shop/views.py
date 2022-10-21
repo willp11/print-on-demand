@@ -114,22 +114,52 @@ class OrderCreateView(APIView):
         serializer = OrderCreateSerializer(data=request.data["order"])
         if serializer.is_valid():
             if request.user.is_authenticated:
-                serializer.save(user=request.user)
+                serializer.save(user=request.user, userEmail=request.user.email)
             else:
                 serializer.save()
 
             try:
                 # create the order item instances - if any not valid, delete the order instance
+                order_total = 0
                 for item in request.data["items"]:
                     design_id = None
+
+                    # get the base price of the product
+                    product = get_object_or_404(Product, pk=item["product"])
+                    price = product.price
                     if item["design"] != None:
                         # create the design instance - we don't want to save the design to the user or we get a new design saved to the user every time they order
                         tryCreateDesign = createDesign(None, item["design"], item["product"], item["color"], item["design"]["previews"], item["design"]["layers"])
-                        design_id = tryCreateDesign["design"].id
+
                         # rollback the order instance if the design instance is not valid
                         if tryCreateDesign["message"] == "fail":
                             serializer.instance.delete()
                             return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+
+                        # succesfully created the design instance
+                        design = tryCreateDesign["design"]
+                        design_id = design.id
+
+                        # check the layer data to calculate the price of custom design
+                        front, back, left, right = [], [], [], []
+                        for layer in item["design"]["layers"]:
+                            if layer["side"] == "front":
+                                front.append(layer)
+                            elif layer["side"] == "back":
+                                back.append(layer)
+                            elif layer["side"] == "left":
+                                left.append(layer)
+                            elif layer["side"] == "right":
+                                right.append(layer)
+                        price_per_side = 2
+                        if len(front) > 0:
+                            price += price_per_side
+                        if len(back) > 0:
+                            price += price_per_side
+                        if len(left) > 0:
+                            price += price_per_side
+                        if len(right) > 0:
+                            price += price_per_side
 
                     # get the size, color instances
                     size = get_object_or_404(Size, product=item["product"], size=item["size"],)
@@ -141,15 +171,19 @@ class OrderCreateView(APIView):
                         "design": design_id,
                         "size": size.id,
                         "color": color.id,
-                        "quantity": item["quantity"]
+                        "quantity": item["quantity"],
+                        "subtotal": round(price * item["quantity"], 2)
                     }
 
+                    order_total += item_data["subtotal"]
                     item_serializer = OrderItemSerializer(data=item_data)
                     if item_serializer.is_valid():
                         item_serializer.save(order=serializer.instance)
                     else:
                         serializer.instance.delete()
                         return Response(item_serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+                serializer.save(total=round(order_total, 2))
                 return Response(serializer.data, status=HTTP_200_OK)
             except:
                 serializer.instance.delete()
