@@ -121,11 +121,15 @@ class OrderCreateView(APIView):
             try:
                 # create the order item instances - if any not valid, delete the order instance
                 for item in request.data["items"]:
-                    # create the design instance - we don't want to save the design to the user or we get a new design saved to the user every time they order
-                    tryCreateDesign = createDesign(None, item["design"], item["product"], item["color"], item["design"]["previews"], item["design"]["layers"])
-                    if tryCreateDesign["message"] == "fail":
-                        serializer.instance.delete()
-                        return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+                    design_id = None
+                    if item["design"] != None:
+                        # create the design instance - we don't want to save the design to the user or we get a new design saved to the user every time they order
+                        tryCreateDesign = createDesign(None, item["design"], item["product"], item["color"], item["design"]["previews"], item["design"]["layers"])
+                        design_id = tryCreateDesign["design"].id
+                        # rollback the order instance if the design instance is not valid
+                        if tryCreateDesign["message"] == "fail":
+                            serializer.instance.delete()
+                            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
 
                     # get the size, color instances
                     size = get_object_or_404(Size, product=item["product"], size=item["size"],)
@@ -134,7 +138,7 @@ class OrderCreateView(APIView):
                     item_data = {
                         "order": serializer.instance.id,
                         "product": item["product"],
-                        "design": tryCreateDesign["design"].id,
+                        "design": design_id,
                         "size": size.id,
                         "color": color.id,
                         "quantity": item["quantity"]

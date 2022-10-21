@@ -168,21 +168,18 @@ class DeliveryAddress(models.Model):
     phone = models.CharField(max_length=16)
 
 class Order(models.Model):
-    # class DeliveryStatus(models.TextChoices):
-    #     PENDING = 'pending', ('pending')
-    #     IN_PROGRESS = 'in_progress', ('in_progress')
-    #     DELIVERED = 'delivered', ('delivered')
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     stripeId = models.CharField(max_length=128)
     paid = models.BooleanField(default=False)
-    # deliveryStatus = models.BooleanField(choices=DeliveryStatus.choices, default=DeliveryStatus.PENDING)
+    posted = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
     deliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.CASCADE, null=True)
     userEmail = models.EmailField(null=True)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='order_items')
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='order_items', null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='order_items')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='order_items')
     quantity = models.IntegerField()
