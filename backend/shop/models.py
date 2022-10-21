@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+import datetime
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -110,7 +111,10 @@ class Design(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.name} by {self.user.email}'
+        if self.user != None:
+            return f'{self.name} by {self.user.email}'
+        else:
+            return f'{self.name} by anonymous'
 
 class Layer(models.Model):
     class Side(models.TextChoices):
@@ -168,18 +172,22 @@ class DeliveryAddress(models.Model):
     phone = models.CharField(max_length=16)
 
 class Order(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
     stripeId = models.CharField(max_length=128)
     paid = models.BooleanField(default=False)
     posted = models.BooleanField(default=False)
     delivered = models.BooleanField(default=False)
-    deliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.CASCADE, null=True)
+    deliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.CASCADE, null=True, blank=True)
     userEmail = models.EmailField(null=True)
+
+    def __str__(self):
+        return self.stripeId
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='order_items', null=True)
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='order_items', null=True, blank=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='order_items')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='order_items')
     quantity = models.IntegerField()
