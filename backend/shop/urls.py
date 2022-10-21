@@ -8,5 +8,6 @@ urlpatterns = [
     path('create-design/', DesignCreateView.as_view(), name="create_design"),
     path('fonts/', FontListView.as_view(), name='fonts'),
     path('preview/', PreviewCreateView.as_view(), name='preview'),
-    path('get-designs/', DesignListView.as_view(), name='get_designs')
+    path('get-designs/', DesignListView.as_view(), name='get_designs'),
+    path('create-order/', OrderCreateView.as_view(), name='create_order')
 ]

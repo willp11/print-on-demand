@@ -52,6 +52,11 @@ class DesignCreateSerializer(ModelSerializer):
         model = Design
         fields = ('user', 'name')
 
+class AnonDesignCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Design
+        fields = ('name',)
+
 class TextLayerCreateSerializer(ModelSerializer):
     class Meta:
         model = Layer
@@ -80,3 +85,13 @@ class DesignGetSerializer(ModelSerializer):
     class Meta:
         model = Design
         fields = ('id', 'name', 'layers', 'previews')
+
+class OrderCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('stripeId', )
+
+class OrderItemSerializer(ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'

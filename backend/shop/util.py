@@ -74,29 +74,35 @@ def layersAreValid(layer_serializers):
             return False
     return True
 
-def createDesign(request):
-    design_data = request.data["design"]
-    design_data["user"] = request.user.pk
-    design_serializer = DesignCreateSerializer(data=design_data)
-    preview_serializer = PreviewSerializer(data=request.data["previews"], many=True)
-    product = get_object_or_404(Product, pk=request.data["product"])
-    color = get_object_or_404(Color, product=product, color=request.data["color"])
+# data should have the following fields: design, product, color, previews, layers
+def createDesign(user, design_data, product_id, color, previews_data, layers_data):
+    if user == None:
+        design_serializer = AnonDesignCreateSerializer(data=design_data)
+    else:
+        if user.is_authenticated:
+            design_data["user"] = user.pk
+            design_serializer = DesignCreateSerializer(data=design_data)
+
+    preview_serializer = PreviewSerializer(data=previews_data, many=True)
+    product = get_object_or_404(Product, pk=product_id)
+    color = get_object_or_404(Color, product=product, color=color)
+
     if design_serializer.is_valid() and preview_serializer.is_valid():
         design = design_serializer.save(product=product, color=color)
         preview_serializer.save(design=design)
-        layer_serializers = serializerLayers(design, request.data["layers"])
+        layer_serializers = serializerLayers(design, layers_data)
         valid_layers = layersAreValid(layer_serializers)
         if valid_layers == True:
             for layer_serializer in layer_serializers:
                 layer_serializer.save()
             design_data = DesignGetSerializer(design).data
-            return Response({"message":"success", "design": design_data}, status=HTTP_200_OK)
+            return {"message": "success", "design": design}
         else:
             # if we have any invalid layer, delete the design and will cascade and delete all the layers too
             design.delete()
-            return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+            return {"message": "fail"}
     else:
-        return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+        return {"message": "fail"}
 
 def updateDesign(request):
     try:
