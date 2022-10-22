@@ -21,6 +21,7 @@ import LoadDesignModal from '../../components/customizer/loadDesignModal';
 import AddToCart from '../../components/customizer/addToCart';
 import { useProductQty } from '../../hooks/useProductQty';
 import SelectQuantity  from '../../components/products/selectQuantity';
+import SelectProduct from '../../components/customizer/selectProduct';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -122,19 +123,19 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
 
             {/* Small screens only */}
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
-                <div className='flex'>
+                <div className='w-full flex justify-left'>
                     <div className="mr-4">
                         <LoadDesign setShowDesigns={setShowDesignsModal} />
                     </div>
-                    <SaveDesign setShowPreview={setShowPreview} />
-                </div>
-
-                <div className="flex">
                     <div className="mr-4">
-                        <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
-                        <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                        <SaveDesign setShowPreview={setShowPreview} />
                     </div>
-                    <SelectProductColor />
+                    <div className="mr-4">
+                        <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
+                    </div>
+                    <div className="mr-4">
+                        <SelectProductColor />
+                    </div>
                 </div>
 
                 {/* Edit Layers */}
@@ -143,8 +144,11 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
 
                 {/* Edit layer is off - show select side and layer previews */}
                 {(!editTextLayerMode && !editImgLayerMode) && 
-                    <>
-                        <SelectSide />
+                    <div>
+                        <div className="my-2">
+                            <SelectSide />
+                        </div>
+    
                         <div>
                             <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Layer</h2>
                             <button disabled={disabledAddLayers} className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
@@ -154,7 +158,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                         <div className="min-h-[100px]">
                             <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
                         </div>
-                    </>
+                    </div>
                 }
 
                 {/* Canvas, select quantity and add to cart */}

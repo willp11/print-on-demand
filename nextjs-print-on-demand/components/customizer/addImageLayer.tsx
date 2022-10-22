@@ -81,6 +81,13 @@ export default function AddImageLayer() {
         }
     }
 
+
+    let disabled = errorMsg === "Invalid file type" || layerImage === null;
+    let cursor = "cursor-pointer";
+    if (disabled) {
+        cursor = "cursor-not-allowed"
+    }
+
     return (
         <div className="flex">
             <div className="flex flex-col">
@@ -98,8 +105,8 @@ export default function AddImageLayer() {
                     />
                 </label>
                 <button
-                    disabled={errorMsg === "Invalid file type"}
-                    className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1" 
+                    disabled={disabled}
+                    className={`border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1 ${cursor}`}
                     onClick={addImageLayer}
                 >
                     Add Layer

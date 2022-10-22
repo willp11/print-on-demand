@@ -63,7 +63,6 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
 
                 // send order to backend with session id
                 const orderRes = await createOrderHandler(id);
-                console.log(orderRes)
                 if (orderRes?.message === "success") {
                     // redirect to stripe
                     const stripe = await getStripe();

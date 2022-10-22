@@ -4,6 +4,7 @@ import SelectProductColor from "./selectProductColor";
 import SaveDesign from "./saveDesign";
 import LoadDesign from "./loadDesign";
 import { Dispatch, SetStateAction } from "react";
+import SelectProduct from "./selectProduct";
 
 interface ILeftMenuProps {
     setShowSelectProductModal: Dispatch<SetStateAction<boolean>>, 
@@ -15,17 +16,24 @@ export default function LeftMenu({setShowSelectProductModal, setShowPreview, set
 
     return (
         <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
-            <div className="border-b border-gray-400 pb-4">
+            {/* <div className="border-b border-gray-400 pb-4">
                 <LoadDesign setShowDesigns={setShowDesigns} />
             </div>
             <div className="border-b border-gray-400 pb-4">
                 <SaveDesign setShowPreview={setShowPreview} />
             </div>
             <div className="border-b border-gray-400 pt-2 pb-4">
-                <h2 className="text-base lg:text-lg font-bold tracking-tight">Product</h2>
-                <button className="border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded" onClick={()=>setShowSelectProductModal(true)}>Select</button>
+                <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
+            </div> */}
+            {/* <div className="border-b border-gray-400 pt-2 pb-4">
+                <SelectProductColor />
+            </div> */}
+            <div className="w-full flex justify-between p-2 border border-gray-100 rounded-md">
+                <LoadDesign setShowDesigns={setShowDesigns} />
+                <SaveDesign setShowPreview={setShowPreview} />
+                <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
             </div>
-            <div className="border-b border-gray-400 pt-2 pb-4">
+            <div className="w-full p-2 border border-gray-100 rounded-md">
                 <SelectProductColor />
             </div>
             <div className="border-b border-gray-400 pt-2 pb-4">

@@ -10,7 +10,7 @@ export default function Account() {
 
     return (
         <div className="w-full p-1">
-            <div className="min-h-[500px] w-full flex justify-start border border-gray-300 rounded-md shadow-md my-4 overflow-y-auto">
+            <div className="h-[500px] w-full flex justify-start border border-gray-300 rounded-md shadow-md my-4">
                 <AccountMenu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 {(selectedIndex === 0) && <AccountDetails />}
                 {(selectedIndex === 1) && <MyOrders />}

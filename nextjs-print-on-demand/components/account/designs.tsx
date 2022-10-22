@@ -25,7 +25,7 @@ export default function Designs({setShowDesignsModal}: IDesignsProps) {
 
     if (designs.length !== 0) {
         return (
-            <div>
+            <div className="w-full h-[500px] overflow-y-auto">
                 {designs.map((design, i) => <Design key={i} design={design} setShowDesignsModal={setShowDesignsModal} />)}
             </div>
         )

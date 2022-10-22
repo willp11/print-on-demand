@@ -1,21 +1,13 @@
 import { useRouter } from "next/router";
-// import useSWR from "swr";
 import { useEffect, useState } from "react";
-// import { useCart } from "../hooks/useCart";
+import { useCart } from "../../hooks/useCart";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import axios from 'axios';
 
 export default function Success() {
     const { query: { session_id } } = useRouter();
 
-    // const {clearCartOnSuccess} = useCart();
-
-    // const fetcher = (url : string) => axios.get(url).then(res => res.data);
-
-    // const { data, error } = useSWR(
-    //     () => `/api/checkout_sessions/${session_id}`,
-    //     fetcher
-    // )
+    const {clearCartOnSuccess} = useCart();
 
     const [data, setData] = useState();
     const [error, setError] = useState();

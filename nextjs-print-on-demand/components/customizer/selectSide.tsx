@@ -14,15 +14,14 @@ interface ISideProps {
 const Side = ({product, side, color, selected}: ISideProps) => {
     let src = `${imageApiPrefix}${product.colors[color][side]}`;
     if (src !== undefined) {
-        let className = "flex flex-col items-center border border-gray-300 rounded cursor-pointer hover:border-gray-500 min-w-[60px]";
-        if (selected) className = "flex flex-col items-center border-2 border-blue-600 rounded cursor-pointer min-w-[60px]";
-        let imgClassName = "hidden lg:block relative w-[100px] h-[100px] border border-gray-300 hover:border-gray-500";
-        if (selected) imgClassName = "hidden lg:block relative w-[100px] h-[100px] border-2 border-t-0 border-blue-600"
+        let border = selected ? "border-2 border-blue-600" : "border border-gray-300 hover:border-gray-500";
+        let imgBorder = selected ? "border-2 border-t-0 border-blue-600" : "border border-gray-300 hover:border-gray-500";
+
         return (
             <div
-                className={className}
+                className={`flex flex-col items-center rounded cursor-pointer min-w-[60px] ${border}`}
             >
-                <div className={imgClassName}>
+                <div className={`hidden lg:block relative w-[100px] h-[100px] ${imgBorder}`}>
                     <Image
                         src={src}
                         layout="fill"
@@ -48,8 +47,8 @@ export default function SelectSide() {
     }
 
     return (
-        <div className="w-[100px] flex flex-col justify-center lg:justify-start">
-            <h2 className="text-base lg:text-lg font-bold tracking-tight">Select Side</h2>
+        <div className="w-full lg:w-[100px] flex flex-col justify-center lg:justify-start">
+            <h2 className="text-sm text-gray-500 font-semibold">Side</h2>
             <div className="flex lg:flex-col">
                 <div onClick={()=>setSideHandler("front")}>
                     {product && color ? <Side product={product} side="front" color={color} selected={productSide === "front"} /> : null}
