@@ -20,14 +20,14 @@ export default function Success() {
     const [data, setData] = useState();
     const [error, setError] = useState();
 
-    // useEffect(()=>{
-    //     if (typeof session_id !== "undefined") {
-    //         axios.get(`/api/checkout_sessions/${session_id}`).then(res=>{
-    //             setData(res.data);
-    //             console.log(res);
-    //         }).catch(err=>setError(err))
-    //     }
-    // }, [session_id])
+    useEffect(()=>{
+        if (typeof session_id !== "undefined") {
+            axios.get(`/api/checkout_sessions/${session_id}`).then(res=>{
+                setData(res.data);
+                console.log(res);
+            }).catch(err=>setError(err))
+        }
+    }, [session_id])
 
     // useEffect(()=>{
     //     clearCartOnSuccess();

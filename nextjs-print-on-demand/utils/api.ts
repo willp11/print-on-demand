@@ -112,6 +112,7 @@ export const fetchProducts = async () => {
     }
 }
 
+// get all designs for user
 export const fetchDesigns = async (token: string) => {
     const url = `${imageApiPrefix}/api/v1/get-designs/`;
     const headers = {
@@ -143,8 +144,8 @@ export const fetchDesigns = async (token: string) => {
     }
 }
 
+// create new unprocessed order
 export const createOrder = async (token: string | undefined, stripeId: string, cart: Cart) => {
-
     // for every item in cart, create a separate order item for every size
     let items = [];
     for (const key in cart.items) {
@@ -174,13 +175,10 @@ export const createOrder = async (token: string | undefined, stripeId: string, c
                         quantity: cartItem.sizeQuantities[size]
                     }
                 }
-                
-                console.log(item)
                 items.push(item)
             }
         }
     }
-    console.log(items);
     const url = `${imageApiPrefix}/api/v1/create-order/`;
     const headers = {
         "Content-Type": "application/json",
@@ -192,7 +190,6 @@ export const createOrder = async (token: string | undefined, stripeId: string, c
     }
     try {
         const res = await axios.post(url, data, {headers: headers});
-        console.log(res);
         return res.data;
     } catch(e) {
         console.log(e);

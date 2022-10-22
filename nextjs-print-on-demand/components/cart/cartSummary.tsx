@@ -23,21 +23,26 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
 
     const [isSSR, setIsSSR] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         setIsSSR(false);
     }, []);
 
-    const createOrderHandler = () => {
+    // call function to create unpaid order on backend
+    const createOrderHandler = async (checkoutId: string) => {
         if (cart) {
-            createOrder(token, "test-stripe", cart);
+            const data = await createOrder(token, checkoutId, cart);
+            return data;
         }
     }
 
+    // Get the session Id from Stripe, send it to the backend, and redirect to checkout
     const redirectToCheckout = async () => {
         if (typeof cart !== "undefined") {
             setIsLoading(true);
             try {
+                // create line items for Stripe
                 const lineItems: ILineItem[] = [];
                 Object.keys(cart.items).map(key=>{
                     let item = cart.items[key];
@@ -51,12 +56,21 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                         quantity: item.totalQty
                     })
                 })
-                console.log(lineItems);
+                // get checkout session
                 const {
                     data: { id },
                 } = await axios.post('/api/checkout_sessions', {items: lineItems} )
-                const stripe = await getStripe();
-                await stripe.redirectToCheckout({sessionId: id});
+
+                // send order to backend with session id
+                const orderRes = await createOrderHandler(id);
+                console.log(orderRes)
+                if (orderRes?.message === "success") {
+                    // redirect to stripe
+                    const stripe = await getStripe();
+                    await stripe.redirectToCheckout({sessionId: id});
+                } else {
+                    setError("There was a problem placing your order, please try again.");
+                }
             } catch(e) {
                 console.log(e);
             } finally {
@@ -96,12 +110,12 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                 <button 
                     className={`p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
                     onClick={redirectToCheckout}
-                    // onClick={createOrderHandler}
                     disabled={cart?.total_qty === 0}
                 >
                     CHECKOUT
                     {isLoading && <div className="ml-2"><Spinner size="small" /></div>}
                 </button>
+                {error !== "" && <p className="text-xs text-red-500 font-semibold mt-2">{error}</p> }
             </div>
         )
     } else {

@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             const signature = req.headers['stripe-signature'];
+            console.log(signature);
             if (typeof signature === "string" && typeof process.env.STRIPE_WEBHOOK_SECRET === "string") {
                 const rawBody = await buffer(req);
 
