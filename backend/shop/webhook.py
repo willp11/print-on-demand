@@ -3,50 +3,11 @@ from django.views.decorators.csrf import csrf_exempt
 import stripe
 from .models import *
 from .serializers import *
+from .process_designs import process_design
 
-# Set your secret key. Remember to switch to your live secret key in production.
-# See your keys here: https://dashboard.stripe.com/apikeys
 stripe.api_key = 'sk_test_51LvIiIK3DYcQUrRXJJ7YFVHSmm30sLXtndAOA4YjZ9oTQcQFWUSCrI9HWa7CVPPb5kSpqwHNloeItLmm0M3w263200SWIMm0D1'
 
-
-# If you are testing your webhook locally with the Stripe CLI you
-# can find the endpoint's secret by running `stripe listen`
-# Otherwise, find your endpoint's secret in your webhook settings in the Developer Dashboard
 endpoint_secret = 'whsec_vLfcBvcXuiqpq2kRV7wonUOabiXsqa3R'
-
-# checkout session data structure
-#   "customer_details": {
-#     "address": {
-#       "city": "Queenstown",
-#       "country": "US",
-#       "line1": "6 bird place,",
-#       "line2": "Fernhill,",
-#       "postal_code": "93000",
-#       "state": "CA"
-#     },
-#     "email": "williampage11@yahoo.co.uk",
-#     "name": "william page",
-#     "phone": null,
-#     "tax_exempt": "none",
-#     "tax_ids": []
-#   },
-#   "id": "cs_test_a1jU1mDKZbBPRo9eTzOCof7moC2mtrQaugiIZzAngNnUzRyedPNxRZ47JO",
-#   "payment_status": "paid",
-#   "phone_number_collection": {
-#     "enabled": false
-#   },
-#   "shipping_cost": null,
-#   "shipping_details": {
-#     "address": {
-#       "city": "Queenstown",
-#       "country": "US",
-#       "line1": "6 bird place,",
-#       "line2": "Fernhill,",
-#       "postal_code": "93000",
-#       "state": "CA"
-#     },
-#     "name": "william page"
-#   } ...
 
 # Function to handle successful payment
 def handle_successful_payment(checkout_data):
@@ -86,6 +47,13 @@ def handle_successful_payment(checkout_data):
         order_instance.shippingDetails = shipping_details_serializer.instance
 
     order_instance.save()
+
+    # get all the designs from the order and process them
+    order_items = OrderItem.objects.filter(order=order_instance)
+    for item in order_items:
+        design = item.design
+        if (design != None):
+            process_design(design)
 
 # Webhook handler for checkout session completed
 @csrf_exempt
