@@ -93,13 +93,24 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
 
             {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">
+
                 <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
+
                 <div className="px-2 flex flex-col items-center justify-start">
-                    <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
-                    <div className="touch-none">
+                    <div className="w-full p-2 border border-gray-100 rounded">
+                        <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                    </div>
+                    
+                    <div className="w-full flex justify-center touch-none border border-gray-100 rounded">
                         <SketchCanvas />
                     </div>
-                    {updateQtyHandler !== null && <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> }
+
+                    {updateQtyHandler !== null && 
+                        <div className="w-full flex justify-center touch-none border border-gray-100 rounded p-2">
+                            <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> 
+                        </div>
+                    }
+
                     <div className="w-full">
                         <AddToCart total={total} setShowAddToCart={setShowAddToCart}/>
                     </div>
@@ -109,10 +120,10 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
 
                 {(!editTextLayerMode && !editImgLayerMode) && 
-                    <>
+                    <div className="w-[250px] h-fit flex justify-center touch-none border border-gray-100 rounded p-2">
                         <SelectSide />
                         <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
-                    </>
+                    </div>
                 }
 
                 {
@@ -162,8 +173,10 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 }
 
                 {/* Canvas, select quantity and add to cart */}
-                <div>
-                    <h2 className="text-center text-2xl font-bold mt-4">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                <div className="w-full p-2 border border-gray-100 rounded">
+                    <div>
+                        <h2 className="text-center text-2xl font-bold">{currentDesign ? currentDesign.name : "Unsaved design"}</h2>
+                    </div>
                     <div className="touch-none w-full flex justify-center">
                         <SketchCanvas />
                     </div>
