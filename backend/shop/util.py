@@ -1,8 +1,15 @@
-from itertools import product
 from .serializers import *
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework.response import Response
+import random
+import string
+
+def get_random_string(length):
+    # choose from all lowercase letter
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 # takes the data outputted from a product serializer and prepares it to format client wants
 def prepareProductData(data):
@@ -76,8 +83,9 @@ def layersAreValid(layer_serializers):
 
 # data should have the following fields: design, product, color, previews, layers
 def createDesign(user, design_data, product_id, color, previews_data, layers_data):
+    if design_data["name"] == "" or design_data["name"] == None:
+        design_data["name"] = "unnamed design"
     if user == None:
-        design_data["name"] = "anon design"
         design_serializer = AnonDesignCreateSerializer(data=design_data)
     else:
         if user.is_authenticated:

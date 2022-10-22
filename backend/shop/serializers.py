@@ -100,3 +100,8 @@ class ShippingDetailsSerializer(ModelSerializer):
     class Meta:
         model = ShippingDetails
         fields = '__all__'
+
+class DesignMockupSerializer(ModelSerializer):
+    class Meta:
+        model = DesignMockup
+        fields = ('design', 'side')

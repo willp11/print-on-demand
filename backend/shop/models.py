@@ -198,3 +198,13 @@ class OrderItem(models.Model):
             return f'custom {self.product.name} {self.size.size} {self.color.color}'
         else:
             return f'blank {self.product.name} {self.size.size} {self.color.color}'
+
+class DesignMockup(models.Model):
+    class Side(models.TextChoices):
+        FRONT = 'front', ('front')
+        BACK = 'back', ('back')
+        LEFT = 'left', ('left')
+        RIGHT = 'right', ('right')
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='mockups')
+    image = models.ImageField(upload_to='images/mockups/', null=True)
+    side = models.CharField(max_length=8, choices=Side.choices)

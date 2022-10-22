@@ -1,5 +1,10 @@
+from django.core.files import File
 from PIL import Image, ImageFont, ImageDraw
 from .models import *
+from .serializers import *
+from .util import get_random_string
+from io import BytesIO
+from django.conf import settings
 
 def addTextLayer(
     design,
@@ -22,6 +27,7 @@ def addTextLayer(
 
     # find the text size
     fontSize = 1
+
     font = ImageFont.truetype(fontPath, fontSize)
     while font.getlength(textContent) < proportion*design.size[0]:
         # iterate until the text size is just larger than the criteria
@@ -134,7 +140,7 @@ def process_design(design):
             elif layer.type == 'text':
                 design_image = addTextLayer(
                     design_image, 
-                    layer.font.file, 
+                    layer.font.file.path, 
                     layer.textContent, 
                     layer.textColor, 
                     layer.translateX, 
@@ -148,6 +154,20 @@ def process_design(design):
                     print_areas.ySize, 
                     layer.rotation
                 )
-            
-        # show the design
-        design_image.show()
+
+        # save design mockup to db
+        file_name = f'{get_random_string(16)}.png'
+        blob = BytesIO()
+
+        design_image.save(blob, format='PNG')
+        mockup_data = {
+            'design': design.pk,
+            'side': side,
+        }
+        mockup_serializer = DesignMockupSerializer(data=mockup_data)
+
+        if mockup_serializer.is_valid():
+            mockup_serializer.save()
+            mockup_serializer.instance.image.save(file_name, File(blob))
+        else:
+            print(mockup_serializer.errors)
