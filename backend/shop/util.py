@@ -77,6 +77,7 @@ def layersAreValid(layer_serializers):
 # data should have the following fields: design, product, color, previews, layers
 def createDesign(user, design_data, product_id, color, previews_data, layers_data):
     if user == None:
+        design_data["name"] = "anon design"
         design_serializer = AnonDesignCreateSerializer(data=design_data)
     else:
         if user.is_authenticated:
