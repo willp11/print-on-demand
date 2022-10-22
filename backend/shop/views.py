@@ -184,7 +184,7 @@ class OrderCreateView(APIView):
                         return Response(item_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
                 serializer.save(total=round(order_total, 2))
-                return Response(serializer.data, status=HTTP_200_OK)
+                return Response({"message": "success", "data": serializer.data}, status=HTTP_200_OK)
             except:
                 serializer.instance.delete()
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

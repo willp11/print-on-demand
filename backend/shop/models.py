@@ -162,14 +162,14 @@ class Preview(models.Model):
     image = models.ImageField(upload_to='images/previews/')
     side = models.CharField(max_length=8, choices=Side.choices)
 
-class DeliveryAddress(models.Model):
-    name = models.CharField(max_length=64)
-    address = models.CharField(max_length=64)
+class ShippingDetails(models.Model):
     city = models.CharField(max_length=64)
-    state = models.CharField(max_length=64)
-    zipCode = models.CharField(max_length=16)
     country = models.CharField(max_length=64)
-    phone = models.CharField(max_length=16)
+    line1 = models.CharField(max_length=128)
+    line2 = models.CharField(max_length=128)
+    postal_code = models.CharField(max_length=16)
+    state = models.CharField(max_length=64)
+    name = models.CharField(max_length=128)
 
 class Order(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
@@ -179,7 +179,7 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     posted = models.BooleanField(default=False)
     delivered = models.BooleanField(default=False)
-    deliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.CASCADE, null=True, blank=True)
+    shippingDetails = models.ForeignKey(ShippingDetails, on_delete=models.CASCADE, null=True, blank=True)
     userEmail = models.EmailField(null=True)
 
     def __str__(self):

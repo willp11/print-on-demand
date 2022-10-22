@@ -95,3 +95,8 @@ class OrderItemSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = '__all__'
+
+class ShippingDetailsSerializer(ModelSerializer):
+    class Meta:
+        model = ShippingDetails
+        fields = '__all__'

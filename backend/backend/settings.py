@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-me)22&8*^+8$$!w5!ne&aadmeprad6h70!=l87$0drkxun+3m2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["c541-184-82-24-211.ap.ngrok.io", "localhost"]
 
 
 # Application definition
@@ -147,9 +147,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
+    "https://c541-184-82-24-211.ap.ngrok.io"
 )
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://c541-184-82-24-211.ap.ngrok.io"]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
