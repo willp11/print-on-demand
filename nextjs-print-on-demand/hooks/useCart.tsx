@@ -60,12 +60,13 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
 
     let item = state?.items?.[itemIdentifier];
     let totalQty = 0;
-
-    if (item) {
-        Object.keys(sizeQuantities).forEach(size => {
+    Object.keys(sizeQuantities).forEach(size => {
+        if (item) {
             item.sizeQuantities[size] += sizeQuantities[size];
-            totalQty += sizeQuantities[size];
-        })
+        }
+        totalQty += sizeQuantities[size];
+    })
+    if (item) {
         item.totalQty = totalQty;
     } else {
         item = {

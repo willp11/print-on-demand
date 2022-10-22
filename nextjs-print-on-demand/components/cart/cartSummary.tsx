@@ -7,6 +7,15 @@ import Spinner from "../ui/spinner";
 import { useUser } from "../../hooks/useUser";
 import { createOrder } from "../../utils/api";
 
+interface ILineItem {
+    price_data: {
+        unit_amount: number,
+        currency: string,
+        product: string
+    },
+    quantity: number
+}
+
 export default function CartSummary({showSummary}: {showSummary: boolean}) {
 
     const {cart, clearCart} = useCart();
@@ -28,12 +37,8 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
     const redirectToCheckout = async () => {
         if (typeof cart !== "undefined") {
             setIsLoading(true);
-
-            // TO DO
-            // Add types to line items
-
             try {
-                const lineItems = [];
+                const lineItems: ILineItem[] = [];
                 Object.keys(cart.items).map(key=>{
                     let item = cart.items[key];
                     let price = item.customPrice ? item.customPrice : item.price;
