@@ -8,7 +8,7 @@ import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
 import LoadDesign from '../../components/customizer/loadDesign';
 import { useState, useEffect, useMemo } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PhotoIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
 import EditImageLayer from '../../components/customizer/editImageLayer';
@@ -150,13 +150,13 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                         </div>
     
                         <div>
-                            <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Layer</h2>
-                            <button disabled={disabledAddLayers} className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowImageLayerModal(true)}>Image</button>
-                            <button disabled={disabledAddLayers} className="border border-gray-300 p-1 w-32 rounded mt-1" onClick={()=>setShowTextLayerModal(true)}>Text</button>
-                        </div>
-
-                        <div className="min-h-[100px]">
-                            <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
+                            <h2 className="text-sm text-gray-500 font-semibold">Add Layer</h2>
+                            <button className="mr-4" disabled={disabledAddLayers} aria-label="add image" onClick={()=>setShowImageLayerModal(true)}>
+                                <PhotoIcon className="w-8 h-8 cursor-pointer" />
+                            </button>
+                            <button disabled={disabledAddLayers} aria-label="add text" onClick={()=>setShowTextLayerModal(true)}>
+                                <DocumentTextIcon className="w-8 h-8 cursor-pointer" />
+                            </button>
                         </div>
                     </div>
                 }
@@ -167,6 +167,17 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     <div className="touch-none w-full flex justify-center">
                         <SketchCanvas />
                     </div>
+                </div>
+
+                {/* Layers */}
+                { layers && productSide && (layers[productSide].length > 0) &&
+                    <div className="min-h-[100px]">
+                        <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
+                    </div>
+                }
+
+                {/* Select quantity and add to cart */}
+                <div className="my-4">
                     {qty && updateQtyHandler && <SelectQuantity qty={qty} updateQtyHandler={updateQtyHandler} /> }
                     <AddToCart total={total} setShowAddToCart={setShowAddToCart} />
                 </div>
@@ -175,22 +186,26 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 {
                     showImageLayerModal && 
                     <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-4">
-                            <div className="relative w-full h-full">
-                                <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer" onClick={()=>setShowImageLayerModal(false)}/>
+                        <div className="w-[300px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded">
+                            <div className="relative">
+                                <XMarkIcon className="w-6 h-6 absolute top-1 right-1 cursor-pointer" onClick={()=>setShowImageLayerModal(false)}/>
                             </div>
-                            <AddImageLayer />
+                            <div className="p-6">
+                                <AddImageLayer />
+                            </div>
                         </div>
                     </div>
                 }
                 {
                     showTextLayerModal && 
                     <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-4">
-                            <div className="relative w-full h-full">
-                                <XMarkIcon className="w-6 h-6 absolute top-0 right-0 cursor-pointer" onClick={()=>setShowTextLayerModal(false)}/>
+                        <div className="w-[300px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded">
+                            <div className="relative">
+                                <XMarkIcon className="w-6 h-6 absolute top-1 right-1 cursor-pointer" onClick={()=>setShowTextLayerModal(false)}/>
                             </div>
-                            <AddTextLayer />
+                            <div className="p-6">
+                                <AddTextLayer />
+                            </div>
                         </div>
                     </div>
                 }

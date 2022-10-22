@@ -89,9 +89,9 @@ export default function AddImageLayer() {
     }
 
     return (
-        <div className="flex">
+        <div className="flex p-2 border border-gray-100 rounded-md">
             <div className="flex flex-col">
-                <h2 className="text-base lg:text-lg font-bold tracking-tight mb-1">Add Image Layer</h2>
+                <h2 className="text-sm text-gray-500 font-semibold mb-1">Add Image Layer</h2>
                 <label className="block mb-1">
                     <span className="sr-only">Add Image Layer</span>
                     <input type="file" 
@@ -106,10 +106,10 @@ export default function AddImageLayer() {
                 </label>
                 <button
                     disabled={disabled}
-                    className={`border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1 ${cursor}`}
+                    className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold ${cursor}`}
                     onClick={addImageLayer}
                 >
-                    Add Layer
+                    Add
                 </button>
                 <p className="text-xs mt-2">Accepted file formats: png, jpg</p>
                 {errorMsg !== "" ? <p className="text-xs text-red-500 mt-2">{errorMsg}</p> : null}

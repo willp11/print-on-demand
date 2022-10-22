@@ -15,31 +15,19 @@ interface ILeftMenuProps {
 export default function LeftMenu({setShowSelectProductModal, setShowPreview, setShowDesigns}: ILeftMenuProps) {
 
     return (
-        <div className="flex flex-row w-full lg:flex-col lg:w-[200px]">
-            {/* <div className="border-b border-gray-400 pb-4">
-                <LoadDesign setShowDesigns={setShowDesigns} />
-            </div>
-            <div className="border-b border-gray-400 pb-4">
-                <SaveDesign setShowPreview={setShowPreview} />
-            </div>
-            <div className="border-b border-gray-400 pt-2 pb-4">
-                <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
-            </div> */}
-            {/* <div className="border-b border-gray-400 pt-2 pb-4">
-                <SelectProductColor />
-            </div> */}
+        <div className="flex flex-row w-full lg:flex-col lg:w-[250px]">
             <div className="w-full flex justify-between p-2 border border-gray-100 rounded-md">
                 <LoadDesign setShowDesigns={setShowDesigns} />
                 <SaveDesign setShowPreview={setShowPreview} />
                 <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
             </div>
-            <div className="w-full p-2 border border-gray-100 rounded-md">
+            <div className="w-full p-2 border border-gray-100 rounded-md mt-2">
                 <SelectProductColor />
             </div>
-            <div className="border-b border-gray-400 pt-2 pb-4">
+            <div className="mt-2">
                 <AddImageLayer />
             </div>
-            <div className="pt-2 mb-4">
+            <div className="mt-2">
                 <AddTextLayer />
             </div>
         </div>

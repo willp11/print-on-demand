@@ -5,13 +5,14 @@ import { IDesign } from "../../types/design";
 import Design from "./design";
 
 interface IDesignsProps {
-    setShowDesignsModal?: Dispatch<SetStateAction<boolean>>
+    setShowDesignsModal?: Dispatch<SetStateAction<boolean>>,
 }
 
 export default function Designs({setShowDesignsModal}: IDesignsProps) {
 
     const { token } = useUser();
     const [designs, setDesigns] = useState<IDesign[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getDesigns = async () => {
@@ -19,9 +20,12 @@ export default function Designs({setShowDesignsModal}: IDesignsProps) {
                 const designs = await fetchDesigns(token);
                 if (designs !== null) setDesigns(designs);
             }
+            setLoading(false);
         }
         getDesigns();
     }, []);
+
+    if (loading) return <div>Loading...</div>
 
     if (designs.length !== 0) {
         return (
@@ -29,5 +33,7 @@ export default function Designs({setShowDesignsModal}: IDesignsProps) {
                 {designs.map((design, i) => <Design key={i} design={design} setShowDesignsModal={setShowDesignsModal} />)}
             </div>
         )
-    } else return <></>
+    } else {
+        return <div>You have no designs saved.</div>
+    }
 }

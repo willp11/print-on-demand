@@ -86,7 +86,7 @@ export default function AddTextLayer() {
     if (selectedFont) {
         fontSelection = (
             <select 
-                className="border border-gray-300 cursor-pointer mr-2 w-48"
+                className="border border-gray-300 cursor-pointer mr-2 w-48 text-sm"
                 value={selectedFont.file} 
                 onChange={e=>setFontHandler(e.target.value)}
             >
@@ -99,11 +99,11 @@ export default function AddTextLayer() {
     if (textLayerContent !== "") cursor = "cursor-pointer";
 
     return (
-        <div className="flex flex-col">
-            <h2 className="text-base lg:text-lg font-bold tracking-tight">Add Text Layer</h2>
+        <div className="flex flex-col p-2 border border-gray-100 rounded-md">
+            <h2 className="text-sm text-gray-500 font-semibold mb-1">Add Text Layer</h2>
             <input
                 type="text" 
-                className="p-1 border border-gray-300" 
+                className="p-1 border border-gray-300 rounded" 
                 placeholder="Text content..." 
                 onChange={(e)=>setTextLayerContent(e.target.value)} 
                 value={textLayerContent}
@@ -118,10 +118,10 @@ export default function AddTextLayer() {
             </div>
             <button
                 disabled={textLayerContent === ""}
-                className={`border border-gray-300 bg-gray-50 hover:bg-gray-100 shadow-md p-1 w-32 rounded mt-1 ${cursor}`}
+                className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold ${cursor}`}
                 onClick={addTextLayer}
             >
-                    Add Layer
+                    Add
             </button>
         </div>
     )

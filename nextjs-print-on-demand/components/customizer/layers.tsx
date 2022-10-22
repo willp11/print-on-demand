@@ -74,7 +74,7 @@ export default function Layers({setEditTextLayerMode, setEditImgLayerMode}: ILay
 
     return (
         <div className="flex flex-col lg:ml-8 min-w-[100px]">
-            <h2 className="text-base lg:text-lg font-bold tracking-tight">Layers <span className="text-xs text-gray-600">(Max. 6 per side)</span></h2>
+            <h2 className="text-sm text-gray-500 font-semibold mb-1">Layers <span className="text-xs text-gray-600">(Max. 6 per side)</span></h2>
             <div className="flex flex-wrap lg:flex-col justify-start items-center">
                 {moveLayerBackArrow}
                 {layerPreviews}
