@@ -24,11 +24,10 @@ class UserDetailsSerializer(ModelSerializer):
 
 class UserProfileSerializer(ModelSerializer):
     user_details = UserDetailsSerializer()
-    orders = GetOrdersSerializer(many=True)
     
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'first_name', 'last_name', 'user_details', 'orders')
+        fields = ('id', 'email', 'first_name', 'last_name', 'user_details')
 
 class UpdateFirstNameSerializer(ModelSerializer):
     class Meta:
@@ -44,4 +43,3 @@ class UpdatePhoneNumberSerializer(ModelSerializer):
     class Meta:
         model = UserDetails
         fields = ('phone_number',)
-

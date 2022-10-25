@@ -23,7 +23,7 @@ class UpdatePhoneNumberView(APIView):
     serializer_class = UpdatePhoneNumberSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def put(self, request):
         try:
             user_details = UserDetails.objects.get(user=request.user)
         except:
