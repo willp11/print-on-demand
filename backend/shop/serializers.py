@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, CharField
 from .models import *
 from drf_extra_fields.fields import Base64ImageField
 
@@ -91,10 +91,26 @@ class OrderCreateSerializer(ModelSerializer):
         model = Order
         fields = ('stripeId', )
 
+class DesignPreviewsSerializer(ModelSerializer):
+    previews = PreviewSerializer(many=True)
+    class Meta:
+        model = Design
+        fields = ('previews',)
+
+class ProductNameImageSerializer(ModelSerializer):
+    product_images = ProductImageSerializer(many=True)
+    class Meta:
+        model = Product
+        fields = ('name', 'product_images')
+
 class OrderItemSerializer(ModelSerializer):
+    color = CharField(source='color.color')
+    size = CharField(source='size.size')
+    design = DesignPreviewsSerializer()
+    product = ProductNameImageSerializer()
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ('id', 'product', 'design', 'color', 'size', 'quantity', 'subtotal')
 
 class ShippingDetailsSerializer(ModelSerializer):
     class Meta:

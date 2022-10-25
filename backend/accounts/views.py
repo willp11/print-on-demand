@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
 from .serializers import *
+from shop.serializers import GetOrdersSerializer
+from shop.models import Order
 
 class UpdateFirstNameView(UpdateAPIView):
     serializer_class = UpdateFirstNameSerializer
@@ -33,3 +35,10 @@ class UpdatePhoneNumberView(APIView):
             serializer.save()
             return Response({"message":"success", "phone_number": serializer.instance.phone_number}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class GetUserOrdersView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = GetOrdersSerializer
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
