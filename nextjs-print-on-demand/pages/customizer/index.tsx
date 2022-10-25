@@ -59,7 +59,6 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
         if (product && layers) {
             const basePrice = product.price;
             total += basePrice;
-            console.log(layers)
             Object.values(layers).forEach(layersArr => {
                 if (layersArr.length > 0) total += pricePerSide;
             });

@@ -4,6 +4,7 @@ import Order from "./Order";
 
 const orders: Orders = [
     {
+        id: 1,
         products: [
             {
                 ...productList[0],
@@ -38,7 +39,7 @@ export default function MyOrders() {
         <div className="w-full p-2">
             {orders.map(order=>{
                 return (
-                    <Order order={order} />
+                    <Order key={order.id} order={order} />
                 )
             })}
         </div>

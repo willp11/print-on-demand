@@ -12,7 +12,7 @@ export default function SubmitBtn({style, content, isLoading}: ISubmitBtnProps) 
         return (
             <button 
                 type="submit" 
-                className="p-2 mt-4 bg-sky-500 text-white rounded font-semibold hover:bg-sky-600 transition ease-in-out duration-300 flex items-center justify-center"
+                className="p-2 mt-4 text-sm bg-sky-500 text-white rounded font-semibold hover:bg-sky-600 transition ease-in-out duration-300 flex items-center justify-center"
                 style={style}
             >
                 <span className="mr-2">Loading...</span>
@@ -23,7 +23,7 @@ export default function SubmitBtn({style, content, isLoading}: ISubmitBtnProps) 
         return (
             <button 
                 type="submit" 
-                className="p-2 mt-4 bg-sky-500 text-white rounded font-semibold hover:bg-sky-600 transition ease-in-out duration-300"
+                className="p-2 mt-4 text-sm bg-sky-500 text-white rounded font-semibold hover:bg-sky-600 transition ease-in-out duration-300"
                 style={style}
             >
                 {content}

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IDesign, ILayer } from "../types/design";
 import { Cart } from "../types/cart";
+import { IUpdateUserData } from "./user";
 
 export const imageApiPrefix = 'http://localhost:8000';
 
@@ -191,6 +192,35 @@ export const createOrder = async (token: string | undefined, stripeId: string, c
     try {
         const res = await axios.post(url, data, {headers: headers});
         return res.data;
+    } catch(e) {
+        console.log(e);
+        return null;
+    }
+}
+
+export const getUserProfile = async (token: string) => {
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + token
+    }
+    const url = `${imageApiPrefix}/auth/user/`;
+    try {
+        const res = await axios.get(url, {headers: headers});
+        return res;
+    } catch(e) {
+        console.log(e);
+        return null;
+    }
+}
+
+export const updateUserProfile = async (token: string, url: string, data: IUpdateUserData) => {
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + token
+    }
+    try {
+        const res = await axios.put(`${imageApiPrefix}${url}`, data, {headers: headers});
+        return res;
     } catch(e) {
         console.log(e);
         return null;
