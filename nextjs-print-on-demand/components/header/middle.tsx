@@ -26,8 +26,8 @@ export default function Middle({setShowMenu}: IMiddleProps) {
 
     return (
         <div className="relative p-2 flex justify-between items-center text-sm font-semibold border-b border-gray-300">
-            <div className="hidden md:block">
-                <SearchForm />
+            <div className="w-[240px] hidden md:block">
+                {/* <SearchForm /> */}
             </div>
             <Logo />
             <div className="text-right md:w-[240px] flex items-center justify-end">

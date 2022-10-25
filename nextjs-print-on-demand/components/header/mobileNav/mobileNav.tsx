@@ -87,7 +87,7 @@ export default function MobileNav({active, setActive}: MobileMenuProps) {
                 <div className="w-full flex items-center justify-start p-2">
                     <Logo />
                 </div>
-                <div className="ml-2 mb-2"><SearchForm /></div>
+                {/* <div className="ml-2 mb-2"><SearchForm /></div> */}
                 
                 {menuItems}
             </div>
