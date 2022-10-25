@@ -4,6 +4,7 @@ from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import get_user_model
 from .forms import CustomAllAuthPasswordResetForm
 from .models import *
+from shop.serializers import GetOrdersSerializer
 
 class RegistrationSerializer(RegisterSerializer):
     username = None
@@ -23,10 +24,11 @@ class UserDetailsSerializer(ModelSerializer):
 
 class UserProfileSerializer(ModelSerializer):
     user_details = UserDetailsSerializer()
+    orders = GetOrdersSerializer(many=True)
     
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'first_name', 'last_name', 'user_details')
+        fields = ('id', 'email', 'first_name', 'last_name', 'user_details', 'orders')
 
 class UpdateFirstNameSerializer(ModelSerializer):
     class Meta:
@@ -42,3 +44,4 @@ class UpdatePhoneNumberSerializer(ModelSerializer):
     class Meta:
         model = UserDetails
         fields = ('phone_number',)
+

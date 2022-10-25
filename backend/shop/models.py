@@ -171,7 +171,7 @@ class ShippingDetails(models.Model):
     name = models.CharField(max_length=128)
 
 class Order(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True, related_name="orders")
     datetime = models.DateTimeField(auto_now_add=True)
     stripeId = models.CharField(max_length=128)
     total = models.FloatField(null=True)

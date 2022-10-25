@@ -101,6 +101,13 @@ class ShippingDetailsSerializer(ModelSerializer):
         model = ShippingDetails
         fields = '__all__'
 
+class GetOrdersSerializer(ModelSerializer):
+    order_items = OrderItemSerializer(many=True)
+    shippingDetails = ShippingDetailsSerializer()
+    class Meta:
+        model = Order
+        fields = ('id', 'datetime', 'total', 'paid', 'posted', 'delivered', 'order_items', 'shippingDetails')
+
 class DesignMockupSerializer(ModelSerializer):
     class Meta:
         model = DesignMockup
