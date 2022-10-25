@@ -116,8 +116,16 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     </div>
                 </div>
 
-                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />}
-                {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
+                {editTextLayerMode && 
+                    <div className="w-[250px] h-fit p-2 border border-gray-100 rounded">
+                        <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />
+                    </div>
+                }
+                {editImgLayerMode && 
+                    <div className="w-[250px] h-fit p-2 border border-gray-100 rounded">
+                        <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />
+                    </div>
+                }
 
                 {(!editTextLayerMode && !editImgLayerMode) && 
                     <div className="w-[250px] h-fit flex justify-center touch-none border border-gray-100 rounded p-2">
@@ -149,10 +157,6 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                     </div>
                 </div>
 
-                {/* Edit Layers */}
-                {editTextLayerMode && <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />}
-                {editImgLayerMode && <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />}
-
                 {/* Edit layer is off - show select side and layer previews */}
                 {(!editTextLayerMode && !editImgLayerMode) && 
                     <div>
@@ -183,9 +187,21 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 </div>
 
                 {/* Layers */}
-                { layers && productSide && (layers[productSide].length > 0) &&
+                { layers && productSide && (layers[productSide].length > 0) && !editTextLayerMode && !editImgLayerMode &&
                     <div className="min-h-[100px]">
                         <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
+                    </div>
+                }
+
+                {/* Edit Layers */}
+                {editTextLayerMode && 
+                    <div className="w-full p-2 border border-gray-100 rounded my-2">
+                        <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />
+                    </div>
+                }
+                {editImgLayerMode && 
+                    <div className="w-full p-2 border border-gray-100 rounded my-2">
+                        <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />
                     </div>
                 }
 

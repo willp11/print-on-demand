@@ -106,7 +106,7 @@ export default function AddImageLayer() {
                 </label>
                 <button
                     disabled={disabled}
-                    className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold ${cursor}`}
+                    className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 ${cursor}`}
                     onClick={addImageLayer}
                 >
                     Add

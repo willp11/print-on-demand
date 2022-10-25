@@ -86,7 +86,7 @@ export default function AddTextLayer() {
     if (selectedFont) {
         fontSelection = (
             <select 
-                className="border border-gray-300 cursor-pointer mr-2 w-48 text-sm"
+                className="border border-gray-300 cursor-pointer mr-2 w-48"
                 value={selectedFont.file} 
                 onChange={e=>setFontHandler(e.target.value)}
             >
@@ -118,7 +118,7 @@ export default function AddTextLayer() {
             </div>
             <button
                 disabled={textLayerContent === ""}
-                className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold ${cursor}`}
+                className={`w-26 rounded-full shadow-md px-1 py-2 mt-1 bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 ${cursor}`}
                 onClick={addTextLayer}
             >
                     Add

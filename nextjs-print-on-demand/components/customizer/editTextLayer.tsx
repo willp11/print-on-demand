@@ -169,7 +169,7 @@ export default function EditTextLayer({setEditTextLayerMode, fonts}: {setEditTex
 
     return (
         <div className="flex flex-col">
-            <h2 className="text-base lg:text-lg font-bold tracking-tight">Edit Text Layer</h2>
+            <h2 className="text-sm text-gray-500 font-semibold mb-1">Edit Text Layer</h2>
             <div className="my-1">
                 <h3 className="text-sm font-semibold mb-1">Color:</h3>
                 <input type="color" value={values.textColor ?? "#000"} onChange={(e)=>editLayerHandler("textColor", e.target.value)}/>
@@ -193,16 +193,16 @@ export default function EditTextLayer({setEditTextLayerMode, fonts}: {setEditTex
                 <button onClick={()=>alignLayer('right')} className="p-1 border border-gray-300 rounded cursor-pointer hover:border-gray-500 w-[60px]">Right</button>
             </div>
             <button 
-                className="p-1 w-32 bg-red-100 border border-red-600 text-red-600 hover:bg-red-200 hover:text-red-700 rounded mt-1" 
+                className="py-2 my-1 bg-red-600 text-white text-sm font-semibold rounded-full hover:bg-red-700" 
                 onClick={revertHandler}
             >
-                Revert
+                Cancel
             </button>
             <button 
-                className="p-1 w-32 bg-green-100 border border-green-600 text-green-600 hover:bg-green-200 hover:text-green-700 rounded mt-1" 
+                className="py-2 bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 rounded-full" 
                 onClick={()=>setEditTextLayerMode(false)}
             >
-                Exit
+                Save
             </button>
         </div>
     )
