@@ -1,47 +1,50 @@
-import { productList } from "../../utils/productList";
-import { Orders } from '../../types/order';
+import { getUserOrders } from '../../utils/api';
+import { IOrder } from '../../types/order';
 import Order from "./Order";
+import { useEffect, useState } from 'react';
+import Spinner from '../ui/spinner';
 
-const orders: Orders = [
-    {
-        id: 1,
-        products: [
-            {
-                ...productList[0],
-                quantity: 1,
-                color: "white",
-                size: "XS",
-                itemName: "SOL'S REGENT T-SHIRT - WHITE - XS"
-            },
-            {
-                ...productList[0],
-                quantity: 2,
-                color: "black",
-                size: "M",
-                itemName: "SOL'S REGENT T-SHIRT - BLACK - M"
+export default function MyOrders({token}: {token: string}) {
+
+    const [orders, setOrders] = useState<IOrder[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(()=>{
+        const getOrders = async () => {
+            try {
+                const orders = await getUserOrders(token);
+                if (orders) {
+                    setOrders(orders);
+                    console.log(orders);
+                } else {
+                    setError("There was a problem fetching your orders. Please try again.");
+                }
+            } catch(e) {
+                setError("There was a problem fetching your orders. Please try again.");
+            } finally {
+                setLoading(false);
             }
-        ],
-        date: '01-01-2022',
-        total: 11.07,
-        status: 'processing',
-        deliveryAddress:  {
-            address_1: "10 Changpuak Soi 2",
-            district: "Wat Ket",
-            city: "Chiang Mai",
-            province: "Chiang Mai",
-            postcode: 50000
         }
-    }
-]
+        getOrders();
+    }, [token])
 
-export default function MyOrders() {
-    return (
-        <div className="w-full p-2">
-            {orders.map(order=>{
-                return (
-                    <Order key={order.id} order={order} />
-                )
-            })}
-        </div>
-    )
+    if (loading) return <div className="p-2"><Spinner /></div>
+    if (error !== "") return <p className="text-red-600 text-sm p-2">{error}</p>
+
+    if (orders.length > 0) {
+        return (
+            <div className="w-full p-2 h-[500px] overflow-y-auto">
+                {orders.map(order=>{
+                    return (
+                        <Order key={order.id} order={order} />
+                    )
+                })}
+            </div>
+        )
+    } else {
+        return (
+            <div className="p-2">You do not have any orders.</div>
+        )
+    }
 }

@@ -1,22 +1,35 @@
 import { ICartItem } from './cart';
 
-export type OrderStatus = 'processing' | 'out for delivery' | 'delivered';
-
-export interface IDeliveryAddress {
-    address_1: string,
-    address_2?: string,
-    district: string,
+export interface IShippingDetails {
+    id: number,
+    name: string,
+    line1: string,
+    line2: string | null,
     city: string,
-    province: string,
-    postcode: number
+    state: string,
+    country: string,
+    postal_code: number
+}
+
+export interface IOrderItem {
+    id: number,
+    product: {name: string, product_images: {image: string, side: string}[]},
+    color: string,
+    size: string,
+    design: {previews: {image: string, side: string}[]} | null,
+    quantity: number,
+    subtotal: number,
 }
 
 export interface IOrder {
-    products: ICartItem[],
-    date: string,
+    id: number,
+    datetime: string,
     total: number,
-    status: OrderStatus,
-    deliveryAddress: IDeliveryAddress
+    paid: boolean,
+    posted: boolean,
+    delivered: boolean,
+    order_items: IOrderItem[],
+    shippingDetails: IShippingDetails
 }
 
 export type Orders = IOrder[];

@@ -98,9 +98,8 @@ const DetailsField = ({title, content, placeholder, token}: {title: string, cont
     }
 }
 
-export default function AccountDetails() {
+export default function AccountDetails({token}: {token: string}) {
 
-    const {token} = useUser();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -113,54 +112,44 @@ export default function AccountDetails() {
 
     useEffect(()=>{
         const getData = async () => {
-            if (token) {
-                try {
-                    const res = await getUserProfile(token);
-                    if (res) {
-                        const data = {
-                            first_name: res.data.first_name,
-                            last_name: res.data.last_name,
-                            email: res.data.email,
-                            phone_number: res.data.user_details.phone_number
-                        }
-                        setUserData(data);
-                    } else {
-                        setError("There was a problem getting your profile. Please try again.");
+            try {
+                const res = await getUserProfile(token);
+                if (res) {
+                    const data = {
+                        first_name: res.data.first_name,
+                        last_name: res.data.last_name,
+                        email: res.data.email,
+                        phone_number: res.data.user_details.phone_number
                     }
-                } catch {
+                    setUserData(data);
+                } else {
                     setError("There was a problem getting your profile. Please try again.");
-                } finally {
-                    setLoading(false);
                 }
+            } catch {
+                setError("There was a problem getting your profile. Please try again.");
+            } finally {
+                setLoading(false);
             }
         }
 
         getData();
     }, [token])
 
-    if (loading) return <Spinner />
-    if (error) return <p className="text-red-600 text-sm">{error}</p>
-    if (token) {
-        return (
-            <div className="w-full p-2">
-                <div className="mb-2">
-                    <h2 className="text-sm text-gray-500 font-semibold">Email</h2>
-                    <div className="flex items-center">
-                        <p>{userData.email}</p>
-                    </div>
+    if (loading) return <div className="p-2"><Spinner /></div>
+    if (error !== "") return <p className="text-red-600 text-sm p-2">{error}</p>
+
+    return (
+        <div className="w-full p-2">
+            <div className="mb-2">
+                <h2 className="text-sm text-gray-500 font-semibold">Email</h2>
+                <div className="flex items-center">
+                    <p>{userData.email}</p>
                 </div>
-                <DetailsField title="First Name" content={userData.first_name} placeholder="Type new name..." token={token} />
-                <DetailsField title="Last Name" content={userData.last_name} placeholder="Type new name..." token={token} />
-                <DetailsField title="Phone Number" content={userData.phone_number} placeholder="Type new number..." token={token} />
-                <ChangePassword />
-                {/* <div className="mb-2">
-                    <h2 className="text-sm text-gray-500 font-semibold">Marketing Emails</h2>
-                    <div className="flex items-center">
-                        <input type="checkbox" className="cursor-pointer" defaultChecked={true} />
-                        <p className="text-sm ml-2">You are opted-in to receiving marketing emails.</p>
-                    </div>
-                </div> */}
             </div>
-        )
-    } else return <></>
+            <DetailsField title="First Name" content={userData.first_name} placeholder="Type new name..." token={token} />
+            <DetailsField title="Last Name" content={userData.last_name} placeholder="Type new name..." token={token} />
+            <DetailsField title="Phone Number" content={userData.phone_number} placeholder="Type new number..." token={token} />
+            <ChangePassword />
+        </div>
+    )
 }

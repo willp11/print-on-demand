@@ -1,8 +1,8 @@
-import { IDeliveryAddress } from '../../types/order';
+import { IShippingDetails } from '../../types/order';
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState, useRef } from "react";
 
-export default function DeliveryAddress({address}: {address: IDeliveryAddress}) {
+export default function ShippingDetails({shipping_details}: {shipping_details: IShippingDetails}) {
 
     const [showAddress, setShowAddress] = useState(false);
 
@@ -28,25 +28,29 @@ export default function DeliveryAddress({address}: {address: IDeliveryAddress}) 
             >
                 <div className="flex flex-col items-start mt-1">
                     <h3 className="text-xs text-gray-400">Address 1</h3>
-                    <p className="text-sm">{address.address_1}</p>
+                    <p className="text-sm">{shipping_details.line1}</p>
                 </div>
-                {address.address_2 && 
+                {shipping_details.line2 && 
                     <div className="flex flex-col items-start">
                         <h3 className="text-xs text-gray-400">Address 2</h3>
-                        <p className="text-sm">{address.address_1}</p>
+                        <p className="text-sm">{shipping_details.line2}</p>
                     </div> 
                 }
                 <div className="flex flex-col items-start">
-                    <h3 className="text-xs text-gray-400">District</h3>
-                    <p className="text-sm">{address.district}</p>
-                </div>
-                <div className="flex flex-col items-start">
                     <h3 className="text-xs text-gray-400">City</h3>
-                    <p className="text-sm">{address.city}</p>
+                    <p className="text-sm">{shipping_details.city}</p>
                 </div>
                 <div className="flex flex-col items-start">
-                    <h3 className="text-xs text-gray-400">Postcode</h3>
-                    <p className="text-sm">{address.postcode}</p>
+                    <h3 className="text-xs text-gray-400">State</h3>
+                    <p className="text-sm">{shipping_details.state}</p>
+                </div>
+                <div className="flex flex-col items-start">
+                    <h3 className="text-xs text-gray-400">Country</h3>
+                    <p className="text-sm">{shipping_details.country}</p>
+                </div>
+                <div className="flex flex-col items-start">
+                    <h3 className="text-xs text-gray-400">Postal Code</h3>
+                    <p className="text-sm">{shipping_details.postal_code}</p>
                 </div>
             </div>
         </div>

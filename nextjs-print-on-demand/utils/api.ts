@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IDesign, ILayer } from "../types/design";
 import { Cart } from "../types/cart";
+import { IOrder } from "../types/order";
 import { IUpdateUserData } from "./user";
 
 export const imageApiPrefix = 'http://localhost:8000';
@@ -221,6 +222,21 @@ export const updateUserProfile = async (token: string, url: string, data: IUpdat
     try {
         const res = await axios.put(`${imageApiPrefix}${url}`, data, {headers: headers});
         return res;
+    } catch(e) {
+        console.log(e);
+        return null;
+    }
+}
+
+export const getUserOrders = async (token: string) => {
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Token " + token
+    }
+    const url = `${imageApiPrefix}/api/v1/get-user-orders/`;
+    try {
+        const res = await axios.get(url, {headers: headers});
+        return res.data as IOrder[];
     } catch(e) {
         console.log(e);
         return null;

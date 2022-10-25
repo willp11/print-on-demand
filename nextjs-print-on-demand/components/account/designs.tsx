@@ -1,31 +1,40 @@
 import { fetchDesigns } from "../../utils/api";
-import { useUser } from "../../hooks/useUser";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IDesign } from "../../types/design";
 import Design from "./design";
+import Spinner from "../ui/spinner";
 
 interface IDesignsProps {
+    token: string,
     setShowDesignsModal?: Dispatch<SetStateAction<boolean>>,
 }
 
-export default function Designs({setShowDesignsModal}: IDesignsProps) {
+export default function Designs({token, setShowDesignsModal}: IDesignsProps) {
 
-    const { token } = useUser();
     const [designs, setDesigns] = useState<IDesign[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         const getDesigns = async () => {
-            if (token) {
+            try {
                 const designs = await fetchDesigns(token);
-                if (designs !== null) setDesigns(designs);
+                if (designs) {
+                    setDesigns(designs);
+                } else {
+                    setError("There was a problem fetching your designs. Please try again.");
+                }
+            } catch(e) {
+                setError("There was a problem fetching your designs. Please try again.");
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         }
         getDesigns();
     }, []);
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return <Spinner />
+    if (error !== "") return <p className="text-red-600 text-sm">{error}</p>
 
     if (designs.length !== 0) {
         return (
@@ -34,6 +43,6 @@ export default function Designs({setShowDesignsModal}: IDesignsProps) {
             </div>
         )
     } else {
-        return <div>You have no designs saved.</div>
+        return <div className="p-2">You have no designs saved.</div>
     }
 }

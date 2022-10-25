@@ -1,26 +1,41 @@
 import Image from "next/image";
-import { ICartItem } from "../../types/cart";
+import { IOrderItem } from "../../types/order";
 
-export default function OrderItem({item}: {item: ICartItem}) {
+export default function OrderItem({item}: {item: IOrderItem}) {
+
+    let imageSrc;
+    if (item?.design?.previews[0]?.image) {
+        imageSrc = item.design.previews[0]?.image;
+    } else {
+        imageSrc = item.product.product_images[0]?.image;
+    }
     return (
-        <div className="w-full my-2 flex justify-start border-b border-gray-300 dark:border-gray-600">
+        <div className="w-full my-2 flex flex-col xs:flex-row justify-start border-b border-gray-300 dark:border-gray-600 pb-2">
             <div className="h-[80px] min-w-[80px] sm:h-[100px] sm:min-w-[100px]">
-                {item?.image && 
+                {item?.design?.previews[0]?.image && 
                     <Image
-                        src={item.colors[item.color]["front"]}
+                        src={imageSrc}
                         height={100}
                         width={100}
-                        alt={item.name}
+                        alt="design preview"
                     />
                 }
             </div>
-            <div className="flex flex-col items-start justify-center ml-2 sm:ml-4">
-                <p className="text-sm">{item.itemName}</p>
-                <div className="flex pt-2 items-center">
-                    <div className="ml-8 flex items-center">
-                        <p className="text-base mx-4">{item.quantity}</p>
-                        <p className="ml-8 mr-2 text-base sm:text-lg">x</p>
-                        <p className="text-base font-semibold">${item.price}</p>
+            <div className="w-full flex flex-col items-start justify-center xs:ml-2 sm:ml-4">
+                <p className="text-sm text-gray-500">Product:</p>
+                <p className="text-sm">{item.product.name}</p>
+                <div className="w-full pt-2 flex items-center justify-between flex-wrap">
+                    <div>
+                        <p className="text-sm text-gray-500">Qty:</p>
+                        <p className="text-sm">{item.quantity}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Size:</p>
+                        <p className="text-sm">{item.size}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-gray-500">Color:</p>
+                        <p className="text-sm">{item.color}</p>
                     </div>
                 </div>
             </div>
