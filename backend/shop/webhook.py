@@ -48,7 +48,7 @@ def handle_successful_payment(checkout_data):
 
     order_instance.save()
 
-    # get all the designs from the order and process them
+    # get all the designs from the order and process them - creates and saves design mockups
     order_items = OrderItem.objects.filter(order=order_instance)
     for item in order_items:
         design = item.design

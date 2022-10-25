@@ -106,68 +106,68 @@ def process_design(design):
     # get sides
     sides = {
         "front": [],
-        # "back": [],
-        # "left": [],
-        # "right": []
+        "back": [],
+        "left": [],
+        "right": []
     }
-    # get print areas
-    print_areas = PrintArea.objects.get(product=design.product.pk, side="front")
     # set design image size
     canvasSizeX = 600
     canvasSizeY = 1000
 
     for side in sides:
-        # create blank design image
-        design_image = Image.new('RGBA', (canvasSizeX, canvasSizeY), (0,0,0,0))
-
+        # get print areas
+        print_areas = PrintArea.objects.get(product=design.product.pk, side=side)
         # get layer instances
         layers = Layer.objects.filter(design=design, side=side).order_by('zIndex')
-        for layer in layers:
-            if layer.type == 'image':
-                design_image = addImageLayer(
-                    design_image, 
-                    layer.image, 
-                    layer.width, 
-                    layer.height, 
-                    layer.xPos, 
-                    layer.yPos, 
-                    print_areas.xPos, 
-                    print_areas.yPos, 
-                    print_areas.xSize, 
-                    print_areas.ySize, 
-                    layer.rotation
-                )
-            elif layer.type == 'text':
-                design_image = addTextLayer(
-                    design_image, 
-                    layer.font.file.path, 
-                    layer.textContent, 
-                    layer.textColor, 
-                    layer.translateX, 
-                    layer.translateY, 
-                    layer.textBoxX, 
-                    layer.textBoxY, 
-                    layer.textBoxW, 
-                    print_areas.xPos, 
-                    print_areas.yPos, 
-                    print_areas.xSize, 
-                    print_areas.ySize, 
-                    layer.rotation
-                )
+        if (len(layers) > 0):
+            # create blank design image
+            design_image = Image.new('RGBA', (canvasSizeX, canvasSizeY), (0,0,0,0))
+            for layer in layers:
+                if layer.type == 'image':
+                    design_image = addImageLayer(
+                        design_image,
+                        layer.image, 
+                        layer.width, 
+                        layer.height, 
+                        layer.xPos, 
+                        layer.yPos, 
+                        print_areas.xPos, 
+                        print_areas.yPos, 
+                        print_areas.xSize, 
+                        print_areas.ySize, 
+                        layer.rotation
+                    )
+                elif layer.type == 'text':
+                    design_image = addTextLayer(
+                        design_image, 
+                        layer.font.file.path, 
+                        layer.textContent, 
+                        layer.textColor, 
+                        layer.translateX, 
+                        layer.translateY, 
+                        layer.textBoxX, 
+                        layer.textBoxY, 
+                        layer.textBoxW, 
+                        print_areas.xPos, 
+                        print_areas.yPos, 
+                        print_areas.xSize, 
+                        print_areas.ySize, 
+                        layer.rotation
+                    )
 
-        # save design mockup to db
-        file_name = f'{get_random_string(16)}.png'
-        blob = BytesIO()
+            # save design mockup to db
+            file_name = f'{get_random_string(16)}.png'
+            blob = BytesIO()
 
-        design_image.save(blob, format='PNG')
-        mockup_data = {
-            'design': design.pk,
-            'side': side,
-        }
-        mockup_serializer = DesignMockupSerializer(data=mockup_data)
+            design_image.save(blob, format='PNG')
+            mockup_data = {
+                'design': design.pk,
+                'side': side,
+            }
+            mockup_serializer = DesignMockupSerializer(data=mockup_data)
 
-        if mockup_serializer.is_valid():
-            mockup_serializer.save()
-            mockup_serializer.instance.image.save(file_name, File(blob))
-        else:
-            print(mockup_serializer.errors)
+            if mockup_serializer.is_valid():
+                mockup_serializer.save()
+                mockup_serializer.instance.image.save(file_name, File(blob))
+            else:
+                print(mockup_serializer.errors)
