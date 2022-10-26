@@ -64,7 +64,7 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
         if (item) {
             item.sizeQuantities[size] += sizeQuantities[size];
         }
-        totalQty += sizeQuantities[size];
+        totalQty += item.sizeQuantities[size];
     })
     if (item) {
         item.totalQty = totalQty;

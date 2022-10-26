@@ -56,6 +56,7 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                         quantity: item.totalQty
                     })
                 })
+
                 // get checkout session
                 const {
                     data: { id },
@@ -107,7 +108,7 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                     <p className="dark:text-gray-100 text-lg font-semibold">${cart?.value.toFixed(2)}</p>
                 </div>}
                 <button 
-                    className={`p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
+                    className={`flex items-center justify-center p-2 mt-2 text-white text-sm font-semibold bg-sky-500 hover:bg-blue-500 transition ease-in-out duration-300 rounded ${checkoutBtnCursor} flex`}
                     onClick={redirectToCheckout}
                     disabled={cart?.total_qty === 0}
                 >
