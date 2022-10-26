@@ -2,7 +2,7 @@ import Head from "next/head";
 
 export default function TermsOfService() {
     return (
-        <div className="w-full p-2">
+        <section className="w-full p-2">
             <Head>
                 <title>Print-it Terms of Service</title>
             </Head>
@@ -124,6 +124,6 @@ export default function TermsOfService() {
                 <h2 className="mb-2 text-base font-bold">Section 20 - Contact Information</h2>
                 <p className="mb-2">Questions about the Terms of Service should be sent to us at contact@print-it.co.th</p>
             </div>
-        </div>
+        </section>
     )
 }
