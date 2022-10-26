@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework.response import Response
 import random
 import string
+import tempfile
 
 def get_random_string(length):
     # choose from all lowercase letter
@@ -147,3 +148,15 @@ def updateDesign(request):
             return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
     except:
         return Response({"message":"fail"}, status=HTTP_400_BAD_REQUEST)
+
+def set_image_dpi(image):
+    """
+    Rescaling image to 300dpi without resizing
+    :param image: An image
+    :return: A rescaled image
+    """
+    image_resize = image
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+    temp_filename = temp_file.name
+    image_resize.save(temp_filename, dpi=(300, 300))
+    return temp_filename

@@ -103,6 +103,11 @@ class ProductNameImageSerializer(ModelSerializer):
         model = Product
         fields = ('name', 'product_images')
 
+class OrderItemCreateSerializer(ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
 class OrderItemSerializer(ModelSerializer):
     color = CharField(source='color.color')
     size = CharField(source='size.size')

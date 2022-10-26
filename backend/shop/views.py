@@ -176,7 +176,7 @@ class OrderCreateView(APIView):
                     }
 
                     order_total += item_data["subtotal"]
-                    item_serializer = OrderItemSerializer(data=item_data)
+                    item_serializer = OrderItemCreateSerializer(data=item_data)
                     if item_serializer.is_valid():
                         item_serializer.save(order=serializer.instance)
                     else:

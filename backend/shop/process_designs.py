@@ -159,7 +159,7 @@ def process_design(design):
             file_name = f'{get_random_string(16)}.png'
             blob = BytesIO()
 
-            design_image.save(blob, format='PNG')
+            design_image.save(blob, format='PNG', dpi=(300,300))
             mockup_data = {
                 'design': design.pk,
                 'side': side,
