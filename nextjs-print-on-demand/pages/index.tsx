@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Slideshow from '../components/slideshow';
+import Slideshow from '../components/landing/slideshow';
+import Categories from '../components/landing/categories';
 
 const Home: NextPage = () => {
     return (
@@ -9,6 +10,7 @@ const Home: NextPage = () => {
                 <title>Print On Demand</title>
             </Head>
             <Slideshow />
+            <Categories />
         </>
     )
 }
