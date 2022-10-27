@@ -58,7 +58,7 @@ export default function SelectSide() {
     }, [product]);
 
     const sidesElements = (sides) && sides.map(side=>(
-        <div onClick={()=>setSideHandler(side)}>
+        <div key={side} onClick={()=>setSideHandler(side)}>
             {product && color ? <Side product={product} side={side} color={color} selected={productSide === side} /> : null}
         </div>
     ))

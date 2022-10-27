@@ -56,6 +56,11 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     // get the quantity of the product from the custom hook
     const {qty, updateQtyHandler} = useProductQty(product);
 
+    // set the product to the first product in the list as default if no product has been selected
+    useEffect(()=>{
+        if (setProduct && !product) setProduct(products[0]);
+    }, []);
+
     // price is derived from the selected product base price + the total of all the layers
     const price = useMemo(()=> {
         let total = 0;
@@ -81,11 +86,6 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
         }
         return 0;
     }, [qty, price]);
-
-    // set the product to the first product in the list as default
-    useEffect(()=>{
-        if (setProduct) setProduct(products[0]);
-    }, []);
 
     // maximum 6 layers per side
     let disabledAddLayers = false;
