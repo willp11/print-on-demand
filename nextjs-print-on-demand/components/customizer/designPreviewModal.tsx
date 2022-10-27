@@ -11,7 +11,6 @@ import SaveDesignBtns from './saveDesignBtns';
 import ConfirmAddToCart from './confirmAddToCart';
 
 type Side = 'front' | 'back' | 'left' | 'right';
-const sides = ["front", "back", "left", "right"];
 
 interface DesignPreviewModalProps {
     product: IProduct, 
@@ -44,38 +43,41 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
 
     // create a design object to pass to confirmAddToCart
     const design: IDesign | null = useMemo(()=>{
-        if (frontPreview && backPreview && leftPreview && rightPreview) {
-            let previews = [
-                {
-                    side: "front",
-                    image: frontPreview
-                },
-                {
-                    side: "back",
-                    image: backPreview
-                },
-                {
-                    side: "left",
-                    image: leftPreview
-                },
-                {
-                    side: "right",
-                    image: rightPreview
-                }
-            ]
-            let designObj: IDesign = {
-                name: designName,
-                layers: layers,
-                previews: previews,
-                product: product,
-                color: color
-            };
-            if (currentDesign) designObj.id = currentDesign.id;
-            return designObj;
+        if (!loading) {
+            const sides: string[] = Object.keys(product.drawableArea);
+            try {
+                const previews = sides.map(side=>{
+                    let preview;
+                    if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else {
+                        throw Error('Invalid side')
+                    }
+                    return {side: side, image: preview}
+                });
+                const designObj: IDesign = {
+                    name: designName,
+                    layers: layers,
+                    previews: previews,
+                    product: product,
+                    color: color
+                };
+                if (currentDesign) designObj.id = currentDesign.id;
+                console.log(designObj)
+                return designObj;
+            } catch(e) {
+                return null;
+            }
         } else {
             return null;
         }
-    }, [product, color, layers, designName, frontPreview, backPreview, leftPreview, rightPreview])
+    }, [product, color, layers, designName, loading])
 
     // Update design name if user loads a saved design
     useEffect(()=>{
@@ -97,57 +99,70 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
 
     // when previews all loaded, setLoading to false
     useEffect(()=>{
-        if (frontPreview && backPreview && leftPreview && rightPreview) {
-            setLoading(false);
+        if (product) {
+            const sides = Object.keys(product.drawableArea);
+            let previewsFound = 0;
+            sides.forEach(side=>{
+                if (side === "front") frontPreview ? previewsFound += 1 : null;
+                if (side === "back") backPreview ? previewsFound += 1 : null;
+                if (side === "left") leftPreview ? previewsFound += 1 : null;
+                if (side === "right") rightPreview ? previewsFound += 1 : null;
+            })
+            if (sides.length === previewsFound) {
+                setLoading(false);
+            }
         }
-    }, [frontPreview, backPreview, leftPreview, rightPreview]);
+    }, [product, frontPreview, backPreview, leftPreview, rightPreview]);
 
     // handler function to save or update a design
     const saveHandler = async (type: 'save' | 'update') => {
-        if (designName === "") {
-            setErrorMsg("Design name is required");
-            return;
-        }
-        if (token && frontPreview && backPreview && leftPreview && rightPreview) {
-            setErrorMsg("");
-            setSuccessMsg("");
-            setLoading(true);
-            let previews = [
-                {
-                    side: "front",
-                    image: frontPreview
-                },
-                {
-                    side: "back",
-                    image: backPreview
-                },
-                {
-                    side: "left",
-                    image: leftPreview
-                },
-                {
-                    side: "right",
-                    image: rightPreview
+        try {
+            if (designName === "") {
+                setErrorMsg("Design name is required");
+                return;
+            }
+            if (token && !loading) {
+                setErrorMsg("");
+                setSuccessMsg("");
+                setLoading(true);
+
+                const previews = Object.keys(product.drawableArea).map(side=>{
+                    let preview;
+                    if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else if (side === "front") {
+                        preview = frontPreview;
+                    } else {
+                        throw Error('Invalid side')
+                    }
+                    return {side: side, image: preview}
+                });
+
+                let res;
+                if (type === "save") {
+                    res = await saveDesign(token, designName, previews);
+                } else if (type === "update") {
+                    res = await updateDesign(token, designName, previews);
                 }
-            ]
-            let res;
-            if (type === "save") {
-                res = await saveDesign(token, designName, previews);
-            } else if (type === "update") {
-                res = await updateDesign(token, designName, previews);
+                if (res?.data?.message === "success") {
+                    setSuccessMsg("Design uploaded successfully. Check your profile page to see all your designs.");
+                    if (setCurrentDesign) setCurrentDesign(res.data.design);
+                } else {
+                    setErrorMsg("There was an error uploading your design. Please try again later.");
+                }
+                setLoading(false);
             }
-            if (res?.data?.message === "success") {
-                setSuccessMsg("Design uploaded successfully. Check your profile page to see all your designs.");
-                if (setCurrentDesign) setCurrentDesign(res.data.design);
-            } else {
-                setErrorMsg("There was an error uploading your design. Please try again later.");
-            }
-            setLoading(false);
+        } catch(e) {
+            setErrorMsg("There was an error uploading your design. Please try again later.");
         }
     }
 
     // select side btns
-    const sideBtns = sides.map((side)=>{
+    const sideBtns = Object.keys(product.drawableArea).map((side)=>{
         return (
             <button
                 key={side}
@@ -160,7 +175,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
         )
     })
 
-    if (product !== null && product !== undefined) {
+    if (product && color) {
         return (
             <div className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)] z-20 flex justify-center items-center">
                 <div className="relative bg-white w-full max-w-[600px] flex flex-col justify-center items-center p-4">
@@ -169,7 +184,14 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                         onClick={from === "save" ? ()=>setShowPreview(false) : ()=>setShowAddToCart(false)}
                     />
                     <h2 className="text-4xl font-bold pb-2">Preview</h2>
-                    <div className={
+                    {Object.keys(product.drawableArea).map(side=>(
+                        <div className={
+                            selectedPreview === side ? "block" : "hidden"
+                        }>
+                            <DesignPreviewCanvas product={product} side={side} color={color} layers={layers} updatePreviewImages={updatePreviewImages} />
+                        </div>
+                    ))}
+                    {/* <div className={
                         selectedPreview === "front" ? "block" : "hidden"
                     }>
                         <DesignPreviewCanvas product={product} side="front" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
@@ -188,7 +210,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                         selectedPreview === "right" ? "block" : "hidden"
                     }>
                         <DesignPreviewCanvas product={product} side="right" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
-                    </div>
+                    </div> */}
 
                     {!loading && <div className="flex">{sideBtns}</div>}
 

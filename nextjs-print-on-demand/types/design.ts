@@ -55,7 +55,7 @@ export interface ILayer {
 
 interface IPreview {
     side: string,
-    image: string
+    image: string | null
 }
 
 export interface IDesign {

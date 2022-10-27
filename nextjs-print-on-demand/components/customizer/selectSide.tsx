@@ -2,26 +2,31 @@ import { useDesign } from "../../hooks/useDesign";
 import Image from "next/image";
 import {IProduct} from '../../types/product';
 import { imageApiPrefix } from '../../utils/api';
+import { useMemo } from "react";
 
-type sideTypes = 'front' | 'back' | 'left' | 'right';
-interface ISideProps {
+type sideType = 'front' | 'back' | 'left' | 'right';
+interface ISelectSideProps {
     product: IProduct,
-    side: sideTypes,
+    side: sideType,
     color: string,
     selected: boolean
 }
 
-const Side = ({product, side, color, selected}: ISideProps) => {
+const Side = ({product, side, color, selected}: ISelectSideProps) => {
     let src = `${imageApiPrefix}${product.colors[color][side]}`;
     if (src !== undefined) {
-        let border = selected ? "border-2 border-blue-600" : "border border-gray-300 hover:border-gray-500";
-        let imgBorder = selected ? "border-2 border-t-0 border-blue-600" : "border border-gray-300 hover:border-gray-500";
+        let className = "flex flex-col items-center rounded cursor-pointer min-w-[60px] border border-gray-300";
+        let imgClassName = "hidden lg:block relative w-[100px] h-[100px] border border-gray-300";
+        if (selected) {
+            className = "flex flex-col items-center rounded cursor-pointer min-w-[60px] border-2 border-blue-600";
+            imgClassName = "hidden lg:block relative w-[100px] h-[100px] border-b-2 border-l-2 border-r-2 border-blue-600";
+        }
 
         return (
             <div
-                className={`flex flex-col items-center rounded cursor-pointer min-w-[60px] ${border}`}
+                className={className}
             >
-                <div className={`hidden lg:block relative w-[100px] h-[100px] ${imgBorder}`}>
+                <div className={imgClassName}>
                     <Image
                         src={src}
                         layout="fill"
@@ -46,22 +51,23 @@ export default function SelectSide() {
         }
     }
 
+    // derive the sides from the product's drawable areas
+    const sides: sideType[] | null = useMemo(()=>{
+        if (product) return Object.keys(product.drawableArea) as sideType[];
+        return null;
+    }, [product]);
+
+    const sidesElements = (sides) && sides.map(side=>(
+        <div onClick={()=>setSideHandler(side)}>
+            {product && color ? <Side product={product} side={side} color={color} selected={productSide === side} /> : null}
+        </div>
+    ))
+
     return (
         <div className="w-full lg:w-[100px] flex flex-col justify-center lg:justify-start">
             <h2 className="text-sm text-gray-500 font-semibold">Side</h2>
             <div className="flex lg:flex-col">
-                <div onClick={()=>setSideHandler("front")}>
-                    {product && color ? <Side product={product} side="front" color={color} selected={productSide === "front"} /> : null}
-                </div>
-                <div onClick={()=>setSideHandler("back")}>
-                    {product && color ? <Side product={product} side="back" color={color} selected={productSide === "back"}  /> : null}
-                </div>
-                <div onClick={()=>setSideHandler("left")}>
-                    {product && color ? <Side product={product} side="left" color={color} selected={productSide === "left"}  /> : null}
-                </div>
-                <div onClick={()=>setSideHandler("right")}>
-                    {product && color ? <Side product={product} side="right" color={color} selected={productSide === "right"}  /> : null}
-                </div>
+                {sidesElements}
             </div>
         </div>
     )
