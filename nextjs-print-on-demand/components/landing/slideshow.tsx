@@ -5,7 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 export default function Slideshow() {
 
     return (
-        <div className="w-full max-w-[1200px] px-2 pb-2 pt-2 md:pt-0 mx-auto">
+        <div className="w-full max-w-[calc(1000px+4rem)] mt-4 px-2 mx-auto">
             <Carousel autoPlay={true} interval={10000} showStatus={false} infiniteLoop={true} showThumbs={false} transitionTime={800}>
                 <div>
                     <Image
