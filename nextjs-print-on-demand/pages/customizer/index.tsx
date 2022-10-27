@@ -22,6 +22,7 @@ import AddToCart from '../../components/customizer/addToCart';
 import { useProductQty } from '../../hooks/useProductQty';
 import SelectQuantity  from '../../components/products/selectQuantity';
 import SelectProduct from '../../components/customizer/selectProduct';
+import { useUser } from '../../hooks/useUser';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -35,6 +36,9 @@ export async function getStaticProps() {
 }
 
 export default function Customizer({products, fonts}: {products: IProduct[], fonts: Font[]}) {
+
+    // get user token if logged in
+    const { token } = useUser();
 
     // state
     const [showPreview, setShowPreview] = useState(false);
@@ -93,7 +97,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
             {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">
 
-                <LeftMenu setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
+                <LeftMenu token={token} setShowSelectProductModal={setShowSelectProductModal} setShowPreview={setShowPreview} setShowDesigns={setShowDesignsModal} />
 
                 <div className="px-2 flex flex-col items-center justify-start">
                     <div className="w-full p-2 border border-gray-100 rounded">
@@ -143,10 +147,10 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
             <div className="flex flex-col lg:hidden w-full max-w-[620px] mx-auto">
                 <div className='w-full flex justify-left'>
                     <div className="mr-4">
-                        <LoadDesign setShowDesigns={setShowDesignsModal} />
+                        <LoadDesign token={token} setShowDesigns={setShowDesignsModal} />
                     </div>
                     <div className="mr-4">
-                        <SaveDesign setShowPreview={setShowPreview} />
+                        <SaveDesign token={token} setShowPreview={setShowPreview} />
                     </div>
                     <div className="mr-4">
                         <SelectProduct setShowSelectProductModal={setShowSelectProductModal} />
@@ -253,7 +257,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
             }
             
             {showDesignsModal && 
-                <LoadDesignModal setShowDesignsModal={setShowDesignsModal} />
+                <LoadDesignModal token={token} setShowDesignsModal={setShowDesignsModal} />
             }
 
         </div>

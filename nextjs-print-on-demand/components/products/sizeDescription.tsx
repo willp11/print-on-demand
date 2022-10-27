@@ -36,18 +36,27 @@ function SizeTable({sizes}: {sizes: {[key: string]: string}}) {
         return <td key={size+"-body"} className="w-20 text-center p-1 text-sm">{val}</td>
     });
 
-    return (
-        <div className="w-full overflow-x-auto my-4">
-            <table className="w-full table-fixed">
-                <thead>
-                    <tr className="border border-gray-300">{headings}</tr>
-                </thead>
-                <tbody>
-                    <tr className="border border-gray-300">{values}</tr>
-                </tbody>
-            </table>
-        </div>
-    )
+    if (Object.keys(sizes).length === 1) {
+        return (
+            <div>
+                <h2 className="text-lg font-bold">Sizes</h2>
+                <p className="text-sm">This product comes in one size only.</p>
+            </div>
+        )
+    }  else {
+        return (
+            <div className="w-full overflow-x-auto my-4">
+                <table className="w-full table-fixed">
+                    <thead>
+                        <tr className="border border-gray-300">{headings}</tr>
+                    </thead>
+                    <tbody>
+                        <tr className="border border-gray-300">{values}</tr>
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
 }
 
 function ShippingReturns() {
@@ -55,8 +64,6 @@ function ShippingReturns() {
         <>
             <h3 className="text-sm font-bold my-4">Returns Policy</h3>
             <p className="text-sm my-4">
-                You may return blank garments at your own postage cost within 14 days of delivery for a full refund. 
-                We'll pay the return shipping costs if the return is a result of our error (you received an incorrect or defective item, etc.)
                 Goods that are not faulty and printed to the customer's specification cannot be returned or exchanged as they are produced to the customer's requirements unless the garment is faulty or there is an issue with the design.
             </p>
             <p className="text-sm my-4">

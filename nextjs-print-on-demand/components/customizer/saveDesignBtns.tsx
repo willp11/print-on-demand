@@ -18,7 +18,7 @@ export default function SaveDesignBtns({loading, designName, setDesignName, save
                 placeholder="Type design name..." 
                 onChange={(e)=>setDesignName(e.target.value)} 
             />
-            <button 
+            {currentDesign && <button 
                 disabled={loading || !currentDesign} 
                 onClick={()=>saveHandler("update")}
                 className={
@@ -27,7 +27,7 @@ export default function SaveDesignBtns({loading, designName, setDesignName, save
                 }
             >
                 {loading ? "Loading..." : "Update existing"}
-            </button>
+            </button>}
             <button 
                 disabled={loading} 
                 onClick={()=>saveHandler("save")}
