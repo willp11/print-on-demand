@@ -23,6 +23,7 @@ import { useProductQty } from '../../hooks/useProductQty';
 import SelectQuantity  from '../../components/products/selectQuantity';
 import SelectProduct from '../../components/customizer/selectProduct';
 import { useUser } from '../../hooks/useUser';
+import Head from 'next/head';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -92,7 +93,10 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     if (!layers || !productSide || layers[productSide].length >= 6) disabledAddLayers = true;
     
     return (
-        <div className="p-1"> 
+        <div className="p-1">
+            {/* <Head>
+                <style>@import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Open+Sans:wght@500&display=swap');</style>
+            </Head> */}
 
             {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">

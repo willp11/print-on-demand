@@ -1,3 +1,5 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Open+Sans:wght@500&display=swap'); */
+
 html,
 body {
   padding: 0;
@@ -23,19 +25,6 @@ a {
     color: white;
     background: black;
   }
-}
-
-@font-face {
-    font-family: Bungee Spice;
-    src: url(../public/fonts/BungeeSpice-Regular.ttf);
-}
-@font-face {
-    font-family: Open Sans;
-    src: url(../public/fonts/OpenSans-Medium.ttf);
-}
-@font-face {
-    font-family: Blaka Ink;
-    src: url(../public/fonts/BlakaInk-Regular.ttf);
 }
 
 @tailwind base;
