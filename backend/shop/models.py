@@ -97,8 +97,12 @@ class Discount(models.Model):
         return f'{self.discount}% off {self.product.name}'
 
 class Font(models.Model):
+    class Languages(models.TextChoices):
+        english = 'english', ('english')
+        thai = 'thai', ('thai')
     name = models.CharField(max_length=64, unique=True)
     file = models.FileField(upload_to='fonts/')
+    language = models.CharField(max_length=8, choices=Languages.choices)
 
     def __str__(self):
         return self.name
