@@ -1,7 +1,8 @@
 import { useDesign } from "../../hooks/useDesign";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ILayer, Font } from "../../types/design";
 import { fetchFonts } from "../../utils/api";
+import { Language } from "../../types/design";
 
 export default function AddTextLayer() {
     
@@ -9,19 +10,42 @@ export default function AddTextLayer() {
 
     const [textLayerContent, setTextLayerContent] = useState("");
     const [selectedColor, setSelectedColor] = useState("black");
-    const [fonts, setFonts] = useState<Font[]>([]);
+    // const [fonts, setFonts] = useState<Font[]>([]);
+    const [englishFonts, setEnglishFonts] = useState<Font[]>([]);
+    const [thaiFonts, setThaiFonts] = useState<Font[]>([]);
+    const [language, setLanguage] = useState<Language>("english");
     const [selectedFont, setSelectedFont] = useState<Font | undefined>();
+    const activeFonts = useMemo(()=>{
+        if (language === "english") {
+            return englishFonts;
+        } else {
+            return thaiFonts;
+        }
+    }, [englishFonts, thaiFonts, language]);
 
     useEffect(()=>{
         fetchFonts().then((res)=>{
-            setFonts(res);
-            setSelectedFont(res[0]);
+            // setFonts(res);
+            if (res) {
+                const english: Font[] = [];
+                const thai: Font[] = [];
+                res.forEach((font)=>{
+                    if (font.language === "english") {
+                        english.push(font);
+                    } else if (font.language === "thai") {
+                        thai.push(font);
+                    }
+                })
+                setEnglishFonts(english);
+                setThaiFonts(thai);
+                setSelectedFont(res[0]);
+            }
         })
     }, []);
 
     const setFontHandler = (name: string) => {
-        fonts.forEach((font, idx)=>{
-            if (font.file === name) setSelectedFont(fonts[idx])
+        activeFonts.forEach((font, idx)=>{
+            if (font.file === name) setSelectedFont(activeFonts[idx])
         })
     }
 
@@ -75,8 +99,8 @@ export default function AddTextLayer() {
 
     // FONT SELECTION
     let fontItems = null;
-    if (fonts) {
-        fontItems = fonts.map((font)=>{
+    if (activeFonts) {
+        fontItems = activeFonts.map((font)=>{
             return (
                 <option key={font.id} value={font.file} style={{fontFamily: font.name}}>{font.name}</option>
             );
@@ -114,6 +138,12 @@ export default function AddTextLayer() {
             </div>
             <div className="mb-1">
                 <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
+                <div className="mb-2">
+                    <input type="radio" id="english" name="language" value="English" className="mr-1" checked={language === "english"} onChange={()=>setLanguage("english")} />
+                    <label htmlFor="english" className="mr-4">English</label>
+                    <input type="radio" id="thai" name="language" value="Thai" className="mr-1" checked={language === "thai"} onChange={()=>setLanguage("thai")} />
+                    <label htmlFor="thai">Thai</label>
+                </div>
                 {fontSelection}
             </div>
             <button

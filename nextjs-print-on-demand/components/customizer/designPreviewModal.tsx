@@ -183,34 +183,17 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                         className="w-6 h-6 absolute top-2 right-2 cursor-pointer" 
                         onClick={from === "save" ? ()=>setShowPreview(false) : ()=>setShowAddToCart(false)}
                     />
+
                     <h2 className="text-4xl font-bold pb-2">Preview</h2>
+                    
                     {Object.keys(product.drawableArea).map(side=>(
-                        <div className={
-                            selectedPreview === side ? "block" : "hidden"
-                        }>
+                        <div 
+                            key={side}
+                            className={selectedPreview === side ? "block" : "hidden"}
+                        >
                             <DesignPreviewCanvas product={product} side={side} color={color} layers={layers} updatePreviewImages={updatePreviewImages} />
                         </div>
                     ))}
-                    {/* <div className={
-                        selectedPreview === "front" ? "block" : "hidden"
-                    }>
-                        <DesignPreviewCanvas product={product} side="front" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
-                    </div>
-                    <div className={
-                        selectedPreview === "back" ? "block" : "hidden"
-                    }>
-                        <DesignPreviewCanvas product={product} side="back" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
-                    </div>
-                    <div className={
-                        selectedPreview === "left" ? "block" : "hidden"
-                    }>
-                        <DesignPreviewCanvas product={product} side="left" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
-                    </div>
-                    <div className={
-                        selectedPreview === "right" ? "block" : "hidden"
-                    }>
-                        <DesignPreviewCanvas product={product} side="right" color="white" layers={layers} updatePreviewImages={updatePreviewImages} />
-                    </div> */}
 
                     {!loading && <div className="flex">{sideBtns}</div>}
 

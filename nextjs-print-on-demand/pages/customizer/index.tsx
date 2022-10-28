@@ -94,10 +94,9 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     
     return (
         <div className="p-1">
-            {/* <Head>
-                <style>@import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Open+Sans:wght@500&display=swap');</style>
-            </Head> */}
-
+            <Head>
+                <title>Print It! Customizer</title>
+            </Head>
             {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">
 

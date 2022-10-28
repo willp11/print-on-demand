@@ -26,10 +26,13 @@ interface TextBox {
     advance: number
 }
 
+export type Language = 'english' | 'thai';
+
 export interface Font {
     id: number,
     file: string,
-    name: string
+    name: string,
+    language: Language
 }
 
 export interface ILayer {

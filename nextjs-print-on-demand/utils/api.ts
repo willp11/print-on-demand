@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IDesign, ILayer } from "../types/design";
+import { IDesign, ILayer, Font } from "../types/design";
 import { Cart } from "../types/cart";
 import { IOrder } from "../types/order";
 import { IUpdateUserData } from "./user";
@@ -94,7 +94,7 @@ export const fetchFonts = async () => {
     }
     try {
         const res = await axios.get(url, {headers: headers});
-        return res.data;
+        return res.data as Font[];
     } catch(e) {
         console.log(e);
     }
