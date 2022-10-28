@@ -123,18 +123,18 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
                 </div>
 
                 {editTextLayerMode && 
-                    <div className="w-[250px] h-fit p-2 border border-gray-100 rounded">
+                    <div className="w-[200px] xl:w-[280px] h-fit p-2 border border-gray-100 rounded">
                         <EditTextLayer setEditTextLayerMode={setEditTextLayerMode} fonts={fonts} />
                     </div>
                 }
                 {editImgLayerMode && 
-                    <div className="w-[250px] h-fit p-2 border border-gray-100 rounded">
+                    <div className="w-[200px] xl:w-[280px] h-fit p-2 border border-gray-100 rounded">
                         <EditImageLayer setEditImgLayerMode={setEditImgLayerMode} />
                     </div>
                 }
 
                 {(!editTextLayerMode && !editImgLayerMode) && 
-                    <div className="w-[250px] h-fit flex justify-center touch-none border border-gray-100 rounded p-2">
+                    <div className="w-[200px] xl:w-[280px] h-fit flex justify-center touch-none border border-gray-100 rounded p-2">
                         <SelectSide />
                         <Layers setEditTextLayerMode={setEditTextLayerMode} setEditImgLayerMode={setEditImgLayerMode} />
                     </div>

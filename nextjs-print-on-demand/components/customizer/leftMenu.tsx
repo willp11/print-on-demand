@@ -16,7 +16,7 @@ interface ILeftMenuProps {
 export default function LeftMenu({token, setShowSelectProductModal, setShowPreview, setShowDesigns}: ILeftMenuProps) {
 
     return (
-        <div className="flex flex-row w-full lg:flex-col lg:w-[250px]">
+        <div className="flex flex-row w-full lg:flex-col lg:w-[200px] xl:w-[280px]">
             <div className="w-full flex justify-between p-2 border border-gray-100 rounded-md">
                 <LoadDesign token={token} setShowDesigns={setShowDesigns} />
                 <SaveDesign token={token} setShowPreview={setShowPreview} />
