@@ -28,11 +28,10 @@ export default function AddImageLayer() {
             if (files !== null) {
                 // check file format and size
                 if (validateSize(files, 50)) {
-                    console.log(files[0].type)
-                    if (files[0].type === "image/png" || files[0].type === "image/jpeg" || files[0].type === "image/bmp") {
+                    if (files[0].type === "image/png" || files[0].type === "image/jpeg" || files[0].type === "image/bmp" || files[0].type === "image/svg+xml" || files[0].type === "image/gif") {
                         setErrorMsg("");
                         getBase64(files[0], returnFile);
-                        
+
                     } else {
                         setErrorMsg("Invalid file type");
                     }
@@ -118,7 +117,8 @@ export default function AddImageLayer() {
                 >
                     Add
                 </button>
-                <p className="text-xs mt-2">Accepted file formats: png, jpg</p>
+                <p className="text-xs mt-2 font-semibold">Accepted file formats:</p>
+                <p  className="text-xs">png, jpg, jpeg, svg, bmp, gif</p>
                 {errorMsg !== "" ? <p className="text-xs text-red-500 mt-2">{errorMsg}</p> : null}
             </div>
         </div>

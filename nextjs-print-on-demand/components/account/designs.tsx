@@ -19,6 +19,7 @@ export default function Designs({token, setShowDesignsModal}: IDesignsProps) {
         const getDesigns = async () => {
             try {
                 const designs = await fetchDesigns(token);
+                console.log(designs);
                 if (designs) {
                     setDesigns(designs);
                 } else {
