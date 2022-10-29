@@ -5,6 +5,8 @@ from .serializers import *
 from .util import get_random_string
 from io import BytesIO
 from django.conf import settings
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPM
 
 def addTextLayer(
     design,
@@ -72,7 +74,14 @@ def addImageLayer(
     printAreaSizeY,
     rotation
 ):
-    # open the image
+    # check the image file's extension
+    image_ext = imagePath.split(".")[-1]
+    if image_ext == "svgxml":
+        # convert svg to png
+        drawing = svg2rlg(imagePath)
+        renderPM.drawToFile(drawing, imagePath, fmt="PNG")
+
+    # open image
     image = Image.open(imagePath)
 
     # find the size to resize image to
@@ -126,7 +135,7 @@ def process_design(design):
                 if layer.type == 'image':
                     design_image = addImageLayer(
                         design_image,
-                        layer.image, 
+                        layer.image.path, 
                         layer.width, 
                         layer.height, 
                         layer.xPos, 

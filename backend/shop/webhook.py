@@ -82,6 +82,7 @@ def checkout_success_webhook_view(request):
             print('Checkout session was successful!')
         except Exception as e:
             # invalid payment information
+            print(e)
             return HttpResponse(status=400)
 
     return HttpResponse(status=200)
