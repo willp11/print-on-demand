@@ -79,6 +79,7 @@ def serializerLayers(design, layers):
 def layersAreValid(layer_serializers):
     for layer_serializer in layer_serializers:
         if not layer_serializer.is_valid():
+            print(layer_serializer.errors)
             return False
     return True
 

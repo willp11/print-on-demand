@@ -2,6 +2,15 @@ from rest_framework.serializers import ModelSerializer, CharField
 from .models import *
 from drf_extra_fields.fields import Base64ImageField
 
+class Base64ImageFieldExt(Base64ImageField):
+    ALLOWED_TYPES = (
+        "jpeg",
+        "jpg",
+        "png",
+        "gif",
+        "bmp"
+    )
+
 class SizeSerializer(ModelSerializer):
     class Meta:
         model = Size
@@ -63,13 +72,13 @@ class TextLayerCreateSerializer(ModelSerializer):
         exclude = ('image',)
 
 class ImageLayerCreateSerializer(ModelSerializer):
-    image = Base64ImageField()
+    image = Base64ImageFieldExt()
     class Meta:
         model = Layer
         fields = ('design', 'side', 'type', 'xPos', 'yPos', 'aspectRatio', 'size', 'width', 'height', 'rotation', 'image', 'zIndex')
 
 class PreviewSerializer(ModelSerializer):
-    image = Base64ImageField()
+    image = Base64ImageFieldExt()
     class Meta:
         model = Preview
         fields = ('image', 'side')
