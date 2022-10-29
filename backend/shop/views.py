@@ -84,6 +84,8 @@ class DesignListView(APIView):
                     with open(f"{settings.BASE_DIR}{layer['image']}", "rb") as image_file:
                         image_data = base64.b64encode(image_file.read()).decode('utf-8')
                     image_ext = layer["image"].split(".")[-1]
+                    if image_ext == "svgxml":
+                        image_ext = "svg+xml"
                     layer["image"] = f"data:image/{image_ext};base64,{image_data}"
                 elif layer["type"] == "text":
                     font = get_object_or_404(Font, pk=layer["font"])

@@ -72,7 +72,7 @@ class TextLayerCreateSerializer(ModelSerializer):
         exclude = ('image',)
 
 class ImageLayerCreateSerializer(ModelSerializer):
-    image = Base64ImageFieldExt()
+    # image = Base64ImageFieldExt()
     class Meta:
         model = Layer
         fields = ('design', 'side', 'type', 'xPos', 'yPos', 'aspectRatio', 'size', 'width', 'height', 'rotation', 'image', 'zIndex')

@@ -5,6 +5,8 @@ from rest_framework.response import Response
 import random
 import string
 import tempfile
+import base64
+from django.core.files.base import ContentFile
 
 def get_random_string(length):
     # choose from all lowercase letter
@@ -72,6 +74,7 @@ def serializerLayers(design, layers):
             layer_serializer = TextLayerCreateSerializer(data=layer)
             layer_serializers.append(layer_serializer)
         elif layer["type"] == "image":
+            layer["image"] = base64_file(layer["image"])
             layer_serializer = ImageLayerCreateSerializer(data=layer)
             layer_serializers.append(layer_serializer)
     return layer_serializers
@@ -79,7 +82,6 @@ def serializerLayers(design, layers):
 def layersAreValid(layer_serializers):
     for layer_serializer in layer_serializers:
         if not layer_serializer.is_valid():
-            print(layer_serializer.errors)
             return False
     return True
 
@@ -161,3 +163,10 @@ def set_image_dpi(image):
     temp_filename = temp_file.name
     image_resize.save(temp_filename, dpi=(300, 300))
     return temp_filename
+
+def base64_file(data, name=None):
+    _format, _img_str = data.split(';base64,')
+    _name, ext = _format.split('/')
+    if not name:
+        name = _name.split(":")[-1]
+    return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
