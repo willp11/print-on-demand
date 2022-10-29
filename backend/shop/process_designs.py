@@ -4,7 +4,6 @@ from .models import *
 from .serializers import *
 from .util import get_random_string
 from io import BytesIO
-from django.conf import settings
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 
