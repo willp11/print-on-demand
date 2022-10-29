@@ -133,6 +133,16 @@ export function drawRotateIcon(
     )
 }
 
+// validate the size of image files. Return true if file size < size (MB)
+export function validateSize(files: FileList, size: number) {
+    const fileSize = files[0].size / 1024 / 1024; // in MiB
+    if (fileSize > size) {
+      return false;
+    } else {
+      return true;
+    }
+}
+
 // input a base64 encoded image
 // export const checkFileType = (file: string) => {
 //     let fileType = "";

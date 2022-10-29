@@ -1,4 +1,4 @@
-import { getBase64 } from "../../utils/customizer";
+import { getBase64, validateSize } from "../../utils/customizer";
 import { useDesign } from "../../hooks/useDesign";
 import { useState } from "react";
 import { ILayer } from "../../types/design";
@@ -26,11 +26,18 @@ export default function AddImageLayer() {
     const setImageHandler = (files: FileList | null) => {
         try {
             if (files !== null) {
-                if (files[0].type === "image/png" || files[0].type === "image/jpeg") {
-                    setErrorMsg("");
-                    getBase64(files[0], returnFile);
+                // check file format and size
+                if (validateSize(files, 50)) {
+                    console.log(files[0].type)
+                    if (files[0].type === "image/png" || files[0].type === "image/jpeg" || files[0].type === "image/bmp") {
+                        setErrorMsg("");
+                        getBase64(files[0], returnFile);
+                        
+                    } else {
+                        setErrorMsg("Invalid file type");
+                    }
                 } else {
-                    setErrorMsg("Invalid file type");
+                    setErrorMsg("File size too large");
                 }
             }
         } catch(e) {

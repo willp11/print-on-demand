@@ -130,12 +130,12 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                     let preview;
                     if (side === "front") {
                         preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
+                    } else if (side === "back") {
+                        preview = backPreview;
+                    } else if (side === "left") {
+                        preview = leftPreview;
+                    } else if (side === "right") {
+                        preview = rightPreview;
                     } else {
                         throw Error('Invalid side')
                     }
@@ -157,7 +157,10 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                 setLoading(false);
             }
         } catch(e) {
+            console.log(e);
             setErrorMsg("There was an error uploading your design. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     }
 
