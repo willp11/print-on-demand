@@ -13,7 +13,7 @@ export default function Account() {
 
     return (
         <div className="w-full p-1">
-            <div className="h-[500px] w-full flex justify-start border border-gray-300 rounded-md shadow-md my-4">
+            <div className="h-[500px] w-full max-w-[875px] mx-auto flex justify-start border border-gray-300 rounded-md shadow-md my-4">
                 <AccountMenu selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
                 {(selectedIndex === 0) && token && <AccountDetails token={token} />}
                 {(selectedIndex === 1) && token && <MyOrders token={token} />}

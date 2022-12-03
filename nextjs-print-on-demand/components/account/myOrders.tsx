@@ -16,7 +16,6 @@ export default function MyOrders({token}: {token: string}) {
                 const orders = await getUserOrders(token);
                 if (orders) {
                     setOrders(orders);
-                    console.log(orders);
                 } else {
                     setError("There was a problem fetching your orders. Please try again.");
                 }

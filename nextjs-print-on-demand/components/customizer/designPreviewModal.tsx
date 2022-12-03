@@ -50,12 +50,12 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                     let preview;
                     if (side === "front") {
                         preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
-                    } else if (side === "front") {
-                        preview = frontPreview;
+                    } else if (side === "back") {
+                        preview = backPreview;
+                    } else if (side === "left") {
+                        preview = leftPreview;
+                    } else if (side === "right") {
+                        preview = rightPreview;
                     } else {
                         throw Error('Invalid side')
                     }

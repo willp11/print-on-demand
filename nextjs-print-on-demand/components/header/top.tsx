@@ -1,5 +1,6 @@
 import { useUser } from "../../hooks/useUser";
 import { useRouter } from "next/router";
+import Link from "next/link"
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Top() {
@@ -27,7 +28,7 @@ export default function Top() {
 
     return (
         <div className="p-2 flex justify-between items-center text-sm font-semibold border-b border-gray-300">
-            <p className="cursor-pointer hover:underline hover:underline-offset-4 hover:text-blue-600">CONTACT US</p>
+            <Link href="/contact"><a className="cursor-pointer hover:underline hover:underline-offset-4 hover:text-blue-600">CONTACT US</a></Link>
 
             {token === undefined || token === "" ? login : logout}
         </div>

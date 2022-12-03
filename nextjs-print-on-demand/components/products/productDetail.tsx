@@ -11,7 +11,7 @@ import { useProductQty } from '../../hooks/useProductQty';
 
 export default function ProductDetail({product}: {product: IProduct}) {
 
-    const [selectedColor, setSelectedColor] = useState("white");
+    const [selectedColor, setSelectedColor] = useState(Object.keys(product.colors)[0]);
     const {qty, updateQtyHandler} = useProductQty(product);
 
     const {addItem} = useCart();
@@ -39,7 +39,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
                 </div>
                 <div className="md:h-[450px] p-4 pt-0 md:pt-4 md:mt-4">
                     <h1 className="text-2xl font-bold tracking-tight">{product.name}</h1>
-                    <p className="text-2xl font-semibold my-4">${product.price}</p>
+                    <p className="text-2xl font-semibold my-4">${product.price.toFixed(2)}</p>
                     <div className="w-full max-w-[500px]">
                         <BlankPriceTable rows={product.blankPriceRows} />
                     </div>

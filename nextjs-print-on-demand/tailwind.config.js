@@ -8,7 +8,8 @@ module.exports = {
         extend: {
             transitionProperty: {
                 'height': 'height',
-                'max-height': 'max-height'
+                'max-height': 'max-height',
+                'opacity': 'opacity',
             }
         },
         screens: {

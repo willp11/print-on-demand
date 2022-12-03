@@ -44,7 +44,8 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
             try {
                 // create line items for Stripe
                 const lineItems: ILineItem[] = [];
-                Object.keys(cart.items).map(key=>{
+                
+                Object.keys(cart.items).forEach(key=>{
                     let item = cart.items[key];
                     let price = item.customPrice ? item.customPrice : item.price;
                     lineItems.push({
@@ -56,6 +57,9 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                         quantity: item.totalQty
                     })
                 })
+
+                console.log(cart.items);
+                console.log(lineItems)
 
                 // get checkout session
                 const {

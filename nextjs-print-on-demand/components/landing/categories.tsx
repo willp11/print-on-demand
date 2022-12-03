@@ -24,7 +24,7 @@ export default function Categories() {
                         />
 
                         <div className="absolute top-0 left-0 flex items-center justify-center bg-[rgba(255,255,255,0.6)]
-                                        transition-height ease-in-out duration-300
+                                        transition-height ease-in-out duration-500
                                         w-0 h-0 group-hover:w-full group-hover:h-full"
                         >
                             <h2 className="hidden group-hover:block text-2xl font-extrabold text-center">{category.caption}</h2>
@@ -41,7 +41,7 @@ export default function Categories() {
                     alt="Custom T-Shirts"
                 />
                     <div className="absolute top-0 left-0 flex items-center justify-center bg-[rgba(255,255,255,0.6)]
-                                    transition-height ease-in-out duration-300
+                                    transition-height ease-in-out duration-500
                                     w-0 h-0 group-hover:w-full group-hover:h-full"
                     >
                         <h2 className="hidden group-hover:block text-4xl font-extrabold text-center">Custom T-Shirts</h2>

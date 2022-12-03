@@ -138,12 +138,12 @@ export default function AddTextLayer() {
             </div>
             <div className="mb-1">
                 <h3 className="text-sm font-semibold mb-1">Select Font:</h3>
-                <div className="mb-2">
+                {/* <div className="mb-2">
                     <input type="radio" id="english" name="language" value="English" className="mr-1" checked={language === "english"} onChange={()=>setLanguage("english")} />
                     <label htmlFor="english" className="mr-4">English</label>
                     <input type="radio" id="thai" name="language" value="Thai" className="mr-1" checked={language === "thai"} onChange={()=>setLanguage("thai")} />
                     <label htmlFor="thai">Thai</label>
-                </div>
+                </div> */}
                 {fontSelection}
             </div>
             <button
