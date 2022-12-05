@@ -66,9 +66,9 @@ export default function CartItem({item}: {item: ICartItem}) {
     if (item.design) {
         // if no front layers but have back layers, use back image preview
         if (item.design?.layers['front'].length === 0 && item.design?.layers['back'].length > 0) {
-            imageSrc = item.design?.previews[1].image;
+            if (item.design?.previews[1].image) imageSrc = item.design?.previews[1].image;
         } else {
-            imageSrc = item.design?.previews[0].image;
+            if (item.design?.previews[0].image) imageSrc = item.design?.previews[0].image;
         }
     }
 
