@@ -5,7 +5,7 @@ export default function Contact() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Contact</title>
+                <title>Contact</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Contact Us</h1>
             <article className="w-full max-w-[600px] mx-auto text-sm sm:text-base my-4">

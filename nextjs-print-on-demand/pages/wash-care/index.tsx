@@ -5,7 +5,7 @@ export default function WashCare() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Wash Care</title>
+                <title>Wash Care</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Wash Care</h1>
             <article className="w-full text-sm my-4">

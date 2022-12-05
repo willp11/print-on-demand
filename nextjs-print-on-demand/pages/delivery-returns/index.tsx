@@ -4,7 +4,7 @@ export default function DeliveryReturns() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Delivery & Returns</title>
+                <title>Delivery & Returns</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Delivery & Returns</h1>
             <article className="w-full text-sm my-4">

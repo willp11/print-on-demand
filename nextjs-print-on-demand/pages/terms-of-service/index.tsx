@@ -4,7 +4,7 @@ export default function TermsOfService() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Terms of Service</title>
+                <title>Terms of Service</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Terms of Service</h1>
             <div className="w-full text-sm my-4">
@@ -122,7 +122,7 @@ export default function TermsOfService() {
             </div>
             <div className="w-full text-sm my-4">
                 <h2 className="mb-2 text-base font-bold">Section 20 - Contact Information</h2>
-                <p className="mb-2">Questions about the Terms of Service should be sent to us at contact@print-it.co.th</p>
+                <p className="mb-2">Questions about the Terms of Service should be sent to us at ...</p>
             </div>
         </section>
     )

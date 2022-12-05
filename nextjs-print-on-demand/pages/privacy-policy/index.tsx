@@ -4,7 +4,7 @@ export default function PrivacyPolicy() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Privacy Policy</title>
+                <title>Privacy Policy</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Privacy Policy</h1>
             <article className="w-full text-sm my-4">
@@ -64,7 +64,7 @@ export default function PrivacyPolicy() {
             </article>
             <article className="w-full text-sm my-4">
                 <h2 className="mb-2 text-base font-bold">Contact Us</h2>
-                <p className="mb-2">For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at admin@print-it.co.th</p>
+                <p className="mb-2">For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at ...</p>
             </article>
         </section>
     )

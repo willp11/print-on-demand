@@ -4,7 +4,7 @@ export default function ArtworkGuidelines() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Artwork Guidelines</title>
+                <title>Artwork Guidelines</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Artwork Guidelines</h1>
             <article className="w-full text-sm my-4">

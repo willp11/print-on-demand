@@ -95,7 +95,7 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     return (
         <div className="p-1">
             <Head>
-                <title>Print It! Customizer</title>
+                <title>Customizer</title>
             </Head>
             {/* Large screens only */}
             <div className="hidden lg:flex lg:justify-center">

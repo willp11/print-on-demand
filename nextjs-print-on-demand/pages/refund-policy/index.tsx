@@ -4,7 +4,7 @@ export default function RefundPolicy() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it Refund Policy</title>
+                <title>Refund Policy</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Refund Policy</h1>
             <article className="w-full text-sm my-4">
@@ -21,7 +21,7 @@ export default function RefundPolicy() {
             </article>
             <article className="w-full text-sm my-4">
                 <h2 className="mb-2 text-base font-bold">Late or missing refunds</h2>
-                <p className="mb-2">If you haven’t received a refund yet, first check your bank account again. Then contact your credit card company, it may take some time before your refund is officially posted. Next, contact your bank. There is often some processing time before a refund is posted. If you’ve done all of this and you still have not received your refund yet, please contact us at contact@print-it.co.th</p>
+                <p className="mb-2">If you haven’t received a refund yet, first check your bank account again. Then contact your credit card company, it may take some time before your refund is officially posted. Next, contact your bank. There is often some processing time before a refund is posted. If you’ve done all of this and you still have not received your refund yet, please contact us at ...</p>
             </article>
             <p className="text-sm">You will be responsible for paying for your own shipping costs for returning your item. Shipping costs are non-refundable. If you receive a refund, the cost of return shipping will be deducted from your refund at our discretion.</p>
         </section>

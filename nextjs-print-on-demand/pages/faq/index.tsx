@@ -38,7 +38,7 @@ export default function Faq() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print-it FAQ</title>
+                <title>FAQ</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">FAQ</h1>
             <article className="my-2">

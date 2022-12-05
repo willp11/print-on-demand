@@ -19,7 +19,7 @@ export default function CustomizerGuide() {
     return (
         <section className="w-full p-2">
             <Head>
-                <title>Print It Customizer Guide</title>
+                <title>Customizer Guide</title>
             </Head>
             <h1 className="text-center text-4xl font-extrabold tracking-tight mb-2">Customizer Guide</h1>
             <GuideSection title="Selecting Your Product" videoSrc="">
