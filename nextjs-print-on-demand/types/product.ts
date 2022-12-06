@@ -27,6 +27,8 @@ export interface IProduct {
     id: number,
     name: string,
     price: number,
+    stripe_price_id: string,
+    stripe_product_id: string,
     image: string,
     material: string,
     description: string[],

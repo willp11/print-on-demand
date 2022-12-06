@@ -52,14 +52,11 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                         price_data: {
                             unit_amount: price * 100,
                             currency: 'usd',
-                            product: "prod_MebyqVT2sUkIre",
+                            product: item.stripe_product_id,
                         },
                         quantity: item.totalQty
                     })
                 })
-
-                console.log(cart.items);
-                console.log(lineItems)
 
                 // get checkout session
                 const {
