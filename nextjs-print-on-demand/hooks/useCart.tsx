@@ -123,7 +123,10 @@ const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantitie
     // remove from cart if it hit 0 quantity on all sizes
     let itemQty = 0;
     Object.values(item.sizeQuantities).forEach(qty => itemQty += qty);
-    if (itemQty === 0) delete updatedCart.items[itemIdentifier];
+    if (itemQty === 0) {
+        delete updatedCart.items[itemIdentifier];
+        updatedCart.total_qty -= 1;
+    }
 
     return updatedCart;
 }

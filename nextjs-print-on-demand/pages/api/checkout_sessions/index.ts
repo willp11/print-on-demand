@@ -7,6 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         try {
+            console.log(req.body.items);
             const session = await stripe.checkout.sessions.create({
                 mode: 'payment',
                 payment_method_types: ['card'],
