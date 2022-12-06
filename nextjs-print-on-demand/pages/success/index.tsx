@@ -21,9 +21,9 @@ export default function Success() {
         }
     }, [session_id])
 
-    // useEffect(()=>{
-    //     clearCartOnSuccess();
-    // }, [data])
+    useEffect(()=>{
+        clearCartOnSuccess();
+    }, [data])
 
     return (
         <div className="container xl:max-w-screen-xl mx-auto py-12 px-6 text-center">
