@@ -14,6 +14,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to="images/products/")
     material = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
+    stripe_price_id = models.CharField(max_length=64)
+    stripe_product_id = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name

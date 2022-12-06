@@ -54,7 +54,7 @@ class ProductSerializer(ModelSerializer):
     print_areas = PrintAreaSerializer(many=True)
     class Meta:
         model = Product
-        fields = ('id', 'name', 'price', 'image', 'material', 'description', 'colors', 'sizes', 'discounts', 'print_areas')
+        fields = ('id', 'name', 'price', 'stripe_price_id', 'stripe_product_id', 'image', 'material', 'description', 'colors', 'sizes', 'discounts', 'print_areas')
 
 class DesignCreateSerializer(ModelSerializer):
     class Meta:
