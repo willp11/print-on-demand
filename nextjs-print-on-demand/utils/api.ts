@@ -182,10 +182,18 @@ export const createOrder = async (token: string | undefined, stripeId: string, c
         }
     }
     const url = `${imageApiPrefix}/api/v1/create-order/`;
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Token " + token
+    let headers;
+    if (token) {
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Token " + token
+        }
+    } else {
+        headers = {
+            "Content-Type": "application/json"
+        }
     }
+    
     const data = {
         order: {stripeId},
         items: items
