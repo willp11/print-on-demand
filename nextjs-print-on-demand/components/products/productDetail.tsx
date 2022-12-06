@@ -19,10 +19,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
 
     const addToCartHandler = () => {
         if (qty !== null) {
-            // for each size, add item to cart if qty>0
-            Object.keys(qty).forEach(size=>{
-                (qty[size] > 0) && addItem(product, selectedColor, qty, false);
-            })
+            addItem(product, selectedColor, qty, false);
         }
     }
 

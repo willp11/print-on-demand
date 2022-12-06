@@ -66,6 +66,7 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
         }
         totalQty += sizeQuantities[size];
     })
+
     if (item) {
         item.totalQty = totalQty;
     } else {
