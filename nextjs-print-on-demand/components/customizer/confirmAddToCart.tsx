@@ -20,7 +20,7 @@ export default function ConfirmAddToCart({total, price, qty, loading, design, se
     const addToCartHandler = () => {
         // iterate over keys of qty object to get qty for each size, then add each to cart seperately
         if (design && qty) {
-            addItem(design.product, design.color, qty, true, design, price);
+            addItem(design.product, design.color, {...qty}, true, design, price);
             setShowAddToCart(false);
         }
     }

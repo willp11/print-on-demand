@@ -24,6 +24,7 @@ import SelectQuantity  from '../../components/products/selectQuantity';
 import SelectProduct from '../../components/customizer/selectProduct';
 import { useUser } from '../../hooks/useUser';
 import Head from 'next/head';
+import { getDiscountPct } from '../../hooks/useCart';
 
 export async function getStaticProps() {
     const products = await fetchProducts();
@@ -76,17 +77,18 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
         return total;
     }, [product, layers])
 
-    // total is derived from price + quantity
+    // total is derived from price + quantity and product discounts
     const total = useMemo(() => {
-        if (qty) {
-            let total = 0;
+        if (qty && product) {
+            let total_qty = 0;
             Object.keys(qty).map(size=>{
-                total += qty[size] * price;
-            })
-            return total;
+                total_qty += qty[size];
+            });
+            const discountPct = getDiscountPct(total_qty, product.discounts);
+            return total_qty * price * (1 - (discountPct / 100));
         }
         return 0;
-    }, [qty, price]);
+    }, [qty, price, product]);
 
     // maximum 6 layers per side
     let disabledAddLayers = false;

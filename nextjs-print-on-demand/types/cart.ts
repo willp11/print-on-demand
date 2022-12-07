@@ -12,6 +12,7 @@ export interface ICartItem extends IProduct {
     design?: IDesign,
     customPrice?: number,
     totalQty: number,
+    pricePerUnit: number
 }
 
 export interface Cart {

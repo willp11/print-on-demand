@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useMemo, Reducer, Dispatch } from "react";
 import useLocalStorageReducer from "./useLocalStorageReducer";
-import { IProduct } from "../types/product";
+import { IProduct, IDiscount } from "../types/product";
 import { Cart, UpdateCartAction, ICartContext, ICartItem } from "../types/cart";
 import { useMessage } from "./useMessage";
 import { IDesign } from "../types/design";
@@ -13,6 +13,7 @@ const initialCart: Cart = {
     total_qty: 0
 }
 
+// get a unique identifier for the item to be used in the cart object
 const getIdentifier = (itemName: string, color: string, design?: IDesign) => {
     if (design) {
         let itemIdentifier = `${itemName}${color}${JSON.stringify(design)}`;
@@ -23,11 +24,46 @@ const getIdentifier = (itemName: string, color: string, design?: IDesign) => {
     }
 }
 
+// get the discount % given total qty and product discounts array
+export const getDiscountPct = (totalQty: number, discounts: IDiscount[]) => {
+    let discount_pct = 0;
+    for (let i=0; i<discounts.length; i++) {
+        let disc = discounts[i];
+        // if totalQty above minQty and there's either no maxQty or under the maxQty, set discount_pct and break loop
+        if (totalQty >= disc.minQty) {
+            if (!disc.maxQty) {
+                discount_pct = disc.discount;
+                break;
+            } else {
+                if (totalQty <= disc.maxQty) {
+                    discount_pct = disc.discount;
+                    break;
+                }
+            }
+        } 
+    }
+    return discount_pct;
+}
+
 // get the total value of the item
 const calcItemValue = (item: ICartItem, price: number) => {
     let itemQty = 0;
     Object.values(item.sizeQuantities).forEach(qty => itemQty += qty);
     return  price * itemQty;
+}
+
+const updateItemPriceValue = (item: ICartItem, product: IProduct, customPrice?: number) => {
+    // calculate discount % based on item.totalQty and product.discounts
+    let discount_pct = getDiscountPct(item.totalQty, product.discounts);
+    // get the base price of the item
+    let itemPrice = customPrice ? customPrice : product.price;
+    // apply the discount to the price
+    itemPrice = (itemPrice*(1-discount_pct/100))
+    item.pricePerUnit = itemPrice;
+    // calculate total value of cart item
+    const value = calcItemValue(item, itemPrice);
+    item.value = value;
+    return item;
 }
 
 // update cart with new item
@@ -59,16 +95,19 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
     let itemIdentifier = getIdentifier(itemName, color, design);
 
     let item = state?.items?.[itemIdentifier];
-    let totalQty = 0;
+
+    // quantity of all sizes of the item being added
+    let newQty = 0;
     Object.keys(sizeQuantities).forEach(size => {
         if (item) {
             item.sizeQuantities[size] += sizeQuantities[size];
         }
-        totalQty += sizeQuantities[size];
+        newQty += sizeQuantities[size];
     })
 
+    // Create the cart item if it doesn't exist, or update it if it does
     if (item) {
-        item.totalQty = totalQty;
+        item.totalQty += newQty;
     } else {
         item = {
             ...product,
@@ -77,17 +116,17 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
             sizeQuantities,
             itemName,
             custom,
-            totalQty
+            totalQty: newQty,
+            pricePerUnit: customPrice ? customPrice : product.price,
         }
         if (design && customPrice) {
             item.design = design;
             item.customPrice = Math.round(customPrice * 100) / 100;
         }
     }
-    // get the total value of the item
-    const itemPrice = customPrice ? customPrice : product.price;
-    const value = calcItemValue(item, itemPrice)
-    item.value = value;
+
+    // call function to update item price and value
+    item = updateItemPriceValue(item, product, customPrice);
 
     // get an updated cart object
     const updatedCart = updateCartItems(state, item, itemIdentifier);
@@ -96,6 +135,7 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
 }
 
 const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantities: ISize, design?: IDesign, customPrice?: number) => {
+    console.log(sizeQuantities);
     let itemName = `${product.name} - ${color.toUpperCase()}`;
 
     let itemIdentifier = getIdentifier(itemName, color, design);
@@ -111,12 +151,10 @@ const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantitie
         })
     } else return state; // item not found in cart, return state
 
-    item.totalQty = totalQty;
+    item.totalQty -= totalQty;
 
-    // get the total value of the item
-    const itemPrice = customPrice ? customPrice : product.price;
-    const value = calcItemValue(item, itemPrice)
-    item.value = value;
+    // call function to update item price and value
+    item = updateItemPriceValue(item, product, customPrice);
 
     // get an updated cart object
     const updatedCart = updateCartItems(state, item, itemIdentifier);

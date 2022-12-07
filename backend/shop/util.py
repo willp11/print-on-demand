@@ -61,7 +61,7 @@ def prepareProductData(data):
             row = f"Buy {minQ}+ for £{price} each - SAVE {dis}%"
             blank_price_rows.append(row)
     data["blankPriceRows"] = blank_price_rows
-    del data["discounts"]
+    data["discounts"] = discounts
 
     return data
 

@@ -19,7 +19,7 @@ export default function ProductDetail({product}: {product: IProduct}) {
 
     const addToCartHandler = () => {
         if (qty !== null) {
-            addItem(product, selectedColor, qty, false);
+            addItem(product, selectedColor, {...qty}, false);
         }
     }
 

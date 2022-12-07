@@ -23,6 +23,13 @@ export interface IDrawableArea {
     right?: IDrawableAreaDetails
 }
 
+export interface IDiscount {
+    discount: number,
+    product: number,
+    minQty: number,
+    maxQty?: number
+}
+
 export interface IProduct {
     id: number,
     name: string,
@@ -35,5 +42,6 @@ export interface IProduct {
     sizes: {[key: string]: string},
     colors: {[key: string]: IProductImages},
     blankPriceRows: string[],
+    discounts: IDiscount[],
     drawableArea: IDrawableArea
 }

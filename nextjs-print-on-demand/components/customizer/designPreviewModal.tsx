@@ -69,7 +69,6 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
                     color: color
                 };
                 if (currentDesign) designObj.id = currentDesign.id;
-                console.log(designObj)
                 return designObj;
             } catch(e) {
                 return null;
