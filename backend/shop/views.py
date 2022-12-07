@@ -33,6 +33,20 @@ class ProductListView(APIView):
 
         return Response(productList)
 
+class ProductListByCategoryView(APIView):
+    permission_classes = [AllowAny]
+    queryset = Product.objects.all()
+
+    def get(self, request, category):
+        productList = []
+        for product in self.queryset.filter(category__name=category):
+            serializer = ProductSerializer(product)
+            data = serializer.data.copy()
+            data = prepareProductData(data)
+            productList.append(data)
+
+        return Response(productList)
+
 class ProductListIdsView(ListAPIView):
     queryset = Product.objects.all()
     permission_classes = [AllowAny]

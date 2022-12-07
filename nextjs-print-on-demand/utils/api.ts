@@ -114,6 +114,20 @@ export const fetchProducts = async () => {
     }
 }
 
+// Send API request to fetch products of a given category from server
+export const fetchProductsByCategory = async (category: string) => {
+    const url = `${imageApiPrefix}/api/v1/get-product-list-by-category/${category}/`;
+    const headers = {
+        "Content-Type": "application/json"
+    }
+    try {
+        const res = await axios.get(url, {headers: headers});
+        return res.data;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 // get all designs for user
 export const fetchDesigns = async (token: string) => {
     const url = `${imageApiPrefix}/api/v1/get-designs/`;

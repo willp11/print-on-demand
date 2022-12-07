@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 
 const menuCategories = [
     {title: "SHOP BY PRODUCT", list: productList, hasBorder: true},
-    {title: "SHOP BY BRAND", list: brandList, hasBorder: true},
+    // {title: "SHOP BY BRAND", list: brandList, hasBorder: true},
     {title: "MEN", list: productList, hasBorder: true},
     {title: "WOMEN", list: productList, hasBorder: true},
     {title: "CHILDREN", list: productList, hasBorder: false},

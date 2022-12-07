@@ -14,14 +14,15 @@ interface MobileMenuProps {
 export const productList = [
     {title: "All", route: "/products/all"},
     {title: "T-Shirts", route: "/products/t-shirts"},
-    {title: "Polo Shirts", route: "/products/polo-shirts"},
-    {title: "Vests", route: "/products/vests"},
-    {title: "Sweatshirts", route: "/products/sweatshirts"},
-    {title: "Hoodies", route: "/products/hoodies"},
-    {title: "Leggings", route: "/products/leggings"},
-    {title: "Shorts", route: "/products/shorts"},
-    {title: "Bags", route: "/products/bags"},
-    {title: "Accessories", route: "/products/accessories"}
+    {title: "Hats", route: "/products/hats"}
+    // {title: "Polo Shirts", route: "/products/polo-shirts"},
+    // {title: "Vests", route: "/products/vests"},
+    // {title: "Sweatshirts", route: "/products/sweatshirts"},
+    // {title: "Hoodies", route: "/products/hoodies"},
+    // {title: "Leggings", route: "/products/leggings"},
+    // {title: "Shorts", route: "/products/shorts"},
+    // {title: "Bags", route: "/products/bags"},
+    // {title: "Accessories", route: "/products/accessories"}
 ]
 
 export const brandList = [
@@ -34,7 +35,7 @@ export const brandList = [
 
 const menuCategories = [
     {title: "SHOP BY PRODUCT", list: productList},
-    {title: "SHOP BY BRAND", list: brandList},
+    // {title: "SHOP BY BRAND", list: brandList},
     {title: "MEN", list: productList},
     {title: "WOMEN", list: productList},
     {title: "CHILDREN", list: productList},
