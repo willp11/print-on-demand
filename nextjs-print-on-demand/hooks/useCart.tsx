@@ -58,7 +58,7 @@ const updateItemPriceValue = (item: ICartItem, product: IProduct, customPrice?: 
     // get the base price of the item
     let itemPrice = customPrice ? customPrice : product.price;
     // apply the discount to the price
-    itemPrice = (itemPrice*(1-discount_pct/100))
+    itemPrice = Math.round((itemPrice*(1-discount_pct/100)) * 100) / 100;
     item.pricePerUnit = itemPrice;
     // calculate total value of cart item
     const value = calcItemValue(item, itemPrice);
@@ -135,7 +135,6 @@ const addItem = (state: Cart, product: IProduct, color: string, sizeQuantities: 
 }
 
 const removeItem = (state: Cart, product: IProduct, color: string, sizeQuantities: ISize, design?: IDesign, customPrice?: number) => {
-    console.log(sizeQuantities);
     let itemName = `${product.name} - ${color.toUpperCase()}`;
 
     let itemIdentifier = getIdentifier(itemName, color, design);

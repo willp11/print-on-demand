@@ -48,9 +48,10 @@ export default function CartSummary({showSummary}: {showSummary: boolean}) {
                 Object.keys(cart.items).forEach(key=>{
                     let item = cart.items[key];
                     let price = item.customPrice ? item.customPrice : item.price;
+                    console.log(item)
                     lineItems.push({
                         price_data: {
-                            unit_amount: price * 100,
+                            unit_amount: item.pricePerUnit * 100,
                             currency: 'usd',
                             product: item.stripe_product_id,
                         },
