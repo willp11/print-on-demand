@@ -2,6 +2,7 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
 import { useState } from "react";
+import axios from "axios";
 
 interface IContactForm {
     name: string,
@@ -12,15 +13,27 @@ interface IContactForm {
 export default function ContactForm() {
 
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
     const ContactSchema = Yup.object().shape({
-        name: Yup.string().required('Required'),
+        name: Yup.string().required('Required').max(64, 'Name must be less than 64 characters'),
         email: Yup.string().email('Invalid email').required('Required'),
-        message: Yup.string().required('Required')
+        message: Yup.string().required('Required').max(1028, 'Message must be less than 1028 characters')
     });
 
-    const submitHandler = (values: IContactForm) => {
-        console.log('submit');
+    const submitHandler = async (values: IContactForm) => {
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        setLoading(true);
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/contact-us-create/`, values, {headers});
+            setMessage("Message sent successfully. We will get back to you as soon as possible.")
+        } catch(e) {
+            setMessage("There was a problem sending your message. Please try again later.")
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -62,11 +75,14 @@ export default function ContactForm() {
                                 <div className="text-xs">*{errors.message}</div>
                             ) : null}
                         </div>
-
                         <SubmitBtn content="SUBMIT" isLoading={loading}/>
                     </Form>
                 )}
             </Formik>
+
+            {
+                message !== "" && <p className="text-sm mt-2">{message}</p>
+            }
         </div>
     )
 }

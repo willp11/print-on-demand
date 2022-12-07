@@ -191,3 +191,7 @@ class OrderCreateView(APIView):
                 print(e)
                 serializer.instance.delete()
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class ContactUsCreateView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ContactUsSerializer

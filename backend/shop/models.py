@@ -215,3 +215,9 @@ class DesignMockup(models.Model):
     design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name='mockups')
     image = models.ImageField(upload_to='images/mockups/', null=True)
     side = models.CharField(max_length=8, choices=Side.choices)
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=128)
+    email = models.EmailField()
+    message = models.TextField(max_length=1024)
+    created_at = models.DateTimeField(auto_now_add=True)

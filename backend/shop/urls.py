@@ -12,4 +12,5 @@ urlpatterns = [
     path('get-designs/', DesignListView.as_view(), name='get_designs'),
     path('create-order/', OrderCreateView.as_view(), name='create_order'),
     path('checkout-success/', checkout_success_webhook_view, name='checkout_success'),
+    path('contact-us-create/', ContactUsCreateView.as_view(), name='contact_us_create'),
 ]

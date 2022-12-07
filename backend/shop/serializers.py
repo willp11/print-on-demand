@@ -142,3 +142,8 @@ class DesignMockupSerializer(ModelSerializer):
     class Meta:
         model = DesignMockup
         fields = ('design', 'side')
+
+class ContactUsSerializer(ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = '__all__'
