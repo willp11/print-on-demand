@@ -1,2 +1,3 @@
 venv
-backend/media/
+/backend/.env
+/backend/media/*
