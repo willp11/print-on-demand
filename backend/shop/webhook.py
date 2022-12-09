@@ -4,10 +4,10 @@ import stripe
 from .models import *
 from .serializers import *
 from .process_designs import process_design
+import os
 
-stripe.api_key = 'sk_test_51LvIiIK3DYcQUrRXJJ7YFVHSmm30sLXtndAOA4YjZ9oTQcQFWUSCrI9HWa7CVPPb5kSpqwHNloeItLmm0M3w263200SWIMm0D1'
-
-endpoint_secret = 'whsec_vLfcBvcXuiqpq2kRV7wonUOabiXsqa3R'
+stripe.api_key = os.environ.get('STRIPE_API_KEY')
+endpoint_secret = os.environ.get('STRIPE_ENDPOINT_SECRET')
 
 # Function to handle successful payment
 def handle_successful_payment(checkout_data):
