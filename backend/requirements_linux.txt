@@ -35,5 +35,5 @@ stripe==5.0.0
 svglib==1.4.1
 tinycss2==1.2.1
 tzdata==2022.7
-urllib3==1.25.11
+urllib3==1.26.5
 webencodings==0.5.1
