@@ -1,2 +1,4 @@
 venv
+linuxEnv
 backend/media/
+backend/shop/.env
