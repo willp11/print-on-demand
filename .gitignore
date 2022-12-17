@@ -1,4 +1,6 @@
 venv
 linuxEnv
+backend/db.sqlite3
+backend/.env
 backend/media/
 backend/shop/.env
