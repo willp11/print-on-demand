@@ -1,7 +1,6 @@
 import { useDesign } from "../../hooks/useDesign";
 import Image from "next/image";
 import {IProduct} from '../../types/product';
-import { imageApiPrefix } from '../../utils/api';
 import { useMemo } from "react";
 
 type sideType = 'front' | 'back' | 'left' | 'right';
@@ -13,7 +12,7 @@ interface ISelectSideProps {
 }
 
 const Side = ({product, side, color, selected}: ISelectSideProps) => {
-    let src = `${imageApiPrefix}${product.colors[color][side]}`;
+    let src = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][side]}`;
     if (src !== undefined) {
         let className = "flex flex-col items-center rounded cursor-pointer min-w-[60px] border border-gray-300";
         let imgClassName = "hidden lg:block relative w-[100px] h-[100px] border border-gray-300";

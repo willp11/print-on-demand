@@ -48,7 +48,7 @@ export default function Design({design, setShowDesignsModal}: IDesignProps) {
                         <div className="text-center" key={i}>
                             <h3 className="text-sm font-semibold">{preview.side}</h3>
                             <div className="relative w-[200px] h-[200px] xs:w-[150px] xs:h-[150px]">
-                                <Image src={`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${preview.image}`} layout="fill" objectFit="contain" />
+                                <Image src={`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${preview.image}`} layout="fill" objectFit="contain" alt="Design preview" />
                             </div>
                         </div>
                     )

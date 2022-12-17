@@ -8,7 +8,7 @@ export default function OrderItems({order_items}: {order_items: IOrderItem[]}) {
     const [showProducts, setShowProducts] = useState(false);
 
     let products = order_items.map((item)=>{
-        return <OrderItem item={item} />
+        return <OrderItem item={item} key={item.id} />
     });
 
     const contentRef = useRef(null);

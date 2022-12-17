@@ -2,7 +2,7 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from 'yup';
 import SubmitBtn from '../ui/submitBtn';
 import CancelBtn from "../ui/cancelBtn";
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import {handleDjangoErrors} from '../../utils/errors';
 import { useUser } from '../../hooks/useUser';
@@ -33,7 +33,7 @@ export default function ChangePasswordForm({goBack}: IChangePassProps) {
             'Content-Type': 'application/json',
             'Authorization': `Token ${token}`
         }
-        const url = `http://localhost:8000/auth/password/change/`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/auth/password/change/`;
         const data = {
             new_password1: values.password,
             new_password2: values.confirmPassword
@@ -54,7 +54,7 @@ export default function ChangePasswordForm({goBack}: IChangePassProps) {
     }
 
     const responseErrors = error.map(err=>{
-        return <div className="text-xs">{err}</div>
+        return <div className="text-xs" key={err}>{err}</div>
     });
 
     return (

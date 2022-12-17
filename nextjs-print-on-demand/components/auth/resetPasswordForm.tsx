@@ -25,7 +25,7 @@ export default function ResetPasswordForm() {
     // Redirect if already logged in
     useEffect(()=>{
         if (token !== "" && token !== undefined) router.push('/')
-    }, [token]);
+    }, [token, router]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string[] | never>([]);
@@ -35,7 +35,7 @@ export default function ResetPasswordForm() {
         const headers = {
             'Content-Type': 'application/json'
         }
-        const url = `http://localhost:8000/auth/password/reset/`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/auth/password/reset/`;
         const data = {
             email: values.email
         }
@@ -53,7 +53,7 @@ export default function ResetPasswordForm() {
     }
 
     const responseErrors = error.map(err=>{
-        return <div className="text-xs">{err}</div>
+        return <div className="text-xs" key={err}>{err}</div>
     });
 
     return (

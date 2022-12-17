@@ -3,7 +3,7 @@ const nextConfig = {
     reactStrictMode: false,
     swcMinify: true,
     images: {
-        domains: ['localhost']
+        domains: ['localhost', 'https://api-pod.williampage.me']
     }
 }
 

@@ -7,7 +7,7 @@ import AddImageLayer from '../../components/customizer/addImageLayer';
 import AddTextLayer from '../../components/customizer/addTextLayer';
 import SaveDesign from '../../components/customizer/saveDesign';
 import LoadDesign from '../../components/customizer/loadDesign';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { XMarkIcon, PhotoIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import SelectProductModal from '../../components/customizer/selectProductModal';
 import EditTextLayer from '../../components/customizer/editTextLayer';
@@ -59,8 +59,14 @@ export default function Customizer({products, fonts}: {products: IProduct[], fon
     const {qty, updateQtyHandler} = useProductQty(product);
 
     // set the product to the first product in the list as default if no product has been selected
+    const init = useCallback(
+        ()=>{
+            if (setProduct && !product) setProduct(products[0]);
+        },
+        [setProduct, product, products]
+    )
     useEffect(()=>{
-        if (setProduct && !product) setProduct(products[0]);
+        init();
     }, []);
 
     // price is derived from the selected product base price + the total of all the layers

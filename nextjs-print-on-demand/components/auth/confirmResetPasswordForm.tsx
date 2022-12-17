@@ -28,7 +28,7 @@ export default function ConfirmResetPasswordForm({uid, token}: {uid: string, tok
         const headers = {
             'Content-Type': 'application/json'
         }
-        const url = `http://localhost:8000/auth/password/reset/confirm/${uid}/${token}/`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/auth/password/reset/confirm/${uid}/${token}/`;
         const data = {
             new_password1: values.password,
             new_password2: values.confirmPassword,
@@ -51,7 +51,7 @@ export default function ConfirmResetPasswordForm({uid, token}: {uid: string, tok
     }
 
     const responseErrors = error.map(err=>{
-        return <div className="text-xs">{err}</div>
+        return <div className="text-xs" key={err}>{err}</div>
     });
 
     return (

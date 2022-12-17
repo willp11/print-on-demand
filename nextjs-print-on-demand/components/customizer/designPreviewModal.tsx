@@ -76,7 +76,7 @@ export default function DesignPreviewModal({product, layers, color, setShowPrevi
         } else {
             return null;
         }
-    }, [product, color, layers, designName, loading])
+    }, [product, color, layers, designName, loading, currentDesign, backPreview, frontPreview, leftPreview, rightPreview])
 
     // Update design name if user loads a saved design
     useEffect(()=>{

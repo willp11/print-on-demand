@@ -40,7 +40,7 @@ export default function LayerPreview({layer, index, setEditTextLayerMode, setEdi
         return (
             <div className={className}>
                 <div style={{width: width, height: height}} className="relative flex justify-center items-center" onClick={()=>selectLayerHandler(index)}>
-                    <img src={layer?.image} className="object-contain" />
+                    <img src={layer?.image} className="object-contain" alt="" />
                 </div>
                 {selectedLayer === index && <PencilSquareIcon onClick={()=>setEditImgLayerMode(true)} className="absolute h-6 w-6 top-0 left-1 stroke-blue-700 hover:fill-sky-100 fill-white cursor-pointer z-10" />}
                 <XCircleIcon className="absolute h-6 w-6 top-0 right-0 stroke-white fill-red-500 cursor-pointer" onClick={()=>removeLayer(index)} />

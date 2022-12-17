@@ -4,7 +4,7 @@ import { Cart } from "../types/cart";
 import { IOrder } from "../types/order";
 import { IUpdateUserData } from "./user";
 
-export const imageApiPrefix = 'http://localhost:8000';
+// export const process.env.NEXT_PUBLIC_BACKEND_PREFIX = 'http://localhost:8000';
 
 interface APILayer extends ILayer {
     side: string,
@@ -57,7 +57,7 @@ const transformLayers = (layers: {[key: string]: ILayer[]}) => {
 
 // Send API request to upload design to server
 export const uploadDesign = async (token: string, product: number, color: string, name: string, layers: {[key: string]: ILayer[]}, previews: object[], id?: number) => {
-    const url = `${imageApiPrefix}/api/v1/create-design/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/create-design/`;
     const headers = {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
@@ -88,7 +88,7 @@ export const uploadDesign = async (token: string, product: number, color: string
 
 // Send API request to fetch all fonts from server
 export const fetchFonts = async () => {
-    const url = `${imageApiPrefix}/api/v1/fonts/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/fonts/`;
     const headers = {
         "Content-Type": "application/json"
     }
@@ -102,7 +102,7 @@ export const fetchFonts = async () => {
 
 // Send API request to fetch all products from server
 export const fetchProducts = async () => {
-    const url = `${imageApiPrefix}/api/v1/get-product-list/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/get-product-list/`;
     const headers = {
         "Content-Type": "application/json"
     }
@@ -116,7 +116,7 @@ export const fetchProducts = async () => {
 
 // Send API request to fetch products of a given category from server
 export const fetchProductsByCategory = async (category: string) => {
-    const url = `${imageApiPrefix}/api/v1/get-product-list-by-category/${category}/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/get-product-list-by-category/${category}/`;
     const headers = {
         "Content-Type": "application/json"
     }
@@ -130,7 +130,7 @@ export const fetchProductsByCategory = async (category: string) => {
 
 // get all designs for user
 export const fetchDesigns = async (token: string) => {
-    const url = `${imageApiPrefix}/api/v1/get-designs/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/get-designs/`;
     const headers = {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
@@ -195,7 +195,7 @@ export const createOrder = async (token: string | undefined, stripeId: string, c
             }
         }
     }
-    const url = `${imageApiPrefix}/api/v1/create-order/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/create-order/`;
     let headers;
     if (token) {
         headers = {
@@ -226,7 +226,7 @@ export const getUserProfile = async (token: string) => {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
     }
-    const url = `${imageApiPrefix}/auth/user/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/auth/user/`;
     try {
         const res = await axios.get(url, {headers: headers});
         return res;
@@ -242,7 +242,7 @@ export const updateUserProfile = async (token: string, url: string, data: IUpdat
         "Authorization": "Token " + token
     }
     try {
-        const res = await axios.put(`${imageApiPrefix}${url}`, data, {headers: headers});
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${url}`, data, {headers: headers});
         return res;
     } catch(e) {
         console.log(e);
@@ -255,7 +255,7 @@ export const getUserOrders = async (token: string) => {
         "Content-Type": "application/json",
         "Authorization": "Token " + token
     }
-    const url = `${imageApiPrefix}/api/v1/get-user-orders/`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/api/v1/get-user-orders/`;
     try {
         const res = await axios.get(url, {headers: headers});
         return res.data as IOrder[];

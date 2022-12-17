@@ -19,7 +19,6 @@ export default function Designs({token, setShowDesignsModal}: IDesignsProps) {
         const getDesigns = async () => {
             try {
                 const designs = await fetchDesigns(token);
-                console.log(designs);
                 if (designs) {
                     setDesigns(designs);
                 } else {
@@ -32,7 +31,7 @@ export default function Designs({token, setShowDesignsModal}: IDesignsProps) {
             }
         }
         getDesigns();
-    }, []);
+    }, [token]);
 
     if (loading) return <Spinner />
     if (error !== "") return <p className="text-red-600 text-sm">{error}</p>

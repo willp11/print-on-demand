@@ -17,6 +17,10 @@ export default function EditImageLayer({setEditImgLayerMode}: {setEditImgLayerMo
         xPos: 200
     });
 
+    // TO DO
+    // investigate why we have explicitly checked for undefined instead of e.g. if (layers)
+    // for selectedLayer we can have values of 0 so cannot do if (selectedLayer) as 0 is falsy
+
     // set initial value so can revert
     useEffect(()=>{
         if (layers !== undefined && productSide !== undefined && selectedLayer !== undefined && selectedLayer !== null) {

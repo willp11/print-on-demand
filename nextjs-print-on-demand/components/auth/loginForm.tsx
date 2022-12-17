@@ -26,7 +26,7 @@ export default function LoginForm() {
     // Redirect if already logged in
     useEffect(()=>{
         if (token !== "" && token !== undefined) router.push('/')
-    }, [token]);
+    }, [token, router]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string[] | never>([]);
@@ -35,7 +35,7 @@ export default function LoginForm() {
         const headers = {
             'Content-Type': 'application/json'
         }
-        const url = `http://localhost:8000/auth/login/`;
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_PREFIX}/auth/login/`;
         const data = {
             email: values.email,
             password: values.password
@@ -54,7 +54,7 @@ export default function LoginForm() {
     }
 
     const responseErrors = error.map(err=>{
-        return <div className="text-xs">{err}</div>
+        return <div className="text-xs" key={err}>{err}</div>
     });
 
     return (

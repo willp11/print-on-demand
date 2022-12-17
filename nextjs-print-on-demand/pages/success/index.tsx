@@ -23,7 +23,7 @@ export default function Success() {
 
     useEffect(()=>{
         clearCartOnSuccess();
-    }, [data])
+    }, [data, clearCartOnSuccess])
 
     return (
         <div className="container xl:max-w-screen-xl mx-auto py-12 px-6 text-center">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import ConfirmResetPasswordForm from "../../../../components/auth/confirmResetPasswordForm";
 import Head from "next/head";
 
-export default function() {
+export default function ResetPassword() {
 
     const router = useRouter();
     const [uid, setUid] = useState<string>("");
