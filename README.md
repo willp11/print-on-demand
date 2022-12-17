@@ -10,6 +10,17 @@ Tailwind CSS.
 
 P5.js used for t-shirt customization tool.
 
+### Environment variables
+
+You will need the following environment variables in a .env.local file within the nextjs-print-on-demand directory.
+
+```
+NEXT_PUBLIC_BACKEND_PREFIX=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+```
+
 ## Backend
 
 Django with Django Rest Framework for APIs.
