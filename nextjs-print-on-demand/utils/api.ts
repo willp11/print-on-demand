@@ -4,8 +4,6 @@ import { Cart } from "../types/cart";
 import { IOrder } from "../types/order";
 import { IUpdateUserData } from "./user";
 
-// export const process.env.NEXT_PUBLIC_BACKEND_PREFIX = 'http://localhost:8000';
-
 interface APILayer extends ILayer {
     side: string,
     zIndex: number,

@@ -22,7 +22,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
     // Preload
     const preload = (p5) => {
         p5.angleMode(p5.DEGREES);
-        if (product?.colors[color][side] && product?.colors[color][`${side}_mask`] && layers) {
+        if (process.env.NEXT_PUBLIC_BACKEND_PREFIX && product?.colors[color][side] && product?.colors[color][`${side}_mask`] && layers) {
             try {
                 productImageRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][side]}`);
                 productImageMaskRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][`${side}_mask`]}`);

@@ -1,10 +1,7 @@
-// draw a editable design on canvas
-
 import dynamic from 'next/dynamic';
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
     ssr: false,
 });
-
 import { useRef, useEffect } from 'react';
 import { useDesign } from '../../hooks/useDesign';
 import {useCanvasSize} from '../../hooks/useCanvasSize';
