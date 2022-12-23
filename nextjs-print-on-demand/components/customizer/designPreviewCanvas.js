@@ -8,7 +8,6 @@ const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
 
 import { useRef } from 'react';
 import {useCanvasSize} from '../../hooks/useCanvasSize';
-import { imageApiPrefix } from '../../utils/api';
 
 export default function DesignPreviewCanvas({product, side, color, updatePreviewImages, layers}) {
 
@@ -23,10 +22,10 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
     // Preload
     const preload = (p5) => {
         p5.angleMode(p5.DEGREES);
-        if (imageApiPrefix && product?.colors[color][side] && product?.colors[color][`${side}_mask`] && layers) {
+        if (process.env.NEXT_PUBLIC_BACKEND_PREFIX && product?.colors[color][side] && product?.colors[color][`${side}_mask`] && layers) {
             try {
-                productImageRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][side]}`);
-                productImageMaskRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][`${side}_mask`]}`);
+                productImageRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][side]}`);
+                productImageMaskRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][`${side}_mask`]}`);
 
                 allLayersRef.current = layers[side].map((layer)=>{
                     if (layer.type === "image") {

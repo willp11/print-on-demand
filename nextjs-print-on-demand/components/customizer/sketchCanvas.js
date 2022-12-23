@@ -1,15 +1,11 @@
-// draw a editable design on canvas
-
 import dynamic from 'next/dynamic';
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
     ssr: false,
 });
-
 import { useRef, useEffect } from 'react';
 import { useDesign } from '../../hooks/useDesign';
 import {useCanvasSize} from '../../hooks/useCanvasSize';
 import { drawResizeIcon, drawRotateIcon, isInsideArea } from '../../utils/customizer';
-import { imageApiPrefix } from '../../utils/api';
 
 export default function SketchCanvas() {
 
@@ -47,8 +43,8 @@ export default function SketchCanvas() {
     // load product image to productImageRef
     useEffect(()=>{
         if (p5ref.current && product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
-            productImageRef.current = p5ref.current.loadImage(`${imageApiPrefix}${product.colors[color][productSide]}`);
-            productImageMaskRef.current = p5ref.current.loadImage(`${imageApiPrefix}${product.colors[color][`${productSide}_mask`]}`);
+            productImageRef.current = p5ref.current.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][productSide]}`);
+            productImageMaskRef.current = p5ref.current.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][`${productSide}_mask`]}`);
         }
     }, [product, productSide, color]);
 
@@ -86,10 +82,10 @@ export default function SketchCanvas() {
     const preload = (p5) => {
         p5ref.current = p5;
         p5.angleMode(p5.DEGREES);
-        if (imageApiPrefix && product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
+        if (product?.colors[color][productSide] && product?.colors[color][`${productSide}_mask`]) {
             try {
-                productImageRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][productSide]}`);
-                productImageMaskRef.current = p5.loadImage(`${imageApiPrefix}${product.colors[color][`${productSide}_mask`]}`);
+                productImageRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][productSide]}`);
+                productImageMaskRef.current = p5.loadImage(`${process.env.NEXT_PUBLIC_BACKEND_PREFIX}${product.colors[color][`${productSide}_mask`]}`);
             } catch(e) {
                 console.log(e);
             }
