@@ -3,7 +3,7 @@ const nextConfig = {
     reactStrictMode: false,
     swcMinify: true,
     images: {
-        domains: ['localhost', 'api-pod.williampage.me'],
+        domains: ['localhost', 'api-pod.williampage.me', 'https://print-on-demand-v14a.vercel.app'],
         formats: ["image/webp"]
     },
     i18n: {
