@@ -380,7 +380,7 @@ export default function SketchCanvas() {
                         )
                     } else if (activeLayerRef.current.type === "text") {
 
-                        if (allLayersRef.current[i].font !== undefined) {
+                        if (activeLayerRef.current.font) {
                             // Draw box around text
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
