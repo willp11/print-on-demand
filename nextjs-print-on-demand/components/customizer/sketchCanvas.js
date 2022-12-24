@@ -292,7 +292,7 @@ export default function SketchCanvas() {
                         translateY = (activeLayerRef.current.yPos * (canvasSize/500)) + movedY + (0.5*activeLayerSizeY);
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
-                        if (activeLayerRef.current.font) {
+                        if (activeLayerRef.current.font && allLayersRef.current[i]) {
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
