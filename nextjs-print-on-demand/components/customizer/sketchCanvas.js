@@ -292,7 +292,7 @@ export default function SketchCanvas() {
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
                         if (allLayersRef.current[i] && allLayersRef.current[i].font) {
-                            console.log(allLayersRef.current[i])
+
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
@@ -381,7 +381,7 @@ export default function SketchCanvas() {
                     } else if (activeLayerRef.current.type === "text") {
 
                         if (allLayersRef.current[i] && allLayersRef.current[i].font) {
-                            console.log(allLayersRef.current[i])
+
                             // Draw box around text
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
