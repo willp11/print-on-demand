@@ -68,6 +68,7 @@ export default function SketchCanvas() {
                         p5ref.current.loadFont(fontFile);
                     }
                 })
+                console.log(allLayersRef.current);
             } else {
                 activeLayerRef.current = undefined;
                 allLayersRef.current = undefined;
