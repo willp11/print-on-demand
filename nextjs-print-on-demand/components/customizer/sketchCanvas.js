@@ -57,7 +57,6 @@ export default function SketchCanvas() {
                 activeLayerRef.current = activeLayer;
                 rotationAngle = activeLayerRef.current?.rotation;
 
-                console.log(layers[productSide]);
                 // all layers
                 allLayersRef.current = layers[productSide].map((layer)=>{
                     if (layer.type === "image") {
@@ -68,7 +67,6 @@ export default function SketchCanvas() {
                         return p5ref.current.loadFont(fontFile);
                     }
                 })
-                console.log(allLayersRef.current);
             } else {
                 activeLayerRef.current = undefined;
                 allLayersRef.current = undefined;
@@ -294,6 +292,7 @@ export default function SketchCanvas() {
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
                         if (activeLayerRef.current.font && allLayersRef.current[i]) {
+                            console.log(allLayersRef.current[i])
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
@@ -382,6 +381,7 @@ export default function SketchCanvas() {
                     } else if (activeLayerRef.current.type === "text") {
 
                         if (activeLayerRef.current?.font && allLayersRef.current[i]) {
+                            console.log(allLayersRef.current[i])
                             // Draw box around text
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
