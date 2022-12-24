@@ -57,6 +57,7 @@ export default function SketchCanvas() {
                 activeLayerRef.current = activeLayer;
                 rotationAngle = activeLayerRef.current?.rotation;
 
+                console.log(layers[productSide]);
                 // all layers
                 allLayersRef.current = layers[productSide].map((layer)=>{
                     if (layer.type === "image") {
@@ -64,7 +65,6 @@ export default function SketchCanvas() {
                     } else if (layer.type === "text") {
                         let fontFile = layer.font.file;
                         fontFile = fontFile.replace("http://", "https://");
-                        console.log(fontFile)
                         p5ref.current.loadFont(fontFile);
                     }
                 })
@@ -265,8 +265,6 @@ export default function SketchCanvas() {
 
             // draw all layers
             for (let i=0; i<allLayersRef.current.length; i++) {
-
-                console.log(allLayersRef.current[i], activeLayerRef.current)
 
                 // if it's the active layer - draw it based off the position and dimensions in the activeLayer ref 
                 if (i === selectedLayer) {
