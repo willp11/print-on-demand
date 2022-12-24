@@ -266,6 +266,8 @@ export default function SketchCanvas() {
             // draw all layers
             for (let i=0; i<allLayersRef.current.length; i++) {
 
+                console.log(allLayersRef.current[i], activeLayerRef.current)
+
                 // if it's the active layer - draw it based off the position and dimensions in the activeLayer ref 
                 if (i === selectedLayer) {
                     // Move image
