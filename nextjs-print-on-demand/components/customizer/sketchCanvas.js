@@ -292,8 +292,8 @@ export default function SketchCanvas() {
                         translateY = (activeLayerRef.current.yPos * (canvasSize/500)) + movedY + (0.5*activeLayerSizeY);
                     } else if (activeLayerRef.current.type === "text") {
                         // rotate origin in middle of textBox
-                        if (allLayersRef.current[i].font) {
-                            let textBox = allLayersRef.current[i].textBounds(
+                        if (activeLayerRef.current.font) {
+                            let textBox = activeLayerRef.current.textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)),
                                 (activeLayerRef.current.yPos * (canvasSize/500)),
@@ -380,9 +380,9 @@ export default function SketchCanvas() {
                         )
                     } else if (activeLayerRef.current.type === "text") {
 
-                        if (activeLayerRef.current.font) {
+                        if (activeLayerRef.current?.font) {
                             // Draw box around text
-                            let textBox = allLayersRef.current[i].textBounds(
+                            let textBox = activeLayerRef.current.textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)) + movedX - translateX, 
                                 (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY,
@@ -474,7 +474,7 @@ export default function SketchCanvas() {
                             layers[productSide][i].height * (canvasSize/500)
                         );
                     } else if (layers[productSide][i].type === "text") {
-                        if (allLayersRef.current[i].font !== undefined){
+                        if (allLayersRef.current[i]?.font){
                             
                             let textBox = allLayersRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
