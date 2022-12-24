@@ -380,7 +380,7 @@ export default function SketchCanvas() {
                         )
                     } else if (activeLayerRef.current.type === "text") {
 
-                        if (activeLayerRef.current?.font) {
+                        if (activeLayerRef.current?.font && allLayersRef.current[i]) {
                             // Draw box around text
                             let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
@@ -474,7 +474,7 @@ export default function SketchCanvas() {
                             layers[productSide][i].height * (canvasSize/500)
                         );
                     } else if (layers[productSide][i].type === "text") {
-                        if (allLayersRef.current[i]?.font){
+                        if (allLayersRef.current[i]){
                             
                             let textBox = allLayersRef.current[i].textBounds(
                                 layers[productSide][i].textContent,
