@@ -382,7 +382,7 @@ export default function SketchCanvas() {
 
                         if (activeLayerRef.current?.font) {
                             // Draw box around text
-                            let textBox = activeLayerRef.current.textBounds(
+                            let textBox = allLayersRef.current[i].textBounds(
                                 activeLayerRef.current.textContent,
                                 (activeLayerRef.current.xPos * (canvasSize/500)) + movedX - translateX, 
                                 (activeLayerRef.current.yPos * (canvasSize/500)) + movedY - translateY,
