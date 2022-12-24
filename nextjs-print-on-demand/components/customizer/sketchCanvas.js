@@ -65,7 +65,7 @@ export default function SketchCanvas() {
                     } else if (layer.type === "text") {
                         let fontFile = layer.font.file;
                         fontFile = fontFile.replace("http://", "https://");
-                        p5ref.current.loadFont(fontFile);
+                        return p5ref.current.loadFont(fontFile);
                     }
                 })
                 console.log(allLayersRef.current);
