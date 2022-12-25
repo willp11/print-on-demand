@@ -33,7 +33,7 @@ export default function DesignPreviewCanvas({product, side, color, updatePreview
                     } else if (layer.type === "text") {
                         let fontFile = layer.font.file;
                         fontFile = fontFile.replace("http://", "https://");
-                        return p5.loadFont(layer.font.file);
+                        return p5.loadFont(fontFile);
                     }
                 })
             } catch(e) {
