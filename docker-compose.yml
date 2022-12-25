@@ -1,0 +1,19 @@
+version: '3'
+ 
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "80:8000"
+    volumes:
+      - ./backend:/app
+      - pod-media:/app/backend/media
+    command: >
+      sh -c "gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
+    env_file:
+      - ./.env
+
+volumes:
+  pod-media:
+    external: true

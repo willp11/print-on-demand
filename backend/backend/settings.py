@@ -175,10 +175,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
-    "https://api-pod.williampage.me"
+    "https://api-pod.williampage.me",
+    "https://print-on-demand-v14a.vercel.app"
 )
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://api-pod.williampage.me"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://api-pod.williampage.me", "https://print-on-demand-v14a.vercel.app"]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
