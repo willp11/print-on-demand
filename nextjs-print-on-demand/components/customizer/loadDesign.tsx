@@ -1,15 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
-import { useUser } from "../../hooks/useUser";
 import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 
 export default function LoadDesign({token, setShowDesigns}: {token: string | undefined, setShowDesigns: Dispatch<SetStateAction<boolean>>}) {
 
-    const disabled = token === undefined;
+    let disabled = true;
+    if (token) disabled = false;
 
-    let cursor = "cursor-not-allowed";
-    if (!disabled) {
-        cursor = "cursor-pointer";
-    }
+    let cursor = "cursor-pointer";
+    if (disabled) cursor = "cursor-not-allowed";
 
     return (
         <div className="flex flex-col items-center">

@@ -5,7 +5,7 @@ export default function SaveDesign({token, setShowPreview}: {token: string | und
 
     let disabled = true;
     if (token) disabled = false;
-    console.log("token", token, token === undefined);
+
     let cursor = "cursor-pointer";
     if (disabled) cursor = "cursor-not-allowed";
 
