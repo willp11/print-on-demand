@@ -3,8 +3,8 @@ import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 
 export default function SaveDesign({token, setShowPreview}: {token: string | undefined, setShowPreview: Dispatch<SetStateAction<boolean>>}) {
 
-    let disabled = false;
-    if (token) disabled = true;
+    let disabled = true;
+    if (token) disabled = false;
     console.log("token", token, token === undefined);
     let cursor = "cursor-pointer";
     if (disabled) cursor = "cursor-not-allowed";
