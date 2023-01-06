@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Slideshow from '../components/landing/slideshow';
 import Categories from '../components/landing/categories';
+import About from '../components/landing/about';
 
 const Home: NextPage = () => {
     return (
@@ -10,6 +11,7 @@ const Home: NextPage = () => {
                 <title>Print On Demand</title>
             </Head>
             <Slideshow />
+            <About />
             <Categories />
         </>
     )
